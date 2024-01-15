@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  f_name          String
+  l_email         String   @unique
+  image           String?
+  hashedPassword  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  classesIds String[] @db.ObjectId
+  classes Class[] @relation("classCode", fields: [classesIds], references: [id])
+
+  gradesIds String[] @db.ObjectId
+  gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
+
+}
+
+model Teacher {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  f_name          String
+  l_email         String   @unique
+  image           String?
+  hashedPassword  String?
+  languages       String[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  classesIds String[] @db.ObjectId
+  classes Class[] @relation("classCode", fields: [classesIds], references: [id])
+
+  gradesIds String[] @db.ObjectId
+  gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
+
+
+}
+
+model Class {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  classCode String
+  language  String
+  schedule String
+
+  studentClassesIds String[] @db.ObjectId
+  studentClasses Student[] @relation("classCode", fields: [studentClassesIds], references: [id])
+
+  teacherClassesIds String[] @db.ObjectId
+  teacherClasses Teacher[] @relation("classCode", fields: [teacherClassesIds], references: [id])
+
+
+}
+
+
+model Grade {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  value     String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  studentGradesIds String[] @db.ObjectId
+  studentGrades Student[] @relation("Value", fields: [studentGradesIds], references: [id])
+
+  teacherGradesIds String[] @db.ObjectId
+  teacherGrades Teacher[] @relation("Value", fields: [studentGradesIds], references: [id])
+
+}

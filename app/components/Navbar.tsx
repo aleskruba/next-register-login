@@ -10,7 +10,7 @@ const Navbar = () => {
  
   return (
     <div>
-      <ul className="flex justify-between m-10 item-center">
+      <ul className="flex w-full justify-between m-10 item-center">
         <div>
           <Link href="/">
             <li>Home</li>

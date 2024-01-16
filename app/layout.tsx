@@ -24,7 +24,9 @@ export default function RootLayout({
           >
         <div className='mx-auto max-w-5xl text-2xl gap-2 mb-10'>
               <Navbar/>
+              <div className='flex justify-center'>
              {children}
+             </div>
           </div>
         </ThemeProvider>
       </body>

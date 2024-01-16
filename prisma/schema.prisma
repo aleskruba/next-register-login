@@ -9,13 +9,26 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+model Admin {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  f_name          String
+  l_name          String
+  email           String   @unique
+  image           String?
+  hashedPassword  String?
+  role            String   @default("Admin")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
+}
 model Student {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   f_name          String
-  l_email         String   @unique
+  l_name          String
+  email           String   @unique
   image           String?
   hashedPassword  String?
+  role            String   @default("Student")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -30,10 +43,12 @@ model Student {
 model Teacher {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   f_name          String
-  l_email         String   @unique
+  l_name          String
+  email           String   @unique
   image           String?
   hashedPassword  String?
   languages       String[]
+  role            String   @default("Teacher")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

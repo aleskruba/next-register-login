@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -27,15 +26,18 @@ const formSchema = z.object({
     email: z.string().email(),
     f_name: z.string().min(3).max(25),
     l_name: z.string().min(3).max(25),
+    languages:z.string().min(3).max(50),
     password: z.string().min(3).max(25),
     confirm_password: z.string().min(3).max(25),
-    role: z.enum(["Student","Teacher"])
+    role: z.enum(["Student","Teacher","Admin"])
   }).refine((data)=>{
     return data.password === data.confirm_password
   },{
     message :"Passwords do not match",
     path: ["confirm_password"]
   })
+
+  
 
 const Register = () => {
     const form = useForm<z.infer<typeof formSchema>>({
@@ -44,12 +46,14 @@ const Register = () => {
           email: "",
           f_name:"",
           l_name:"",
+          languages:"",
           password: "",
           confirm_password: "",
-          role: "Student" || "Teacher"
+          role: "Student" || "Teacher" || "Admin"
         },
       })
 
+      const role = form.watch('role')
 
     const handleSubmit = (values:z.infer<typeof formSchema>) => {
         console.log(values);
@@ -107,7 +111,7 @@ const Register = () => {
                            render={({ field })=>(
                             <FormItem>
                               <FormLabel>Role</FormLabel>
-                              <Select onValueChange={field.onChange}>                              <FormControl>
+                              <Select onValueChange={field.onChange} required>                              <FormControl>
                               <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a role" />
                             </SelectTrigger>
@@ -115,12 +119,29 @@ const Register = () => {
                             <SelectContent>
                                 <SelectItem value="Student">Student</SelectItem>
                                 <SelectItem value="Teacher">Teacher</SelectItem>
+                                <SelectItem value="Admin">Admin</SelectItem>
                           </SelectContent>
                           </Select>                      
                               <FormMessage />
                       
                            </FormItem>
                            )} />
+
+                {role === 'Teacher' &&
+                <FormField control={form.control} 
+                           name="languages" 
+                           render={({ field })=>(
+                            <FormItem>
+                              <FormLabel>Teaching Languages</FormLabel>
+                              <FormControl>
+                                  <Input placeholder="Teaching Languages" 
+                                  autoComplete="Teaching Languages"
+                                         {...field} />
+                             </FormControl>
+                              <FormMessage />
+                           </FormItem>
+                           )} />
+                           }
 
                 <FormField control={form.control} 
                            name="password" 

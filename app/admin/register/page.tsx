@@ -1,4 +1,7 @@
 "use client"
+
+import { useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -26,7 +29,7 @@ const formSchema = z.object({
     email: z.string().email(),
     f_name: z.string().min(3).max(25),
     l_name: z.string().min(3).max(25),
-    languages:z.string().min(3).max(50),
+    languages:z.string().optional(),
     password: z.string().min(3).max(25),
     confirm_password: z.string().min(3).max(25),
     role: z.enum(["Student","Teacher","Admin"])
@@ -40,8 +43,14 @@ const formSchema = z.object({
   
 
 const Register = () => {
+  const router = useRouter()
+  const ref = useRef<HTMLFormElement>(null)
+
+
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+
         defaultValues: {
           email: "",
           f_name:"",
@@ -55,14 +64,33 @@ const Register = () => {
 
       const role = form.watch('role')
 
-    const handleSubmit = (values:z.infer<typeof formSchema>) => {
+    const handleSubmit = async (values:z.infer<typeof formSchema>) => {
         console.log(values);
-    }
+
+         const dataResponse = await fetch('/api/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            
+          },
+          body: JSON.stringify(values),
+        });
+
+        console.log(dataResponse)
+        if (dataResponse.status === 200) {
+          await form.reset();
+        }
+
+        console.log(ref)
+      return dataResponse
+      }
 
   return (
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4">
+      <h1 className="text-2xl md:text-3xl text-center mt-4 mb-4">Register a new user</h1>
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
+            <form onSubmit={form.handleSubmit(handleSubmit)}
+              ref={ref}>
                 <FormField control={form.control} 
                            name="email" 
                            render={({ field })=>(
@@ -111,7 +139,7 @@ const Register = () => {
                            render={({ field })=>(
                             <FormItem>
                               <FormLabel>Role</FormLabel>
-                              <Select onValueChange={field.onChange} required>                              <FormControl>
+                              <Select onValueChange={field.onChange} >                              <FormControl>
                               <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Select a role" />
                             </SelectTrigger>
@@ -173,14 +201,29 @@ const Register = () => {
                               <FormMessage />
                            </FormItem>
                            )} />
-                <div className="flex justify-center mt-4 ">
-                    <Button type="submit" className="w-full">
+                <div className="flex flex-col gap-4 justify-center mt-4 ">
+                    <Button type="submit" 
+                            className="w-full
+                                      hover:bg-blue-400
+                            ">
                             Submit 
                     </Button>
+                    <Button type='button' 
+                            onClick={() => router.push('/')} 
+                            className="w-full
+                                       bg-gray-400
+                                       hover:bg-gray-600
+                                       hover:text-white
+                                       "
+        
+                            >
+                            Back
+                    </Button>
+                 
                 </div>
             </form> 
         </Form>
-
+   
     </div>
   )
 }

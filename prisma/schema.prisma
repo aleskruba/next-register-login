@@ -20,7 +20,10 @@ model Admin {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+ @@map("admins") 
 }
+
+
 model Student {
   id              String @id @default(auto()) @map("_id") @db.ObjectId
   f_name          String
@@ -38,6 +41,7 @@ model Student {
   gradesIds String[] @db.ObjectId
   gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
 
+ @@map("students") 
 }
 
 model Teacher {
@@ -58,7 +62,7 @@ model Teacher {
   gradesIds String[] @db.ObjectId
   gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
 
-
+ @@map("teachers") 
 }
 
 model Class {
@@ -73,7 +77,7 @@ model Class {
   teacherClassesIds String[] @db.ObjectId
   teacherClasses Teacher[] @relation("classCode", fields: [teacherClassesIds], references: [id])
 
-
+ @@map("classes") 
 }
 
 
@@ -89,4 +93,5 @@ model Grade {
   teacherGradesIds String[] @db.ObjectId
   teacherGrades Teacher[] @relation("Value", fields: [studentGradesIds], references: [id])
 
+ @@map("grades") 
 }

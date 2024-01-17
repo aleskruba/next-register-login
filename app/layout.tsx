@@ -23,8 +23,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
         <div className='mx-auto max-w-5xl text-2xl gap-2 mb-10'>
-              <Navbar/>
-              <div className='flex justify-center'>
+                <div className='flex justify-center'>
              {children}
              </div>
           </div>

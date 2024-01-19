@@ -1,72 +1,76 @@
 import NextAuth from "next-auth"
-import { Account,User as AuthUser } from "next-auth"
-import  CredentialsProvider  from "next-auth/providers/credentials"
-import prisma from '@/app/libs/prismadb';
-import bcrypt from 'bcrypt'
+import GoogleProvider from "next-auth/providers/google"
+import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from "bcrypt";
+import { NextResponse } from 'next/server'
 
-export const authOptions:any = {
-  // Configure one or more authentication providers
+import prisma from "@/app/libs/prismadb"
+
+const handler = NextAuth({
+
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
+    }),
     CredentialsProvider({
-        name: "Credentials",
-        credentials: {
-          email: { label: "Email", type: "text" },
-          password: { label: "Password", type: "password" },
+      name: 'credentials',
+      credentials: {
+        email: { label: 'email', type: 'text' },
+        password: { label: 'password', type: 'password' } ,
         },
-        async authorize(credentials: any): Promise<any> {     
-          
-            try {
-            const { email, password } = credentials;
+      async authorize(credentials: any): Promise<any>  {
+        try {
+          const { email, password } = credentials;
 
-            // Check if the user exists in the admin model
-            const admin = await prisma.admin.findUnique({
-              where: { email },
-            });
-  
-            if (admin) {
-              const isPasswordCorrect = await bcrypt.compare(password, admin.hashedPassword || '');
-              if (isPasswordCorrect) {
-                return admin;
-              }
+          // Check if the user exists in the admin model
+          const admin = await prisma.admin.findUnique({
+            where: { email },
+          });
+
+          if (admin) {
+            const isPasswordCorrect = await bcrypt.compare(password, admin.hashedPassword || '');
+            if (isPasswordCorrect) {
+              return admin;
             }
-  
-            // Check if the user exists in the student model
-            const student = await prisma.student.findUnique({
-              where: { email },
-            });
-  
-            if (student) {
-              const isPasswordCorrect = await bcrypt.compare(password, student.hashedPassword || '');
-              if (isPasswordCorrect) {
-                return student;
-              }
-            }
-  
-            // Check if the user exists in the teacher model
-            const teacher = await prisma.teacher.findUnique({
-              where: { email },
-            });
-  
-            if (teacher) {
-              const isPasswordCorrect = await bcrypt.compare(password, teacher.hashedPassword || '');
-              if (isPasswordCorrect) {
-                return teacher;
-              }
-            }
-          } catch (err: any) {
-            throw new Error(err);
           }
-        },
-      }),
-  ],
-  callbacks: {
-    async signIn({ user, account }: { user: AuthUser; account: Account }) {
-      if (account?.provider == "credentials") {
-        return true;
-      }
-    }
-}
-}
 
-export const handler = NextAuth(authOptions);
+          // Check if the user exists in the student model
+          const student = await prisma.student.findUnique({
+            where: { email },
+          });
+
+          if (student) {
+            const isPasswordCorrect = await bcrypt.compare(password, student.hashedPassword || '');
+            if (isPasswordCorrect) {
+              return student;
+            }
+          }
+
+          // Check if the user exists in the teacher model
+          const teacher = await prisma.teacher.findUnique({
+            where: { email },
+          });
+
+          if (teacher) {
+            const isPasswordCorrect = await bcrypt.compare(password, teacher.hashedPassword || '');
+            if (isPasswordCorrect) {
+              return teacher;
+            }
+          }
+        } catch (err: any) {
+          throw new Error(err);
+        }
+      }
+    })
+
+  ],
+  debug: process.env.NODE_ENV === 'development',
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+})
+
+
 export { handler as GET, handler as POST };

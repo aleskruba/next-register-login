@@ -8,7 +8,6 @@ export const authOptions:any = {
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
-        id: "credentials",
         name: "Credentials",
         credentials: {
           email: { label: "Email", type: "text" },

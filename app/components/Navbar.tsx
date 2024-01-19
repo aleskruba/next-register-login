@@ -7,6 +7,7 @@ import { ModeToggle } from "@/components/DarkModeToggle";
 const Navbar = () => {
 
  const { data: session }: any = useSession();
+ console.log('data',session);
 
   return (
     <div>

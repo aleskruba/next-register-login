@@ -9,10 +9,26 @@
     createdAt?: Date ;
     updatedAt?: Date;
   };
-import { formSchema } from "@/app/admin/register/page";
-  import * as z from "zod"
-  
 
+  import * as z from "zod"
+
+  
+  const formSchema = z.object({
+    email: z.string().email(),
+    f_name: z.string().min(3).max(25),
+    l_name: z.string().min(3).max(25),
+    languages:z.string().optional(),
+    password: z.string().min(3).max(25),
+    confirm_password: z.string().min(3).max(25),
+    role: z.enum(["Student","Teacher","Admin"]),
+
+  }).refine((data)=>{
+    return data.password === data.confirm_password
+  },{
+    message :"Passwords do not match",
+    path: ["confirm_password"]
+  })
+  
 export async function createUser(user:z.infer<typeof formSchema>){
     try {
       const response = await fetch('/api/register', {

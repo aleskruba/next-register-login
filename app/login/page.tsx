@@ -3,8 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
+import Link from "next/link";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { useRouter } from 'next/navigation'
 import {
     Form,
     FormControl,
@@ -23,6 +25,7 @@ import {
   } from "@/components/ui/select"
 
   import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
  
   const formSchema = z.object({
     email: z.string().email(),
@@ -31,6 +34,16 @@ import {
 
   const Login = () => {
     const router = useRouter()
+    const [error, setError] = useState("");
+    const { data: session, status: sessionStatus } = useSession();
+
+
+    useEffect(() => {
+      if (sessionStatus === "authenticated") {
+        router.replace("/dashboard");
+      }
+    }, [sessionStatus, router]);
+
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,20 +56,35 @@ import {
  
     const handleSubmit = async (values:z.infer<typeof formSchema>) => {
         console.log(values);
-        const dataResponse = await fetch('/api/testpost', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            
-          },
-          body: JSON.stringify(values),
+
+        const email = values.email
+        const password = values.password 
+
+
+        const res = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
         });
+
+        console.log(res);
+
+        if (res?.error) {
+          setError("Invalid email or password");
+          if (res?.url) router.replace("/dashboard");
+        } else {
+          setError("");
+        }
       
-        return dataResponse;
-    }
+        if (sessionStatus === "loading") {
+          return <h1>Loading...</h1>;
+        }
+        
+    } 
 
 
   return (
+    sessionStatus !== "authenticated" && (
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4 justify-center h-screen">
       <h1 className="text-2xl md:text-3xl text-center  mb-4">Log in</h1>
     <Form {...form}>
@@ -89,6 +117,8 @@ import {
                            </FormItem>
                            )} />
 
+<div className='text-xl text-red-500'>{error && error}</div>
+
 <div className="flex flex-col gap-4 justify-center mt-4 ">
 
             <Button type="submit" 
@@ -113,6 +143,7 @@ import {
         </Form>
 
   </div>
+  )
   )
 }
 

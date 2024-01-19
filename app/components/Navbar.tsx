@@ -1,13 +1,13 @@
 "use client";
-import React,{useState} from "react";
+import React from "react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
-import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/DarkModeToggle";
 
 const Navbar = () => {
- // const { data: session }: any = useSession();
- 
+
+ const { data: session }: any = useSession();
+
   return (
     <div>
       <ul className="flex w-full justify-between m-10 item-center">
@@ -17,10 +17,8 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex gap-10">
-          <Link href="/dashboard">
-            <li>Dashboard</li>
-          </Link>
-         {/*  {!session ? ( */}
+        
+        {!session ? ( 
             <>
               <Link href="/login">
                 <li>Login</li>
@@ -29,9 +27,12 @@ const Navbar = () => {
                 <li>Register</li>
               </Link>
             </>
-      {/*     ) : ( */}
+       ) : ( 
             <>
-      {/*         {session.user?.email} */}
+            {session.user?.email} 
+            <Link href="/dashboard">
+            <li>Dashboard</li>
+          </Link>
               <li>
                 <button
                   onClick={() => {
@@ -43,7 +44,7 @@ const Navbar = () => {
                 </button>
               </li>
             </>
-{/*           )} */}
+           )} 
         </div>
             <div>
               <li>

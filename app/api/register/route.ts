@@ -28,6 +28,26 @@ export async function POST(req: NextRequest) {
       return new NextResponse('Invalid email address or Passwords do not match', { status: 422 ,statusText: 'Invalid email address or Passwords do not match'});
     }
 
+  
+    const existingAdmin = await prisma.admin.findUnique({
+      where: { email },
+    });
+
+    const existingStudent = await prisma.student.findUnique({
+      where: { email },
+    });
+
+    const existingTeacher = await prisma.teacher.findUnique({
+      where: { email },
+    });
+
+    if (existingAdmin || existingStudent || existingTeacher) {
+      return new NextResponse('Email already exists', {
+        status: 422,
+        statusText: 'Email already exists',
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 12);
   
     if (role=='Admin') {
@@ -73,7 +93,7 @@ export async function POST(req: NextRequest) {
     } catch (error) {
       console.log(error);
       return new Response(
-        JSON.stringify({ message: 'Failed to process the message' }),
+        JSON.stringify({ message: 'Failed to process the registration' }),
         { status: 500 }
       );
     }

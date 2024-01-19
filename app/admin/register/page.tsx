@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef } from 'react'
+import { useRef,useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
+import toast from 'react-hot-toast'
 import {
     Form,
     FormControl,
@@ -24,15 +25,17 @@ import {
   } from "@/components/ui/select"
 
   import { Button } from "@/components/ui/button"
+import { createUser } from '@/utils'
  
-const formSchema = z.object({
+export const formSchema = z.object({
     email: z.string().email(),
     f_name: z.string().min(3).max(25),
     l_name: z.string().min(3).max(25),
     languages:z.string().optional(),
     password: z.string().min(3).max(25),
     confirm_password: z.string().min(3).max(25),
-    role: z.enum(["Student","Teacher","Admin"])
+    role: z.enum(["Student","Teacher","Admin"]),
+
   }).refine((data)=>{
     return data.password === data.confirm_password
   },{
@@ -40,13 +43,15 @@ const formSchema = z.object({
     path: ["confirm_password"]
   })
 
-  
 
 const Register = () => {
   const router = useRouter()
   const ref = useRef<HTMLFormElement>(null)
 
+const [pending,setPending] = useState(false)
 
+
+const [error,setError] = useState('')
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -59,31 +64,38 @@ const Register = () => {
           password: "",
           confirm_password: "",
           role: "Student" || "Teacher" || "Admin"
+     
         },
       })
 
       const role = form.watch('role')
 
-    const handleSubmit = async (values:z.infer<typeof formSchema>) => {
-        console.log(values);
-
-         const dataResponse = await fetch('/api/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            
-          },
-          body: JSON.stringify(values),
-        });
-
-        console.log(dataResponse)
-        if (dataResponse.status === 200) {
+      const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+        setPending(true)
+        try {
+          console.log(values);
+          setError('');
+      
+           await createUser(values);
+      
+          toast.success('Registered successfully');
           await form.reset();
+          setPending(false)
+      
+        } catch (error) {
+          console.error('Error in form submission:', error);
+          setPending(false)
+      
+          if (error instanceof Response && error.status === 422) {
+            setError(error.statusText);
+            setPending(false)
+          } else {
+            // Handle other error cases
+            toast.error('Something went wrong');
+            setPending(false)
+          }
         }
-
-        console.log(ref)
-      return dataResponse
-      }
+      };
 
   return (
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4">
@@ -201,12 +213,16 @@ const Register = () => {
                               <FormMessage />
                            </FormItem>
                            )} />
+               <div className='text-xl text-red-500'>{error && error}</div>
+               
                 <div className="flex flex-col gap-4 justify-center mt-4 ">
                     <Button type="submit" 
                             className="w-full
                                       hover:bg-blue-400
-                            ">
-                            Submit 
+                            "
+                            disabled={pending}
+                            >
+                            Submit {pending && '...'}
                     </Button>
                     <Button type='button' 
                             onClick={() => router.push('/')} 
@@ -215,7 +231,7 @@ const Register = () => {
                                        hover:bg-gray-600
                                        hover:text-white
                                        "
-        
+                                       disabled={pending}
                             >
                             Back
                     </Button>

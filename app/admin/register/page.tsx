@@ -27,7 +27,7 @@ import {
   import { Button } from "@/components/ui/button"
 import { createUser } from '@/utils'
  
-export const formSchema = z.object({
+ const formSchema = z.object({
     email: z.string().email(),
     f_name: z.string().min(3).max(25),
     l_name: z.string().min(3).max(25),

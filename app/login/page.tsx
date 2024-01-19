@@ -3,7 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
-import { signIn, useSession } from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react"
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -28,15 +29,15 @@ import { useEffect, useState } from "react"
   const Login = () => {
     const router = useRouter()
     const [error, setError] = useState("");
-    const { data: session, status: sessionStatus } = useSession();
+    const { data: session } = useSession();
 
-
+  
     useEffect(() => {
-      if (sessionStatus === "authenticated") {
+      if (session?.user) {
+        // Assuming that a user object is present in the session when authenticated
         router.replace("/dashboard");
       }
-    }, [sessionStatus, router]);
-
+    }, [session, router]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -69,15 +70,12 @@ import { useEffect, useState } from "react"
           setError("");
         }
       
-        if (sessionStatus === "loading") {
-          return <h1>Loading...</h1>;
-        }
         
     } 
 
 
   return (
-    sessionStatus !== "authenticated" && (
+
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4 justify-center h-screen">
       <h1 className="text-2xl md:text-3xl text-center  mb-4">Log in</h1>
     <Form {...form}>
@@ -137,7 +135,7 @@ import { useEffect, useState } from "react"
 
   </div>
   )
-  )
+
 }
 
 export default Login

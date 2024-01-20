@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import ToasterContext from '@/context/toaster-context'
 import { getServerSession } from 'next-auth'
 import SessionProvider from "@/utils/SessionProvider";
+import UserContextProvider from './context/auth-context'
 
 export const metadata: Metadata = {
   title: 'School app',
@@ -22,19 +23,24 @@ export default async  function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body >
       <SessionProvider session={session}>
+      <UserContextProvider>   
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-        <div className='mx-auto max-w-5xl text-2xl gap-2 mb-10'>
+       
+  
+             <div className='mx-auto max-w-5xl text-2xl gap-2 mb-10'>
                 <div className='flex justify-center'>
-                <ToasterContext/>
-             {children}
-             </div>
+                  <ToasterContext/>
+                  {children}
+                </div>
           </div>
-        </ThemeProvider>
+ 
+         </ThemeProvider>
+         </UserContextProvider>
         </SessionProvider>
       </body>
     </html>

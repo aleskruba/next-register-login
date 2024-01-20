@@ -3,10 +3,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
-import { useSession, signIn, signOut } from "next-auth/react"
-
+import {  signIn } from "next-auth/react"
+import { useUserContext } from "../context/auth-context";
 import { useRouter } from "next/navigation";
-
+import toast from 'react-hot-toast'
 import {
     Form,
     FormControl,
@@ -19,7 +19,8 @@ import {
 
 
   import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
+import {  useState } from "react"
+import { fetchCurrentUser } from "@/utils"
  
   const formSchema = z.object({
     email: z.string().email(),
@@ -29,15 +30,9 @@ import { useEffect, useState } from "react"
   const Login = () => {
     const router = useRouter()
     const [error, setError] = useState("");
-    const { data: session } = useSession();
+    const {setCurrentUser} = useUserContext()
+    const [pending,setPending] = useState(false)
 
-  
-    useEffect(() => {
-      if (session?.user) {
-        // Assuming that a user object is present in the session when authenticated
-        router.replace("/dashboard");
-      }
-    }, [session, router]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,11 +44,12 @@ import { useEffect, useState } from "react"
 
  
     const handleSubmit = async (values:z.infer<typeof formSchema>) => {
-        console.log(values);
+      
 
         const email = values.email
         const password = values.password 
-
+      try {
+        setPending(true)
 
         const res = await signIn("credentials", {
           redirect: false,
@@ -61,16 +57,26 @@ import { useEffect, useState } from "react"
           password,
         });
 
-        console.log(res);
+        if (res?.ok) {
+        const response = await fetchCurrentUser(email);
+                     
+        setCurrentUser(response);
+        toast.success('Logged in successfully');
+        setPending(false)
+        router.replace("/");
+
+          }
 
         if (res?.error) {
           setError("Invalid email or password");
-          if (res?.url) router.replace("/dashboard");
+    
         } else {
           setError("");
         }
       
-        
+      }catch(err) {
+        console.log(err);
+      }
     } 
 
 
@@ -115,8 +121,10 @@ import { useEffect, useState } from "react"
             <Button type="submit" 
                             className="w-full
                                       hover:bg-blue-400
-                            ">
-                            Login
+                            "
+                            disabled={pending}
+                            >
+                            Login {pending && '...'}
                     </Button>
                     <Button type='button' 
                             onClick={() => router.push('/')} 
@@ -125,7 +133,7 @@ import { useEffect, useState } from "react"
                                        hover:bg-gray-600
                                        hover:text-white
                                        "
-        
+                                       disabled={pending}
                             >
                             Back
                     </Button>

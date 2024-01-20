@@ -1,13 +1,16 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { ModeToggle } from "@/components/DarkModeToggle";
+import { useUserContext } from "../context/auth-context";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
 
- const { data: session }: any = useSession();
- console.log('data',session);
+  const {session,currentUser,setCurrentUser} = useUserContext()
+  const router = useRouter()
+
 
   return (
     <div>
@@ -30,14 +33,28 @@ const Navbar = () => {
             </>
        ) : ( 
             <>
-            {session.user?.email} 
-            <Link href="/dashboard">
-            <li>Dashboard</li>
-          </Link>
+            {session.user?.email}       
+               {currentUser?.role === "Admin" && 
+                   <Link href="/dashboard">
+                   <li>Dashboard</li>
+                 </Link>}  
+                 {currentUser?.role === "Student" && 
+                   <Link href="/student">
+                   <li>Student zone</li>
+                 </Link>}  
+                 {currentUser?.role === "Teacher" && 
+                   <Link href="/teacher">
+                   <li>Teacher zone</li>
+                 </Link>}  
+
               <li>
                 <button
                   onClick={() => {
                     signOut();
+                    router.replace("/");
+                    setCurrentUser(null)
+       
+          
                   }}
                   className="p-2 px-5 -mt-1 bg-blue-800 rounded-full"
                 >

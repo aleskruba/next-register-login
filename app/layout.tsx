@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import ToasterContext from '@/context/toaster-context'
 import { getServerSession } from 'next-auth'
 import SessionProvider from "@/utils/SessionProvider";
-import UserContextProvider from './context/auth-context'
+import UserContextProvider from '../context/auth-context'
 
 export const metadata: Metadata = {
   title: 'School app',

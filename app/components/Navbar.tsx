@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { ModeToggle } from "@/components/DarkModeToggle";
-import { useUserContext } from "../context/auth-context";
+import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {

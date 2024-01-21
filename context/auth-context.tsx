@@ -35,6 +35,7 @@ export default function UserContextProvider({
 
      const { data: session }: any = useSession();
      const [currentUser, setCurrentUser] = useState<UserProps>(null)
+    
 
      useEffect(() => {
          const fetchData = async () => {
@@ -44,7 +45,7 @@ export default function UserContextProvider({
               
                    
                      setCurrentUser(res);
-                        console.log(res);
+             
              
                     } catch (error) {
                      // Handle error if needed

@@ -7,9 +7,7 @@ export async function POST(req: NextRequest) {
         
         try {const data = await req.json();
 
-            console.log(data)
-
-               const email = data
+                const email = data
        
 
                  const admin = await prisma.admin.findUnique({

@@ -1,11 +1,9 @@
 "use client"
-import { DataTableDemo } from '@/components/TableComponent'
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import Students from '../components/Students';
-import Class from '../components/Class';
+import Link from 'next/link';
 
 const Dashboard = () => {
 
@@ -28,13 +26,10 @@ const Dashboard = () => {
       <Navbar/>
    {/*      <DataTableDemo/> */}
       <div className='flex w-full justify-around'>
-        <div>
-        <Students/>
-        </div>
-
-        <div>
-        <Class/>
-        </div>
+            CREATE CLASS
+            <Link href='../dashboard'>
+            Back to dashboard
+            </Link>
       </div>
 
         </> : 

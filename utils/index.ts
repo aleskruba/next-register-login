@@ -67,3 +67,11 @@ export async function createUser(user:z.infer<typeof formSchema>){
     }
   }
   
+
+  export async function fetchStudents() {
+
+    const response = await fetch(`/api/students`)
+    const data = await response.json()
+
+return data.data
+}

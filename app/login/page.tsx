@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
 import {  signIn } from "next-auth/react"
-import { useUserContext } from "../context/auth-context";
+import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast'
 import {
@@ -69,9 +69,11 @@ import { fetchCurrentUser } from "@/utils"
 
         if (res?.error) {
           setError("Invalid email or password");
+          setPending(false)
     
         } else {
           setError("");
+          setPending(false)
         }
       
       }catch(err) {

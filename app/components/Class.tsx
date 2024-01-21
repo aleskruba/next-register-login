@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
+import CreateClassComponent from './CreateClassComponent'
+import Classes from './Classes'
 
 function Class() {
   return (
@@ -7,12 +9,11 @@ function Class() {
         <div>
             <Link href='createclass'>
                 Create class
-
-            </Link>
+                        </Link>
         </div>
 
         <div>
-        Classes
+        <Classes/>
         </div>
    
     </div>

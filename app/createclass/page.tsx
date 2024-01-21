@@ -4,12 +4,15 @@ import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import CreateClassComponent from '../components/CreateClassComponent';
 
 const Dashboard = () => {
 
   const router = useRouter()
   const {session,currentUser,setCurrentUser} = useUserContext()
   const [isLoading,setIsLoading] = useState(true)
+
+  
 
   useEffect(() => {
     if (session && currentUser?.role === "Admin") {
@@ -25,8 +28,10 @@ const Dashboard = () => {
     {!isLoading ? <>      
       <Navbar/>
    {/*      <DataTableDemo/> */}
-      <div className='flex w-full justify-around'>
+      <div className='flex flex-col'>
             CREATE CLASS
+
+            <CreateClassComponent/>
             <Link href='../dashboard'>
             Back to dashboard
             </Link>

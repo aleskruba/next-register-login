@@ -24,7 +24,7 @@ const Dashboard = () => {
   },[])
 
   return (
-    <div className='w-screen'>
+    <div className='w-screen mt-20'>
     {!isLoading ? <>      
       <Navbar/>
    {/*      <DataTableDemo/> */}

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import Students from '../components/Students';
+import Students from '../components/StudentsNOTinUSE';
 import Class from '../components/Class';
 
 const Dashboard = () => {
@@ -23,18 +23,12 @@ const Dashboard = () => {
   },[])
 
   return (
-    <div className='w-screen'>
+    <div className='w-screen mt-20'>
     {!isLoading ? <>      
       <Navbar/>
-   {/*      <DataTableDemo/> */}
-      <div className='flex w-full justify-around'>
-        <div>
-        <Students/>
-        </div>
-
-        <div>
+   
+      <div className=' mt-20'>
         <Class/>
-        </div>
       </div>
 
         </> : 

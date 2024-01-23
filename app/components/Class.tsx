@@ -6,11 +6,6 @@ import Classes from './Classes'
 function Class() {
   return (
     <div className='flex flex-col'>
-        <div>
-            <Link href='createclass'>
-                Create class
-                        </Link>
-        </div>
 
         <div>
         <Classes/>

@@ -13,6 +13,7 @@ export type UserProps = {
 
 
   export type StudentsProps = {
+    id:string;
     f_name: string;
     l_name: string;
     email: string;
@@ -52,7 +53,7 @@ export type UserProps = {
     teacherID?: string;
     studentID?: string;
     teacherClasses?: TeacherDetails[];
-    studentClasses?: StudentDetails[];
+    studentClassesIds?: string[]; 
   };
   
   export type TeacherDetails = {

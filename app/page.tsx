@@ -4,9 +4,12 @@ export default function Home() {
 
 
   return (
-     <main className="w-full">
+     <main className="w-full text-base">
        <Navbar/>
-      WELCOME
+       <div className='mt-20 '>
+       WELCOME
+       </div>
+
         
       </main>
 

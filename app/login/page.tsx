@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import {  signIn } from "next-auth/react"
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 import {
     Form,
     FormControl,

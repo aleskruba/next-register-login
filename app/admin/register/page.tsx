@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
 import toast from 'react-hot-toast'
+import { languages } from '@/constants'
 import {
     Form,
     FormControl,
@@ -167,8 +168,8 @@ const [error,setError] = useState('')
                            </FormItem>
                            )} />
 
-                {role === 'Teacher' &&
-                <FormField control={form.control} 
+          
+           {/*      <FormField control={form.control} 
                            name="languages" 
                            render={({ field })=>(
                             <FormItem>
@@ -180,9 +181,35 @@ const [error,setError] = useState('')
                              </FormControl>
                               <FormMessage />
                            </FormItem>
-                           )} />
-                           }
-
+                           )} /> */}
+                           
+      {role === 'Teacher' &&
+                  <FormField control={form.control} 
+                  name="languages" 
+                  render={({ field })=>(
+                  <FormItem>
+                    <FormLabel>Language</FormLabel>
+                    <Select onValueChange={field.onChange} >                        
+                    <FormControl>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select a language" />
+                  </SelectTrigger>
+                  </FormControl>
+                  <SelectContent> 
+                    {languages.map(language =>( 
+                      <div key={language}>
+                      <SelectItem value={language}>{language}</SelectItem>
+            
+                      </div>
+                    ))}
+                   
+                      </SelectContent>
+                </Select>                      
+                    <FormMessage />
+            
+                  </FormItem>
+          )} />        
+                  }
                 <FormField control={form.control} 
                            name="password" 
                            render={({ field })=>(

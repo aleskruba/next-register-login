@@ -1,5 +1,6 @@
 import { TeachersArray, ClassProps } from '@/types';
 import { createClass, fetchTeachers } from '@/utils';
+import Link from 'next/link';
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 
 const CreateClassComponent = () => {
@@ -62,19 +63,37 @@ const CreateClassComponent = () => {
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col max-w-[350px]'>
-      <input name='classCode' placeholder='classCode' onChange={handleChange} />
-      <input name='language' placeholder='language' onChange={handleChange} />
-      <input name='schedule' placeholder='schedule' onChange={handleChange} />
+      <div >
+      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2' name='classCode' placeholder='class code' onChange={handleChange} />
+      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='language' placeholder='language' onChange={handleChange} />
+      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='schedule' placeholder='schedule' onChange={handleChange} />
 
-      <select name='teacherID' value={selected} onChange={handleChangeSelect}>
+      <select 
+            name='teacherID' 
+            value={selected} 
+            onChange={handleChangeSelect}
+            className="text-xl italic mt-2 block w-full pl-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            >
         {teachers?.map((teacher) => (
-          <option value={teacher.id} key={teacher.email}>
+          <option 
+          className='text-xl italic'
+          value={teacher.id} key={teacher.email}>
             {teacher.l_name}
           </option>
         ))}
       </select>
 
-      <input type='submit' value='save' />
+      <input type='submit' 
+             value='save' 
+             className='bg-blue-500 text-white w-full py-2 mt-2 border border-solid border-gray-500 hover:bg-blue-700 hover:text-white'
+             />
+             <div className='bg-gray-500 text-white text-center w-full py-2 mt-2 border border-solid border-gray-500  hover:bg-gray-700 hover:text-white'>
+            <Link href='../'
+                 >
+            back 
+            </Link>
+            </div>
+      </div>
     </form>
   );
 };

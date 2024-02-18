@@ -32,10 +32,13 @@ const Navbar = () => {
 })
 
   return (
-    <header className="w-full mx-auto text-lg md:px-4  sm:px-4 fixed left-0 top-0 z-50 shadow bg-white dark:bg-stone-900  md:opacity-100  dark:border-b dark:border-stone-600">
+    <header className="w-full mx-auto text-lg md:px-4 pt-6  sm:px-4 fixed left-0 top-0 z-50 shadow bg-white dark:bg-stone-900  md:opacity-100  dark:border-b dark:border-stone-600">
+          <div className="md:hidden absolute left-3 top-1 text-base  text-green-400"  >     {session && session.user?.email}  
+  </div> 
+  <div  className="md:hidden absolute right-3 top-1 text-base  "> <ModeToggle/></div>
          <div className="md:hidden"  >
               <button
-                className="p-2 text-gray-800 dark:text-gray-100 rounded-md outline-none focus:border-gray-400 focus:border "
+                className="p-2 mt-2 text-gray-800 dark:text-gray-100 rounded-md outline-none focus:border-gray-400 focus:border "
                 onClick={() =>{ setNavbar(!navbar); /* setOpen(true) */}}
               
               >
@@ -48,17 +51,17 @@ const Navbar = () => {
       <ul className="flex flex-col md:flex-row w-full justify-around  item-center md:pt-4" >
 
           <Link href="/">
-            <li>Home</li>
+            <li className="hover:text-gray-500">Home</li>
           </Link>
    
            
         {!session ? ( 
             <ul className="flex md:gap-5  flex-col md:flex-row ">
               <Link href="/login">
-                <li>Login</li>
+                <li className="hover:text-gray-500">Login</li>
               </Link>
               <Link href="/admin/register">
-                <li>Register</li>
+                <li className="hover:text-gray-500">Register</li>
               </Link>
             </ul>
        ) : ( 
@@ -67,22 +70,34 @@ const Navbar = () => {
                {currentUser?.role === "Admin" && 
                     <>
                        <Link href='createclass'>
-                         <li>Create class</li>  
+                         <li className="hover:text-gray-500">Create class</li>  
+                      </Link>
+
+                      <Link href='managaclasses'>
+                         <li className="hover:text-gray-500">Manage classes</li>  
+                      </Link>
+
+                      <Link href='createclass'>
+                         <li className="hover:text-gray-500">Students</li>  
+                      </Link>
+
+                      <Link href='createclass'>
+                         <li className="hover:text-gray-500">Teachers</li>  
                       </Link>
         
                       <Link href="/dashboard">
-                          <li>Dashboard</li>
+                          <li className="hover:text-gray-500">Dashboard</li>
                       </Link>
                    </>
                    }
                    
                  {currentUser?.role === "Student" && 
                    <Link href="/student">
-                   <li>Student zone</li>
+                   <li className="hover:text-gray-500">Student zone</li>
                  </Link>}  
                  {currentUser?.role === "Teacher" && 
                    <Link href="/teacher">
-                   <li>Teacher zone</li>
+                   <li className="hover:text-gray-500">Teacher zone</li>
                  </Link>}  
 
               <li>
@@ -94,7 +109,7 @@ const Navbar = () => {
        
           
                   }}
-                  className="p-2 px-5 -mt-1 bg-blue-800 rounded-full"
+                  className=" px-5  bg-blue-300 rounded-full mt-4 md:mt-0 hover:bg-blue-500"
                 >
                   Logout
                 </button>
@@ -103,11 +118,11 @@ const Navbar = () => {
            )} 
      
        </ul>
-       <div className="text-base  text-green-400 absolute left-20 md:left-10 top-1" >
+       <div className=" hidden md:block text-base  text-green-400 absolute left-20 md:left-10 top-1" >
          {session && session.user?.email}   
        </div>
 
-          <div className="absolute right-5 top-1">
+          <div className="hidden md:block  absolute right-5 top-1">
              <ModeToggle/>
 
             </div>

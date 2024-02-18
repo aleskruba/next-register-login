@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { UserProps } from "@/types";
+import { ClassArray, UserProps } from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -117,4 +117,31 @@ export async function fetchClasses() {
   const data = await response.json()
 
 return data.data
+}
+
+
+export async function updateStudentsInClass(classData: ClassArray): Promise<void> {
+
+  console.log('classData',classData)
+   try {
+    const response = await fetch('/api/classes', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(classData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create class');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error creating class:', error);
+
+  } 
 }

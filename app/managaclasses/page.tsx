@@ -5,8 +5,9 @@ import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import CreateClassComponent from '../components/CreateClassComponent';
+import ManageClassesComponents from '../components/ManageClassesComponents';
 
-const Dashboard = () => {
+const ManageClasses = () => {
 
   const router = useRouter()
   const {session,currentUser,setCurrentUser} = useUserContext()
@@ -29,10 +30,8 @@ const Dashboard = () => {
       <Navbar/>
    {/*      <DataTableDemo/> */}
       <div className='flex flex-col py-8 '>
-           <div className='italic font-bold'> CREATE A CLASS </div>
-
-            <CreateClassComponent/>
-
+           <div className='italic font-bold'> Hola {currentUser?.f_name} </div>
+        <ManageClassesComponents/>
       </div>
 
         </> : 
@@ -43,4 +42,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default ManageClasses

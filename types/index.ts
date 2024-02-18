@@ -23,6 +23,7 @@ export type UserProps = {
     role: string;
     createdAt?: Date;
     updatedAt?: Date;
+    classesIds:string[];
   };
   
   // Define an array type with the StudentsProps type
@@ -47,6 +48,7 @@ export type UserProps = {
 
 
   export type ClassProps = {
+
     classCode: string;
     language: string;
     schedule: string;

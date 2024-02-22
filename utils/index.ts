@@ -85,8 +85,12 @@ export async function fetchTeachers() {
 return data.data
 }
 
+interface ClassResponseType {
+  message: string;
+  // Add other properties as needed
+}
 
-export async function createClass(classData: ClassProps): Promise<void> {
+export async function createClass(classData: ClassProps): Promise<ClassResponseType> {
   try {
     const response = await fetch('/api/class', {
       method: 'POST',
@@ -100,15 +104,20 @@ export async function createClass(classData: ClassProps): Promise<void> {
       throw new Error('Failed to create class');
     }
 
-    const responseData = await response.json();
-    return responseData
-
+    const responseData: ClassResponseType = await response.json();
+    return responseData;
 
   } catch (error) {
     console.error('Error creating class:', error);
 
+    // Option 1: Rethrow the error
+    throw error;
+
+    // Option 2: Return a default value or error object
+    // return { message: 'Failed to create class' };
   }
 }
+
 
 
 export async function fetchClasses() {
@@ -119,6 +128,53 @@ export async function fetchClasses() {
 return data.data
 }
 
+export async function deleteClass(classID: string) {
+  try {
+    const response = await fetch('/api/class', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(classID),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete class');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error creating class:', error);
+
+  }
+}
+
+export async function updateClass(updatedClass:ClassProps) {
+  try {
+    const response = await fetch('/api/class', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedClass),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update class');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error creating class:', error);
+
+  }
+}
 
 export async function updateStudentsInClass(classData: ClassArray): Promise<void> {
 

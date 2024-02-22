@@ -73,11 +73,11 @@ const Navbar = () => {
                          <li className="hover:text-gray-500">Create class</li>  
                       </Link>
 
-                      <Link href='managaclasses'>
+                      <Link href='manageclasses'>
                          <li className="hover:text-gray-500">Manage classes</li>  
                       </Link>
 
-                      <Link href='createclass'>
+                      <Link href='students'>
                          <li className="hover:text-gray-500">Students</li>  
                       </Link>
 

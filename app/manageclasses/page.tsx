@@ -10,7 +10,7 @@ import ManageClassesComponents from '../components/ManageClassesComponents';
 const ManageClasses = () => {
 
   const router = useRouter()
-  const {session,currentUser,setCurrentUser} = useUserContext()
+  const {session,currentUser} = useUserContext()
   const [isLoading,setIsLoading] = useState(true)
 
   
@@ -29,7 +29,7 @@ const ManageClasses = () => {
     {!isLoading ? <>      
       <Navbar/>
    {/*      <DataTableDemo/> */}
-      <div className='flex flex-col py-8 '>
+      <div className='flex flex-col py-8 items-center md:items-start'>
            <div className='italic font-bold'> Hola {currentUser?.f_name} </div>
         <ManageClassesComponents/>
       </div>

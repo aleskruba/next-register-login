@@ -2,13 +2,19 @@ import { TeachersArray, ClassProps } from '@/types';
 import { createClass, fetchTeachers } from '@/utils';
 import Link from 'next/link';
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useRouter } from 'next/navigation'
+import toast from "react-hot-toast";
 
 const CreateClassComponent = () => {
+  const router = useRouter()
+
   const [teachers, setTeachers] = useState<TeachersArray>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selected, setSelected] = useState<string>(''); // Initialize with an empty string
+  const [classCodeError, setClassCodeError] = useState<string | null>(null);
 
   const [newClass, setNewClass] = useState<ClassProps>({
+    id:'',
     classCode: '',
     language: '',
     schedule: '',
@@ -20,7 +26,7 @@ const CreateClassComponent = () => {
       try {
         const response = await fetchTeachers();
         setTeachers(response);
-        setIsLoading(false);
+
 
         // Set the initial selected value after fetching teachers
         if (response && response.length > 0) {
@@ -32,7 +38,6 @@ const CreateClassComponent = () => {
         }
       } catch (err) {
         console.error(err);
-        setIsLoading(false);
       }
     };
 
@@ -45,26 +50,57 @@ const CreateClassComponent = () => {
     setNewClass({ ...newClass, teacherID: e.target.value });
   };
 
+ 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewClass({ ...newClass, [e.target.name]: e.target.value });
-    console.log({ ...newClass, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    // Check if the input is "classCode" and validate the format
+    if (name === 'classCode') {
+      const classCodeRegex = /^[0-9][A-Z]$/;
+
+      if (!classCodeRegex.test(value)) {
+        setClassCodeError('Class code should be in the format of a number followed by a capital letter (e.g., 1A, 2B).');
+      } else {
+        setClassCodeError(null);
+      }
+    }
+
+    setNewClass({ ...newClass, [name]: value });
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    if (!classCodeError) {
     try { 
+      setIsLoading(true);
         const response = await createClass(newClass)
-        console.log(response)
+
+   
+        if (response.message === 'success') { 
+          console.log(response.message)
+          toast.success('Class created  successfully');
+          router.push('/dashboard')
+         
+        }
+        else {
+          alert('Class han not been created')
+          setIsLoading(false);
+        }
+    
     } 
     catch(e) 
         {console.log(e);}
+
+  } else {
+    alert('ERROR')
+  }
   };
 
   return (
     <form onSubmit={handleSubmit} className='flex flex-col max-w-[350px]'>
       <div >
       <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2' name='classCode' placeholder='class code' onChange={handleChange} />
+     <p className='text-xs text-red-600'> {classCodeError && classCodeError}</p>
       <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='language' placeholder='language' onChange={handleChange} />
       <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='schedule' placeholder='schedule' onChange={handleChange} />
 
@@ -83,6 +119,8 @@ const CreateClassComponent = () => {
         ))}
       </select>
 
+{!isLoading && 
+<>
       <input type='submit' 
              value='save' 
              className='bg-blue-500 text-white w-full py-2 mt-2 border border-solid border-gray-500 hover:bg-blue-700 hover:text-white'
@@ -93,6 +131,8 @@ const CreateClassComponent = () => {
             back 
             </Link>
             </div>
+            </>
+  }
       </div>
     </form>
   );

@@ -25,7 +25,7 @@ const Students = () => {
      <div className='w-screen mt-20 ml-5'>
     {!isLoading ? <>      
       <Navbar/>
-      <div className=''> Hola {currentUser?.f_name} 
+      <div className=''> 
       
       <StudentsComponents/>
       </div>

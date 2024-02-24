@@ -30,8 +30,7 @@ const ManageClasses = () => {
       <Navbar/>
    {/*      <DataTableDemo/> */}
       <div className='flex flex-col py-8 items-center md:items-start'>
-           <div className='italic font-bold'> Hola {currentUser?.f_name} </div>
-        <ManageClassesComponents/>
+                <ManageClassesComponents/>
       </div>
 
         </> : 

@@ -298,11 +298,10 @@ function ManageClassesComponents() {
                         >
                         delete
                         </button>
-
-
-
+             
                         </>}
-
+                        {cl.studentClassesIds &&  cl.studentClassesIds?.length > 0 &&  <span className="text-xs text-red-400 text-end w-full mb-2">Only empty class can be deleted  </span> }
+        
                         </div>
                        
                     

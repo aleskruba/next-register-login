@@ -77,6 +77,40 @@ return data.data
 }
 
 
+export async function fetchStudent(params: any) {
+
+  const response = await fetch(`/api/student/${params}`)
+  const data = await response.json()
+
+return data.data
+}
+
+
+export async function deleteStudent(studentID: string) {
+  try {
+    const response = await fetch(`/api/student/${studentID}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(studentID),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete a student');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting a student:', error);
+
+  }
+}
+
+
 export async function fetchTeachers() {
 
   const response = await fetch(`/api/teachers`)
@@ -147,7 +181,7 @@ export async function deleteClass(classID: string) {
 
 
   } catch (error) {
-    console.error('Error creating class:', error);
+    console.error('Error during deletin a class:', error);
 
   }
 }

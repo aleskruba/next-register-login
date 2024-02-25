@@ -30,6 +30,7 @@ model Student {
   email           String   @unique
   image           String?
   hashedPassword  String?
+  languages       String?     // New field
   role            String   @default("Student")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

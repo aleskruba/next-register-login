@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { ClassArray, UserProps } from "@/types";
+import { ClassArray, StudentsProps, UserProps } from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -94,6 +94,30 @@ export async function deleteStudent(studentID: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(studentID),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete a student');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting a student:', error);
+
+  }
+}
+
+export async function updateStudent(student: StudentsProps) {
+  try {
+    const response = await fetch(`/api/student/${student}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(student),
     });
 
     if (!response.ok) {

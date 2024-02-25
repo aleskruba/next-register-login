@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
       if (currentUser?.role == 'Admin') {
 
         const students = await prisma.student.findMany({
+          where: { role: "Student" },
           include: {
             classes: true // Include the associated classes for each student
           }

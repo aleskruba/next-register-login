@@ -79,3 +79,34 @@ export async function DELETE(req: NextRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  
+  try {
+    const student = await req.json();
+    console.log(student)
+
+    const existingStudent= await prisma.student.findUnique({
+      where: { id: student.id },
+    });
+
+    if (!existingStudent) {
+    
+      return new Response(JSON.stringify({ message: 'Student not found' }), { status: 404 });
+    }
+
+    const updatedStudent = await prisma.student.update({
+      where: { id: student.id },
+      data: {
+        email: student.email,
+        f_name: student.f_name,
+        l_name: student.l_name,
+          },
+    });
+
+    return NextResponse.json({ message: 'success'}, { status: 200 });
+
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
+  }
+}

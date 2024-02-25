@@ -11,7 +11,6 @@ import { useTheme } from "next-themes"
 
 const Navbar = () => {
   const { resolvedTheme } = useTheme();
-  console.log(resolvedTheme)
   const {session,currentUser,setCurrentUser} = useUserContext()
   const router = useRouter()
   const [navbar, setNavbar] = useState(false)

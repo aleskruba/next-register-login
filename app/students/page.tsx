@@ -22,7 +22,7 @@ const Students = () => {
 
 
   return (
-     <div className='w-screen mt-20 ml-5'>
+     <div className='w-screen mt-20 ml-5 '>
     {!isLoading ? <>      
       <Navbar/>
       <div className=''> 

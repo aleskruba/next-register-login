@@ -78,14 +78,12 @@ export async function PUT(req: NextRequest) {
       }
     }
 
-    // Loop through data and log studentClassesIds from each class
-    for (const classData of data) {
+/*     for (const classData of data) {
       console.log(`Class ID: ${classData.id}, Student Classes IDs: ${classData.studentClassesIds}`);
-    }
+    } */
 
 
     const students = await prisma.student.findMany();
-    console.log(students)
 
     const allClassesIds = [].concat(...data.map((classObj: { ids: any; }) => classObj.ids));
 

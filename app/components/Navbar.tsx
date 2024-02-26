@@ -79,20 +79,20 @@ const Navbar = () => {
             <Link href="/login">
               <li className={pathname === "/login" ? "font-bold text-green-500" : "hover:text-green-500"}>Login</li>
             </Link>
-            <Link href="/admin/register">
-              <li className={pathname === "/admin/register" ? "font-bold text-green-500" : "hover:text-green-500"}>Register</li>
-            </Link>
-          </ul>
+             </ul>
         ) : (
           <>
             {currentUser?.role === "Admin" && (
               <>
+                <Link href="/admin/register">
+                  <li className={pathname === "/admin/register" ? "font-bold text-green-500" : "hover:text-green-500"}>Register a new user</li>
+                </Link>
                 <Link href='../createclass'>
                   <li className={pathname === "/createclass" ? "font-bold text-green-500" : "hover:text-green-500"}>Create class</li>
                 </Link>
 
                 <Link href='../manageclasses'>
-                  <li className={pathname === "/manageclasses" ? "font-bold text-green-500" : "hover:text-green-500"}>Manage classes</li>
+                  <li className={pathname === "/manageclasses" ? "font-bold text-green-500" : "hover:text-green-500"}>Classes</li>
                 </Link>
 
                 <Link href='../students'>
@@ -104,7 +104,7 @@ const Navbar = () => {
                 </Link>
 
                 <Link href="../dashboard">
-                  <li className={pathname === "/dashboard" ? "font-bold text-green-500" : "hover:text-green-500"}>Dashboard</li>
+                  <li className={pathname === "/dashboard" ? "font-bold text-green-500" : "hover:text-green-500"}>Add Students to Classes</li>
                 </Link>
               </>
             )}

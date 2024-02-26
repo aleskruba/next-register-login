@@ -70,9 +70,10 @@ const CreateClassComponent = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     if (!classCodeError) {
     try { 
-      setIsLoading(true);
+  
         const response = await createClass(newClass)
 
    
@@ -119,7 +120,7 @@ const CreateClassComponent = () => {
         ))}
       </select>
 
-{!isLoading && 
+{!isLoading ?
 <>
       <input type='submit' 
              value='save' 
@@ -132,6 +133,7 @@ const CreateClassComponent = () => {
             </Link>
             </div>
             </>
+            :<> wait please ....</>
   }
       </div>
     </form>

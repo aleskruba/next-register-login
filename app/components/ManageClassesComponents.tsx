@@ -157,7 +157,9 @@ function ManageClassesComponents() {
   return (
     <div>
         {!isLoading  ? <>
-        <h1>ManageClassesComponents</h1>
+        <div className='mb-5'>
+        <h1>Update or delete a class</h1>
+        </div>
         {classes.map( cl =>{
 
             return (

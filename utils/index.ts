@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { ClassArray, StudentsProps, UserProps } from "@/types";
+import { ClassArray, StudentsProps, TeachersProps, UserProps } from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -110,6 +110,39 @@ export async function deleteStudent(studentID: string) {
   }
 }
 
+
+export async function fetchTeacher(params: any) {
+
+  const response = await fetch(`/api/teacher/${params}`)
+  const data = await response.json()
+
+return data.data
+}
+
+export async function deleteTeacher(teacherID: string) {
+  try {
+    const response = await fetch(`/api/teacher/${teacherID}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(teacherID),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete a teacher');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting a teacher:', error);
+
+  }
+}
+
 export async function updateStudent(student: StudentsProps) {
   try {
     const response = await fetch(`/api/student/${student}`, {
@@ -130,6 +163,30 @@ export async function updateStudent(student: StudentsProps) {
 
   } catch (error) {
     console.error('Error during deleting a student:', error);
+
+  }
+}
+
+export async function updateTeacher(teacher: TeachersProps) {
+  try {
+    const response = await fetch(`/api/teacher/${teacher}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(teacher),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete a teacher');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting a teacher:', error);
 
   }
 }

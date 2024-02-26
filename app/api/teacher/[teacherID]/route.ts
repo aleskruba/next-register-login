@@ -16,19 +16,18 @@ try {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
       });
-   
- 
+     
       if(currentUser?.role === 'Admin') {
    
-        const student = await prisma.student.findFirst({
-            where: { id:params.studentID },
+        const teacher = await prisma.teacher.findFirst({
+            where: { id:params.teacherID },
             include: {
               classes: true,  // Include the related classes
               gradeses: true, // Include the related grades
           },
         });
 
-        return new Response(JSON.stringify({ data:student }), { status: 200 });
+        return new Response(JSON.stringify({ data:teacher }), { status: 200 });
 
         }
     } else 
@@ -47,29 +46,29 @@ catch(err){
 export async function DELETE(req: NextRequest) {
   
   try {
-    const studentID = await req.json();
+    const teacherID = await req.json();
 
     const classes = await prisma.class.findMany()
    
 
-     const studentToBeDeleted = await prisma.student.findUnique({
-      where: { id: studentID }, 
+     const teacherToBeDeleted = await prisma.teacher.findUnique({
+      where: { id: teacherID }, 
     });
-    if (!studentToBeDeleted) {
+    if (!teacherToBeDeleted) {
          return NextResponse.json({ error: 'Admin record not found' }, { status: 400 });
     }
 
-    const studentClassesIds = classes.flatMap(cls => cls.studentClassesIds);
-        if (!studentClassesIds.includes(studentID)) {
-     
-                  const deletedStudent = await prisma.student.delete({
-            where: { id: studentID },
+    const teacherClassesIds = classes.flatMap(cls => cls.teacherClassesIds);
+        if (!teacherClassesIds.includes(teacherID)) {
+         
+                  const deletedTeacher = await prisma.teacher.delete({
+            where: { id: teacherID },
           });
         
           return NextResponse.json({ message: 'success'}, { status: 200 });
         } else {
         
-                 return new Response(JSON.stringify({ message: 'unauthorized' }));
+                return new Response(JSON.stringify({ message: 'unauthorized' }));
         }
 
   } catch (error) {
@@ -81,23 +80,23 @@ export async function DELETE(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   
   try {
-    const student = await req.json();
+    const teacher = await req.json();
 
-    const existingStudent= await prisma.student.findUnique({
-      where: { id: student.id },
+    const existingTeacher= await prisma.teacher.findUnique({
+      where: { id: teacher.id },
     });
 
-    if (!existingStudent) {
+    if (!existingTeacher) {
     
-      return new Response(JSON.stringify({ message: 'Student not found' }), { status: 404 });
+      return new Response(JSON.stringify({ message: 'Teacher not found' }), { status: 404 });
     }
 
-    const updatedStudent = await prisma.student.update({
-      where: { id: student.id },
+    const updatedTeacher = await prisma.teacher.update({
+      where: { id: teacher.id },
       data: {
-        email: student.email,
-        f_name: student.f_name,
-        l_name: student.l_name,
+        email: teacher.email,
+        f_name: teacher.f_name,
+        l_name: teacher.l_name,
           },
     });
 

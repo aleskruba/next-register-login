@@ -5,9 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    console.log(data);
-
-    const existingClass = await prisma.class.findFirst({
+        const existingClass = await prisma.class.findFirst({
       where: {
         classCode: data.classCode,
       },
@@ -33,8 +31,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    console.log('Class saved:', newClass);
-
+ 
     return NextResponse.json({ message: 'success', newClass }, { status: 200 });
   } catch (error) {
     console.error(error);
@@ -56,8 +53,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     if (classToBeDeleted.studentClassesIds.length === 0) {
-    console.log(classToBeDeleted, 'can be delted');
-    const deletedAdmin = await prisma.class.delete({
+      const deletedAdmin = await prisma.class.delete({
       where: { id: classID },
     });
     }

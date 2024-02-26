@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef,useState } from 'react'
+import { useRef,useState,useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -8,6 +8,7 @@ import * as z from "zod"
 import { Input } from "@/components/ui/input"
 import toast from 'react-hot-toast'
 import { languages } from '@/constants'
+import { useUserContext } from "../../../context/auth-context";
 import {
     Form,
     FormControl,
@@ -50,6 +51,17 @@ const Register = () => {
   const ref = useRef<HTMLFormElement>(null)
 
 const [pending,setPending] = useState(false)
+const {session,currentUser} = useUserContext()
+const [isLoading,setIsLoading] = useState(true)
+
+useEffect(() => {
+  if (session && currentUser?.role === "Admin") {
+  setIsLoading(false)
+  }
+  else {
+    router.replace("/");
+  }
+},[])
 
 
 const [error,setError] = useState('')
@@ -97,9 +109,9 @@ const [error,setError] = useState('')
           }
         }
       };
-
   return (
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4">
+      {isLoading ? <>...wait please </> : <> 
       <h1 className="text-2xl md:text-3xl text-center mt-4 mb-4">Register a new user</h1>
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}
@@ -266,7 +278,7 @@ const [error,setError] = useState('')
                 </div>
             </form> 
         </Form>
-   
+        </>}
     </div>
   )
 }

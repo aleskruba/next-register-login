@@ -41,6 +41,7 @@ const StudentsComponents = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
       />
 
+    {!isLoading ? <>   
   
       {filteredStudents .sort((a, b) => a.l_name.localeCompare(b.l_name)).map((student) => {
         const studentClasses = classes
@@ -69,6 +70,13 @@ const StudentsComponents = () => {
           </div>
         );
       })}
+
+
+      </>:<>
+        <div>
+        wait please ...
+        </div>
+      </>}  
     </div>
   );
 };

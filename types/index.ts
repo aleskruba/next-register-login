@@ -56,6 +56,7 @@ export type UserProps = {
     studentID?: string;
     teacherClasses?: TeacherDetails[];
     studentClassesIds?: string[]; 
+    teacherClassesIds?: string[]; 
 
   };
   

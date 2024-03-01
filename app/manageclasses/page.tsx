@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import Link from 'next/link';
-import CreateClassComponent from '../components/CreateClassComponent';
 import ManageClassesComponents from '../components/ManageClassesComponents';
 
 const ManageClasses = () => {

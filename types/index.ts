@@ -1,5 +1,6 @@
 
 export type UserProps = {
+    id: any;
     f_name: string;
     l_name: string;
     email: string;
@@ -20,7 +21,7 @@ export type UserProps = {
     image?: string | null;
     hashedPassword?: string | null;
     languages?: string | null;
-    role: string;
+    role?: string;
     createdAt?: Date;
     updatedAt?: Date;
     classesIds?:string[];
@@ -55,7 +56,7 @@ export type UserProps = {
     teacherID?: string;
     studentID?: string;
     teacherClasses?: TeacherDetails[];
-    studentClassesIds?: string[]; 
+    studentClassesIds?: string[] ; 
     teacherClassesIds?: string[]; 
 
   };

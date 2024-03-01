@@ -7,6 +7,7 @@ export async function GET(req: Request,context:any) {
 const {params} = context;
 const session = await getServerSession();
 
+
 try {
     
 
@@ -16,9 +17,9 @@ try {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
       });
-   
+
  
-      if(currentUser?.role === 'Admin') {
+      if(currentUser?.role == 'Admin')    {
    
         const student = await prisma.student.findFirst({
             where: { id:params.studentID },
@@ -31,6 +32,8 @@ try {
         return new Response(JSON.stringify({ data:student }), { status: 200 });
 
         }
+
+
     } else 
         { return new Response(JSON.stringify({ message:'not authorized' }), { status: 401 });}
 
@@ -40,7 +43,6 @@ catch(err){
     console.log(err)
     return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
 }
-
 }
 
 
@@ -79,9 +81,27 @@ export async function DELETE(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-  
+
+  const session = await getServerSession();
+  const student = await req.json();
+
   try {
-    const student = await req.json();
+
+    if (session) {
+      const currentUser = await prisma.admin.findUnique({
+        where: {
+          email: session.user?.email as string // Ensure session.user.email exists and is a string
+        }
+      });
+
+      const currentUserStudent = await prisma.student.findUnique({
+        where: {
+          email: session.user?.email as string // Ensure session.user.email exists and is a string
+        }
+      });
+  
+      if(currentUser?.role == 'Admin' || currentUserStudent?.id == student.id)    {
+
 
     const existingStudent= await prisma.student.findUnique({
       where: { id: student.id },
@@ -102,7 +122,10 @@ export async function PUT(req: NextRequest) {
     });
 
     return NextResponse.json({ message: 'success'}, { status: 200 });
-
+    } else {return new Response(JSON.stringify({ message:'not authorized' }), { status: 401 });}
+  } 
+  
+  else  { return new Response(JSON.stringify({ message:'not authorized' }), { status: 401 });}
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });

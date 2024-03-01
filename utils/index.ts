@@ -86,6 +86,15 @@ return data.data
 }
 
 
+export async function fetchMyProfile(params: any) {
+
+  const response = await fetch(`/api/myprofile/${params}`)
+  const data = await response.json()
+
+return data.data
+}
+
+
 export async function deleteStudent(studentID: string) {
   try {
     const response = await fetch(`/api/student/${studentID}`, {

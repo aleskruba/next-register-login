@@ -1,8 +1,9 @@
-"use client"
+/* "use client"
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
+import StudentsComponents from '../components/StudentsComponents';
 
 function Student() {
 
@@ -15,7 +16,8 @@ function Student() {
       try {
         if (currentUser) {
           console.log("Current User:", currentUser);
-          if (currentUser.role === "Student") {
+          if (currentUser.role === "Student" || "Admin") {
+            console.log('Student')
             setIsLoading(false);
           } else {
                    router.replace("/");
@@ -34,8 +36,7 @@ function Student() {
 
         {!isLoading ? <>      
               <Navbar/>
-              Student Page
-
+<h1>Hello</h1>
                 </> : 
                 <>
                 ... wait please
@@ -44,4 +45,4 @@ function Student() {
           )
         }
 
-export default Student
+export default Student */

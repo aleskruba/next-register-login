@@ -30,6 +30,7 @@ const ManageClasses = () => {
       <Navbar/>
    {/*      <DataTableDemo/> */}
       <div className='flex flex-col py-8 items-center md:items-start'>
+    
                 <ManageClassesComponents/>
       </div>
 

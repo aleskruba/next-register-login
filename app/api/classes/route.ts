@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession();
+/*     const session = await getServerSession();
 
  
 
@@ -15,22 +15,24 @@ export async function GET(req: NextRequest) {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
       });
-
+ */
  
-            if (currentUser?.role === 'Admin') {
+        /*     if (currentUser?.role === 'Admin') { */
         const classes = await prisma.class.findMany({
           include: {
             teacherClasses: true, // Include the associated teachers
           },
         });
+
+        
  
         return new Response(JSON.stringify({ data:classes }), { status: 200 });
-      } else {
+/*       } else {
         return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
       }
     } else {
       return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
-    }
+    } */
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
@@ -43,8 +45,18 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   const data = await req.json();
+  const session = await getServerSession();
 
   try {
+
+    if (session) {
+      const currentUser = await prisma.admin.findUnique({
+        where: {
+          email: session.user?.email as string // Ensure session.user.email exists and is a string
+        }
+      });
+
+
     for (const classData of data) {
       const { id: classId, studentClassesIds } = classData;
 
@@ -91,6 +103,9 @@ export async function PUT(req: NextRequest) {
 
 
     return new Response(JSON.stringify({ message: 'Success' }), { status: 200 });
+
+  }
+  else {  return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });}
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });

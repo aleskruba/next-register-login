@@ -5,6 +5,8 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
+  
+
         const existingClass = await prisma.class.findFirst({
       where: {
         classCode: data.classCode,
@@ -73,6 +75,8 @@ export async function PUT(req: NextRequest) {
   try {
     const classObject = await req.json();
 
+    console.log(classObject)
+
     const existingClass = await prisma.class.findUnique({
       where: { id: classObject.id },
     });
@@ -90,7 +94,7 @@ export async function PUT(req: NextRequest) {
         schedule: classObject.schedule,
 
         teacherClasses: {
-          set: [{ id: classObject.teacherClasses[0].id }],
+          set: [{ id: classObject.teacherID}],
         },
       },
     });

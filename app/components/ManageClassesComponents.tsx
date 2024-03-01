@@ -14,13 +14,15 @@ function ManageClassesComponents() {
     const [selected, setSelected] = useState<string>('');
     const [classCodeError, setClassCodeError] = useState<string | null>(null);
 
+
+
     const [updatedClass, setUpdatedClass] = useState<ClassProps>({
         id: '',
         classCode: '',
         language: '',
         schedule: '',
         teacherID: '',
-        teacherClasses: [], // Initialize with an empty array of TeacherDetails
+        teacherClasses: [] , // Initialize with an empty array of TeacherDetails
       });
 
  
@@ -38,7 +40,7 @@ function ManageClassesComponents() {
         fetchData();
 
 
-    },[])
+    },[updatedClass])
 
     const handleDelete = async (ID:string) => {
 
@@ -72,15 +74,19 @@ function ManageClassesComponents() {
         console.log(ID)
         {classes.forEach( cl =>{
             if (cl.id === ID) {
-                console.log(cl.classCode)
+          
 
+                cl.teacherClassesIds && setSelected( cl.teacherClassesIds[0])
                 setUpdatedClass({
                     id:cl.id,
                     classCode: cl.classCode,
                     language: cl.language,
                     schedule: cl.schedule,
+                    teacherID: cl.teacherClasses && cl.teacherClasses[0].id,
+                    teacherClasses:cl.teacherClasses && [cl.teacherClasses[0]] 
                    
                 })
+                              
             }
 
          })}
@@ -88,7 +94,8 @@ function ManageClassesComponents() {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
- 
+  
+
 
         if (name === 'classCode') {
           const classCodeRegex = /^[0-9][A-Z]$/;
@@ -107,6 +114,10 @@ function ManageClassesComponents() {
       const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
      
         setSelected(e.target.value);
+        console.log(e.target.value);
+        console.log(teachers)
+        const selectedTeacher = teachers.find(teacher => teacher.id === e.target.value) 
+        console.log(selectedTeacher)
       
         setUpdatedClass((prevClass) => {
           const updatedTeacherClasses = prevClass.teacherClasses || []; // Default to an empty array if undefined
@@ -119,7 +130,7 @@ function ManageClassesComponents() {
           return {
             ...prevClass,
             teacherID: e.target.value,
-            teacherClasses: [...updatedTeacherClasses, selectedTeacher],
+            teacherClasses: [selectedTeacher],
           };
         });
       };
@@ -128,7 +139,7 @@ function ManageClassesComponents() {
 
       const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
-        console.log(updatedClass);
+
         if (!classCodeError) {
         try{
           const updatedClassIndex = classes.findIndex((c) => c.id === updatedClass.id);
@@ -140,7 +151,7 @@ function ManageClassesComponents() {
               ...prevClasses.slice(updatedClassIndex + 1),
             ]);
           }
-        setSelectedClass(null)
+   setSelectedClass(null)
  
          const response = await updateClass(updatedClass)
          
@@ -162,6 +173,8 @@ function ManageClassesComponents() {
         </div>
         {classes.map( cl =>{
 
+  
+
             return (
                 <div key={cl.id} className='border border-solid border-gray-400 flex justify-between px-2 min-w-[380px]  md:min-w-[500px] '>
                     
@@ -176,18 +189,20 @@ function ManageClassesComponents() {
                                      />
                             <p className='text-xs text-red-600'> {classCodeError && classCodeError}</p>               
                         </div>
-                        <div> <input value={updatedClass.language} 
-                                       name='language'
-                                     className='border border-solid border-gray-500'
-                                     onChange={handleChange}
-                                     />
-                        </div>
-                        <div> <input value={updatedClass.schedule} 
+                     
+                                                <div> <input value={updatedClass.schedule} 
                                      name='schedule'
                                      className='border border-solid border-gray-500'
                                      onChange={handleChange}
                                      />
                         </div>
+                        <div> <input value={updatedClass.language} 
+                                       name='language'
+                                     className='bg-gray-200 text-gray-500'
+                                     onChange={handleChange}
+                                     disabled
+                                     />
+                        </div> 
                         <div>      
                           Total Students   {cl.studentClassesIds?.length}
                         </div>
@@ -197,9 +212,8 @@ function ManageClassesComponents() {
                         <div className='flex justify-end items-center flex-col'>
                         <select 
                     name='teacherID' 
-                    value={selected} 
-                    defaultValue=""
-                    className="text-base italic mt-2 mb-2 block w-[80%] max-h-[30px] border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                    value={updatedClass?.teacherID} 
+                     className="text-base italic mt-2 mb-2 block w-[80%] max-h-[30px] border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                     onChange={handleChangeSelect}
                   >
                     <option 
@@ -250,9 +264,10 @@ function ManageClassesComponents() {
                         </div>
                      </div>
                         <div className='flex-1'>
+                  
+                               
 
-           
-                        {cl.teacherClasses?.map((teacher) => 
+                              {cl.teacherClasses?.map((teacher) => 
                         
                      
                         (
@@ -270,7 +285,9 @@ function ManageClassesComponents() {
                             }</p>
                             </div>
                         ))}
-                     
+
+                    
+                      
                         <div className='flex justify-end items-center flex-col'>
                      
                         {!selectedClass ? <> 

@@ -110,9 +110,15 @@ const Navbar = () => {
             )}
 
             {currentUser?.role === "Student" && (
-              <Link href="/student">
-                <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>Student zone</li>
+          <>
+            <Link href={`/student/${currentUser.id}`}>
+                <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
               </Link>
+
+              <Link href="/mygrades">
+                <li className={pathname === "/mygrades" ? "font-bold text-green-500" : "hover:text-green-500"}>my grades</li>
+            </Link>
+          </>
             )}
 
             {currentUser?.role === "Teacher" && (
@@ -124,9 +130,12 @@ const Navbar = () => {
             <li>
               <button
                 onClick={() => {
-                  signOut();
                   router.replace("/");
-                  setCurrentUser(null);
+                  setTimeout(() => {   
+                    signOut();
+                    setCurrentUser(null)
+                  }, 2000);
+           
                 }}
                 className={`px-5  bg-blue-500 rounded-full mt-4 md:mt-0 hover:bg-blue-600 ${resolvedTheme === 'dark' ? 'text-white' : 'text-white'}`}
               >

@@ -209,6 +209,7 @@ const handleSubmit = () =>{
 
   return (
     <div className=' flex justify-around w-full'>
+            <div className='mt-10'> Drag and drop students to the class</div>
 {isUpdated && 
       <div className='absolute cursor-pointer top-20 right-20 w-[80px] h-[80px] bg-green-300 flex justify-center items-center hover:bg-green-800 hover:text-white '
           onClick={handleSubmit}

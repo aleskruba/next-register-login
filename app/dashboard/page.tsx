@@ -28,6 +28,7 @@ const Dashboard = () => {
       <Navbar/>
    
       <div className=' mt-20'>
+
         <Class/>
       </div>
 

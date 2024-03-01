@@ -111,7 +111,7 @@ const Post: FC<Props> = ({params}) => {
         console.log(response)
         if (response.message = 'success') {
           toast.success('Updated successfully');
-          router.push('/students')
+          router.push('/teachers')
         }
         }
         fetchFunc()

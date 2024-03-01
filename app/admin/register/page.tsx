@@ -28,6 +28,7 @@ import {
 
   import { Button } from "@/components/ui/button"
 import { createUser } from '@/utils'
+import Navbar from '@/app/components/Navbar'
  
  const formSchema = z.object({
     email: z.string().email(),
@@ -110,6 +111,8 @@ const [error,setError] = useState('')
         }
       };
   return (
+    <>
+    <Navbar/>
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4">
       {isLoading ? <>...wait please </> : <> 
       <h1 className="text-2xl md:text-3xl text-center mt-4 mb-4">Register a new user</h1>
@@ -280,6 +283,7 @@ const [error,setError] = useState('')
         </Form>
         </>}
     </div>
+    </>
   )
 }
 

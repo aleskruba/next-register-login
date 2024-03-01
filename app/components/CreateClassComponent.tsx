@@ -10,7 +10,9 @@ const CreateClassComponent = () => {
 
   const [teachers, setTeachers] = useState<TeachersArray>();
   const [isLoading, setIsLoading] = useState(false);
-  const [selected, setSelected] = useState<string>(''); // Initialize with an empty string
+  const [selectedValue, setselectedValue] = useState<string>(''); // Initialize with an empty string
+  const [languageValue, setLanguageValue] = useState<string | null | undefined>(''); 
+
   const [classCodeError, setClassCodeError] = useState<string | null>(null);
 
   const [newClass, setNewClass] = useState<ClassProps>({
@@ -28,9 +30,9 @@ const CreateClassComponent = () => {
         setTeachers(response);
 
 
-        // Set the initial selected value after fetching teachers
+        // Set the initial selectedValue value after fetching teachers
         if (response && response.length > 0) {
-          setSelected(response[0].l_name);
+          setselectedValue(response[0].l_name);
           setNewClass({
             ...newClass,
             teacherID: response[0].id,
@@ -42,29 +44,42 @@ const CreateClassComponent = () => {
     };
 
     fetchData();
-  }, []); // Make sure to include an empty dependency array to run the effect only once
+  }, []); 
 
   const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(e.target.value);
-    setSelected(e.target.value);
-    setNewClass({ ...newClass, teacherID: e.target.value });
+    setselectedValue(e.target.value);
+
+    const selectedTeacher = teachers?.find((teacher) => teacher.id === e.target.value);
+
+    if (selectedTeacher) {
+      const languageValue = selectedTeacher.languages ?? ''; // Provide a default value if undefined
+      setLanguageValue(languageValue);
+  
+      setNewClass({ ...newClass, teacherID: e.target.value, language: languageValue });
+    }
   };
 
- 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
+  
     // Check if the input is "classCode" and validate the format
     if (name === 'classCode') {
       const classCodeRegex = /^[0-9][A-Z]$/;
-
-      if (!classCodeRegex.test(value)) {
+  
+      if (value.trim() === '' ) {
+        // If the input is empty, clear the error
+        setClassCodeError('Input cannot be empty');
+      } else if (!classCodeRegex.test(value)) {
+        // If the input doesn't match the expected format, set an error message
         setClassCodeError('Class code should be in the format of a number followed by a capital letter (e.g., 1A, 2B).');
       } else {
+        // If the input is valid, clear the error
         setClassCodeError(null);
       }
     }
-
+  
+    // Update the newClass state
     setNewClass({ ...newClass, [name]: value });
   };
 
@@ -80,11 +95,11 @@ const CreateClassComponent = () => {
         if (response.message === 'success') { 
           console.log(response.message)
           toast.success('Class created  successfully');
-          router.push('/dashboard')
+          router.push('/')
          
         }
         else {
-          alert('Class han not been created')
+          alert('Class has not been created ')
           setIsLoading(false);
         }
     
@@ -100,27 +115,43 @@ const CreateClassComponent = () => {
   return (
     <form onSubmit={handleSubmit} className='flex flex-col max-w-[350px]'>
       <div >
-      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2' name='classCode' placeholder='class code' onChange={handleChange} />
-     <p className='text-xs text-red-600'> {classCodeError && classCodeError}</p>
-      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='language' placeholder='language' onChange={handleChange} />
-      <input className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='schedule' placeholder='schedule' onChange={handleChange} />
 
-      <select 
-            name='teacherID' 
-            value={selected} 
-            onChange={handleChangeSelect}
-            className="text-xl italic mt-2 block w-full pl-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            >
-        {teachers?.map((teacher) => (
-          <option 
-          className='text-xl italic'
-          value={teacher.id} key={teacher.email}>
-            {teacher.l_name}
-          </option>
-        ))}
-      </select>
+        
+        {teachers ? <> 
+  
+          <select
+  name='teacherID'
+  value={selectedValue || ""}
+  onChange={handleChangeSelect}
+  className="text-xl italic mt-2 block w-full pl-2 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+  required>
 
-{!isLoading ?
+  <option value="" hidden>Select a teacher</option>
+
+  {teachers?.map((teacher) => (
+    <option
+      className='text-xl italic'
+      value={teacher.id}
+      key={teacher.email}
+    >
+      {teacher.l_name}
+    </option>
+  ))}
+</select>
+
+      {languageValue &&
+      <input  disabled    required className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='language' placeholder='language'  value={languageValue}  />
+   
+      }
+   
+      <input       required className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2' name='classCode' placeholder='class code' onChange={handleChange} />
+          <p className='text-xs text-red-600'> {classCodeError && classCodeError}</p>
+    
+      <input       required className='text-xl w-full border border-solid border-gray-500 mt-2 pl-2 py-2'  name='schedule' placeholder='schedule' onChange={handleChange} />
+
+      </> : <>  </>}
+
+{!isLoading && teachers?
 <>
       <input type='submit' 
              value='save' 

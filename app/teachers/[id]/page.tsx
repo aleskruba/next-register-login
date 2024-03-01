@@ -1,7 +1,7 @@
 "use client"
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from 'next/navigation'
-import { StudentsProps, ClassArray} from "@/types";
+import { TeachersProps, ClassArray} from "@/types";
 import { deleteTeacher, fetchClasses, fetchTeacher, updateTeacher } from "@/utils";
 import toast from "react-hot-toast";
 import { FC,useEffect,useState,ChangeEvent,FormEvent } from "react";
@@ -18,12 +18,12 @@ const Post: FC<Props> = ({params}) => {
   const router = useRouter()
 
     const [updateSelected,setUpdateSelected] = useState(false)  
-    const [teacher,setTeacher] = useState<StudentsProps>()
+    const [teacher,setTeacher] = useState<TeachersProps>()
     const [classes, setClasses] = useState<ClassArray>([]);
     const [isLoading,setIsLoading] = useState(true)
     const [classCodeError, setClassCodeError] = useState<string | null>(null);
 
-    const [updatedTeacher, setUpdatedTeaacher] = useState<StudentsProps>({
+    const [updatedTeacher, setUpdatedTeaacher] = useState<TeachersProps>({
       id: '',
       email: '',
       f_name: '',

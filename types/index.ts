@@ -25,6 +25,9 @@ export type UserProps = {
     createdAt?: Date;
     updatedAt?: Date;
     classesIds?:string[];
+    classes: ClassProps[];
+    gradesIds: GradeProps[];
+    gradeses: GradeProps[];
   };
   
   // Define an array type with the StudentsProps type
@@ -39,9 +42,13 @@ export type UserProps = {
     image?: string | null;
     hashedPassword?: string | null;
     languages?: string | null;
-    role: string;
+    role?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    classesIds: string[];
+    classes: ClassProps[];
+    gradesIds: string[];
+    grades: GradeProps[];
   };
   
   // Define an array type with the StudentsProps type
@@ -55,9 +62,10 @@ export type UserProps = {
     schedule: string;
     teacherID?: string;
     studentID?: string;
-    teacherClasses?: TeacherDetails[];
-    studentClassesIds?: string[] ; 
-    teacherClassesIds?: string[]; 
+    studentClassesIds?: string[];
+    studentClasses: StudentsProps[];
+    teacherClassesIds: string[];
+    teacherClasses: TeachersProps[];
 
   };
   
@@ -78,4 +86,14 @@ export type UserProps = {
   export type ClassArray = ClassProps[];
 
   
- 
+  export type GradeProps = {
+    id: string;
+    comment?: string;
+    value: string;
+    createdAt: Date;
+    updatedAt: Date;
+    studentGradesIds: string[];
+    studentGrades: StudentsProps[];
+    teacherGradesIds: string[];
+    teacherGrades: TeachersProps[];
+};

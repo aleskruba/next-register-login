@@ -21,6 +21,7 @@ export async function GET(req: NextRequest) {
         const classes = await prisma.class.findMany({
           include: {
             teacherClasses: true, // Include the associated teachers
+            studentClasses:true,
           },
         });
 

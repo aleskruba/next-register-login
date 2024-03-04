@@ -21,6 +21,10 @@ const CreateClassComponent = () => {
     language: '',
     schedule: '',
     teacherID: '',
+    studentClassesIds: [],
+    studentClasses: [],
+    teacherClassesIds: [],
+    teacherClasses: [],
   });
 
   useEffect(() => {

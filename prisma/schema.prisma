@@ -83,6 +83,7 @@ model Class {
 
 model Grade {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String?
   value     String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

@@ -94,6 +94,14 @@ export async function fetchMyProfile(params: any) {
 return data.data
 }
 
+export async function fetchMyProfileTeacher(params: any) {
+
+  const response = await fetch(`/api/myprofileteacher/${params}`)
+  const data = await response.json()
+
+return data.data
+}
+
 
 export async function deleteStudent(studentID: string) {
   try {
@@ -163,7 +171,7 @@ export async function updateStudent(student: StudentsProps) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to delete a student');
+      throw new Error('Failed to update a student');
     }
 
     const responseData = await response.json();
@@ -171,7 +179,31 @@ export async function updateStudent(student: StudentsProps) {
 
 
   } catch (error) {
-    console.error('Error during deleting a student:', error);
+    console.error('Error during updating a student:', error);
+
+  }
+}
+
+export async function updateTeacherProfile(teacher: TeachersProps) {
+  try {
+    const response = await fetch(`/api/myprofileteacher/${teacher}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(teacher),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update a student');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during updating a teacher:', error);
 
   }
 }

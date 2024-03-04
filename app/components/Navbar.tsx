@@ -122,9 +122,15 @@ const Navbar = () => {
             )}
 
             {currentUser?.role === "Teacher" && (
-              <Link href="/teacher">
-                <li className={pathname === "/teacher" ? "font-bold text-green-500" : "hover:text-green-500"}>Teacher zone</li>
+             <>
+              <Link href={`/teacher/${currentUser.id}`}>
+                      <li className={pathname === "/techer" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
               </Link>
+              <Link href={`/myclass/${currentUser.id}`}>
+                  <li className={pathname === "/myclass" ? "font-bold text-green-500" : "hover:text-green-500"}>My class</li>
+                </Link>
+                
+            </>
             )}
 
             <li>

@@ -73,7 +73,7 @@ function MyClassTeacher({id}:any) {
                                             <div>      
                                                 grades:
                                                 {student.gradesIds.map(grade =>
-                                                        <div> {student.gradesIds.length}</div>
+                                                        <div key={grade.id}> {student.gradesIds.length}</div>
                                                         
                                                 )}
                                             </div>

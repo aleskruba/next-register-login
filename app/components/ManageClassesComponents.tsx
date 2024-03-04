@@ -17,12 +17,15 @@ function ManageClassesComponents() {
 
 
     const [updatedClass, setUpdatedClass] = useState<ClassProps>({
-        id: '',
-        classCode: '',
-        language: '',
-        schedule: '',
-        teacherID: '',
-        teacherClasses: [] , // Initialize with an empty array of TeacherDetails
+      id:'',
+      classCode: '',
+      language: '',
+      schedule: '',
+      teacherID: '',
+      studentClassesIds: [] ,
+      studentClasses: [],
+      teacherClassesIds: [],
+      teacherClasses: [],
       });
 
  
@@ -78,14 +81,15 @@ function ManageClassesComponents() {
 
                 cl.teacherClassesIds && setSelected( cl.teacherClassesIds[0])
                 setUpdatedClass({
-                    id:cl.id,
-                    classCode: cl.classCode,
-                    language: cl.language,
-                    schedule: cl.schedule,
-                    teacherID: cl.teacherClasses && cl.teacherClasses[0].id,
-                    teacherClasses:cl.teacherClasses && [cl.teacherClasses[0]] 
-                   
-                })
+                  id: cl.id,
+                  classCode: cl.classCode,
+                  language: cl.language,
+                  schedule: cl.schedule,
+                  teacherID: cl.teacherClasses && cl.teacherClasses[0]?.id,
+                  teacherClasses: cl.teacherClasses && [cl.teacherClasses[0]],
+                  studentClasses: cl.studentClasses && [cl.studentClasses[0]],
+                  teacherClassesIds: cl.teacherClassesIds || [],  // Add this line
+                });
                               
             }
 
@@ -119,7 +123,7 @@ function ManageClassesComponents() {
         const selectedTeacher = teachers.find(teacher => teacher.id === e.target.value) 
         console.log(selectedTeacher)
       
-        setUpdatedClass((prevClass) => {
+        setUpdatedClass((prevClass:any) => {
           const updatedTeacherClasses = prevClass.teacherClasses || []; // Default to an empty array if undefined
       
           // Create a new TeacherDetails object

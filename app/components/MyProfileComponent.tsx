@@ -5,6 +5,14 @@ import { StudentsProps } from '@/types';
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation'
 
+
+type Student = {
+  id: string;
+  f_name: string;
+  l_name: string;
+  email: string;
+}
+
 function MyProfileComponent({id}:any) {
 
     const router = useRouter()
@@ -17,7 +25,11 @@ function MyProfileComponent({id}:any) {
         id: '',
         email: '',
         f_name: '',
-        l_name: ''
+        l_name: '',
+        classesIds:[],
+        classes: [],
+        gradesIds:[],
+        gradeses: []
           });
 
     useEffect(() =>{
@@ -50,7 +62,11 @@ function MyProfileComponent({id}:any) {
           id: student?.id || '',       
           email: student?.email || '', 
           f_name: student?.f_name || '', 
-          l_name: student?.l_name || ''
+          l_name: student?.l_name || '',
+          classesIds:[''],
+          classes: [],
+          gradesIds:[],
+          gradeses: []
   
         });
   

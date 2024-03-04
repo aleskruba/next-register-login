@@ -17,7 +17,11 @@ function MyProfileTeacherComponents({id}:any) {
         id: '',
         email: '',
         f_name: '',
-        l_name: ''
+        l_name: '',
+        classesIds:[],
+        classes: [],
+        gradesIds: [],
+        grades: []
           });
 
     useEffect(() =>{
@@ -50,7 +54,11 @@ function MyProfileTeacherComponents({id}:any) {
           id: teacher?.id || '',       
           email: teacher?.email || '', 
           f_name: teacher?.f_name || '', 
-          l_name: teacher?.l_name || ''
+          l_name: teacher?.l_name || '',
+          classesIds:[],
+          classes: [],
+          gradesIds: [],
+          grades: []
   
         });
   

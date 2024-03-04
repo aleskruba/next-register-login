@@ -62,11 +62,11 @@ return (
         {student?.email} 
         </div>
         <div className='mt-8'>
-        grades {student?.gradeses.map(grade=>{
+  {/*       grades {student?.gradeses.map(grade=>{
             return (
                 <div key={grade?.id}>{grade?.comment} {grade?.value}</div>
             )
-        })}
+        })} */}
         </div>
         </div>
 

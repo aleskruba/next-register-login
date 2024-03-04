@@ -64,7 +64,7 @@ return (
         <div className='mt-8'>
         grades {student?.gradeses.map(grade=>{
             return (
-                <div>{grade?.comment} {grade?.value}</div>
+                <div key={grade?.id}>{grade?.comment} {grade?.value}</div>
             )
         })}
         </div>

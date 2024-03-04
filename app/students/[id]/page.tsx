@@ -29,6 +29,10 @@ const Post: FC<Props> = ({params}) => {
       f_name: '',
       l_name: '',
       role: '', 
+      classesIds:[],
+      classes: [],
+      gradesIds:[],
+      gradeses: []
         });
 
     useEffect(() =>{
@@ -59,6 +63,10 @@ const Post: FC<Props> = ({params}) => {
         f_name: student?.f_name || '', 
         l_name: student?.l_name || '', 
         role: student?.role || '',  
+        classesIds:[''],
+        classes: [],
+        gradesIds:[],
+        gradeses: []
       });
 
     }

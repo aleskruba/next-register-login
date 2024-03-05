@@ -70,12 +70,11 @@ function MyClassTeacher({id}:any) {
                                     <div className='flex  bg-blue-200 justify-between min-w-[380px] md:min-w-[480px]' >
                                         <div>{student.f_name} {student.l_name} </div>
 
-                                            <div>      
-                                                grades:
-                                                {student.gradesIds.map(grade =>
-                                                        <div key={grade.id}> {student.gradesIds.length}</div>
-                                                        
-                                                )}
+                                            <div className='flex'>      
+                                               <span>grades:</span>  <span>   
+                                               {student.gradesIds.length}
+                                                                             </span>
+
                                             </div>
                                     </div>  
                                 </Link>

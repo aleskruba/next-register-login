@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { ClassArray, StudentsProps, TeachersProps, UserProps } from "@/types";
+import { ClassArray, StudentsProps, TeachersProps, UserProps,GradeProps, NewGrade} from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -356,4 +356,20 @@ export async function updateStudentsInClass(classData: ClassArray): Promise<void
     console.error('Error creating class:', error);
 
   } 
+}
+
+
+export async function fetchGrade(grade:NewGrade) {
+
+  const response = await fetch(`/api/grade`, {
+          method: 'POST',
+         headers: {
+          'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(grade),
+      })
+
+  const data = await response.json()
+
+return data.data
 }

@@ -97,3 +97,9 @@ export type UserProps = {
     teacherGradesIds: string[];
     teacherGrades: TeachersProps[];
 };
+
+export type NewGrade = {
+  comment?: string;
+  value: string;
+  StudentID:string
+};

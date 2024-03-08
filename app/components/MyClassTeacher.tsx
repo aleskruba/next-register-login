@@ -17,7 +17,6 @@ function MyClassTeacher({id}:any) {
     const [teacher,setTeacher] = useState<TeachersProps>()
     const [classes, setClasses] = useState<ClassArray>([]);
     const [isLoading,setIsLoading] = useState(true)
-    
 
     useEffect(() =>{
       const fetchData = async () => { 

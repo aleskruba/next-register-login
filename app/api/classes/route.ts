@@ -61,6 +61,30 @@ export async function PUT(req: NextRequest) {
     for (const classData of data) {
       const { id: classId, studentClassesIds } = classData;
 
+      const originalClass = await prisma.class.findUnique({
+        where: { id: classId }
+      });
+
+      console.log('originalClass',originalClass?.studentClassesIds)
+      console.log('studentClassesIds',studentClassesIds)
+    
+      const studentsToUpdate = originalClass?.studentClassesIds?.filter((studentId: any) => !studentClassesIds.includes(studentId));
+     
+      if (studentsToUpdate) {  
+      await Promise.all(
+        studentsToUpdate.map(async studentId => {
+          await prisma.student.update({
+            where: { id: studentId },
+            data: {
+              classesIds: [],
+              gradesIds: [],
+            },
+            
+          });
+        })
+      );
+
+      }
       // Update the studentClassesIds array for the existing class
       await prisma.class.update({
         where: { id: classId },
@@ -68,6 +92,8 @@ export async function PUT(req: NextRequest) {
           studentClassesIds: { set: studentClassesIds },
         },
       });
+
+
 
       // Find students and add classId to their classesIds
       for (const studentId of studentClassesIds) {

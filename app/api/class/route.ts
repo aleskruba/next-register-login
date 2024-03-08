@@ -50,15 +50,39 @@ export async function DELETE(req: NextRequest) {
      const classToBeDeleted = await prisma.class.findUnique({
       where: { id: classID }, 
     });
+
+    const teacherID =  classToBeDeleted?.teacherClassesIds[0]
+
+  /*   const teacherClasstoBeDeleted = await prisma.teacher.findUnique({
+      where: { id: teacherID }, 
+    }); */
+
     if (!classToBeDeleted) {
          return NextResponse.json({ error: 'Admin record not found' }, { status: 400 });
     }
 
-    if (classToBeDeleted.studentClassesIds.length === 0) {
+     if (classToBeDeleted.studentClassesIds.length === 0) {
       const deletedAdmin = await prisma.class.delete({
       where: { id: classID },
-    });
-    }
+      });
+    
+      const updateTeacher = await prisma.teacher.update({
+        where: { id: teacherID},
+        data: {
+          classesIds: {
+            set: [],
+          },
+          gradesIds: {
+            set: [],
+          },
+        },
+      }
+      
+      );
+
+      
+    
+    } 
     else {
       return NextResponse.json({ message: 'Class is not empty'}, { status: 401 });
     }

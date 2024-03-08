@@ -89,7 +89,7 @@ export type UserProps = {
   export type GradeProps = {
     id: string;
     comment?: string;
-    value: string;
+    value?: string;
     createdAt: Date;
     updatedAt: Date;
     studentGradesIds: string[];
@@ -99,6 +99,14 @@ export type UserProps = {
 };
 
 export type NewGrade = {
+  comment?: string;
+  value: string;
+  StudentID:string
+};
+
+
+export type UpdatedGrade = {
+  gradeID:string;
   comment?: string;
   value: string;
   StudentID:string

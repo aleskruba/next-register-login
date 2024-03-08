@@ -373,3 +373,56 @@ export async function fetchGrade(grade:NewGrade) {
 
 return data.data
 }
+
+
+
+export async function deleteGrade(grade:any) {
+
+  try {
+    const response = await fetch('/api/grade', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(grade),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the grade');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting the grade:', error);
+
+  }
+}
+
+
+export async function updateGrade(grade:any) {
+
+  try {
+    const response = await fetch('/api/grade', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(grade),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update the grade');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during updating the grade:', error);
+
+  }
+}

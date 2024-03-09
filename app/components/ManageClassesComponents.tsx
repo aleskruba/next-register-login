@@ -156,14 +156,16 @@ function ManageClassesComponents() {
               ...prevClasses.slice(updatedClassIndex + 1),
             ]);
           }
-          setRefresh(!refresh)
-          router.refresh()
-          setSelectedClass(null)
+      
+  
  
          const response = await updateClass(updatedClass)
          if (response.message === 'success') {
           toast.success('Class updated successfully')
-         }
+          setSelectedClass(null)
+          setRefresh(!refresh)
+          router.refresh()
+        }
 
 
 

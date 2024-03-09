@@ -56,8 +56,8 @@ const Navbar = () => {
     <header className="w-full mx-auto text-lg md:px-4 pt-6  sm:px-4 fixed left-0 top-0 z-50 shadow bg-white dark:bg-stone-900  md:opacity-100  dark:border-b dark:border-stone-600">
           <div className="md:hidden absolute left-3 top-1 text-base  text-green-400"  >     {session && session.user?.email}  
   </div> 
-  <div  className="md:hidden absolute right-3 top-1 text-base  "> <ModeToggle/></div>
-         <div className="md:hidden"  >
+  <div  className="lg:hidden absolute right-3 top-1 text-base  "> <ModeToggle/></div>
+         <div className="lg:hidden"  >
               <button
                 className="p-2 mt-2 text-gray-800 dark:text-gray-100 rounded-md outline-none focus:border-gray-400 focus:border "
                 onClick={() =>{ setNavbar(!navbar); /* setOpen(true) */}}
@@ -66,7 +66,7 @@ const Navbar = () => {
                 {navbar ? <div ><IoMdClose size={30}/></div>  : <IoMdMenu size={30} />}
               </button>
             </div>
-      <div ref={menuRef}        className={`md:block w-screen m-2 ${
+      <div ref={menuRef}        className={`lg:block w-screen m-2 ${
               navbar ? "block" : "hidden"
             }`}  > 
           <ul className="flex flex-col md:flex-row w-full justify-around item-center md:pt-4">

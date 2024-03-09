@@ -165,6 +165,7 @@ function ManageClassesComponents() {
           setSelectedClass(null)
           setRefresh(!refresh)
           router.refresh()
+   
         }
 
 

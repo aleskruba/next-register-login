@@ -208,8 +208,13 @@ const handleSubmit = () =>{
   } 
 
   return (
-    <div className=' flex justify-around w-full'>
-            <div className='mt-10'> Drag and drop students to the class</div>
+    <div className='flex flex-col items-center justify-center'> 
+    
+    <div className='mt-10'> Drag and drop students to the class</div>
+   
+
+    <div className=' flex justify-around w-full mt-4'>
+        
 {isUpdated && 
       <div className='absolute cursor-pointer top-20 right-20 w-[80px] h-[80px] bg-green-300 flex justify-center items-center hover:bg-green-800 hover:text-white '
           onClick={handleSubmit}
@@ -217,7 +222,7 @@ const handleSubmit = () =>{
        <IoMdCheckmark size={30}/>
       </div>
 }
-    <div className='flex flex-col text-base'>
+    <div className='flex flex-col text-base '>
     {!isLoading ? (
     <>
     {students?.map((student) => {
@@ -234,8 +239,9 @@ const handleSubmit = () =>{
             draggable
             onDragStart={(e) => handleDragStart(e, student)}
           >
+            <div className='flex bg-gray-100 text-black font-semibold gap-2 py-1 border border-solid border-1 w-[150px] mt-1 px-1 rounded'>
             <div>{student?.l_name}</div>      <div>{student?.f_name}</div>
-      
+            </div>
           </div>
         );
       }
@@ -252,11 +258,11 @@ const handleSubmit = () =>{
     )}
   </div>
 
-  <div className='max-h-[450px] '>
+  <div className='max-h-[450px] overflow-y-auto'>
   {classes?.map((cl) => (
     <div
       key={cl.classCode}
-      className="relative border border-solid border-gray-300 min-h-[120px] min-w-[300px] md:min-w-[400px] overflow-y-auto overflow-x-hidden mt-2 pl-2 "
+      className="relative border border-solid bg-gray-100 text-black border-gray-300 min-h-[120px] w-[300px]  md:min-w-[400px] overflow-y-auto overflow-x-hidden mt-2 pl-2 "
       style={{
         scrollbarWidth: 'thin',
         scrollbarColor: '#888 #f1f1f1',
@@ -266,12 +272,12 @@ const handleSubmit = () =>{
     >
       {/* Sticky content */}
       <div className="sticky top-0 text-xl w-[150px] flex flex-col">
-        <p className='text-xs md:text-2xl font-bold' >{cl.classCode}-{cl.language}</p>
+        <p className='text-base md:text-2xl font-bold' >{cl.classCode}-{cl.language}</p>
         <p className='text-xs'>{cl.schedule}</p>
         <div>
           {cl.teacherClasses?.map((teacher) => (
             <div key={teacher.id}>
-              <p className='font-bold text-xs md:text-base  mt-4'>{teacher.f_name} {teacher.l_name}</p>
+              <p className='font-bold text-base md:text-base  mt-4'>{teacher.f_name} {teacher.l_name}</p>
             </div>
           ))}
         </div>
@@ -308,6 +314,7 @@ const handleSubmit = () =>{
 
     
 
+    </div>
     </div>
   );
 }

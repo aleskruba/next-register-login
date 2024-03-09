@@ -18,6 +18,8 @@ export const MyClassTeacherStudentDetail = ({id}:any) => {
     const [isLoadingSubmit,setIsLoadingSubmit] = useState(false)
     const [isDeletingGrade,setIsDeletingGrade] = useState(false)
     const [newGrade, setNewGrade] = useState<NewGrade>({
+        createdAt: new Date(),
+        updatedAt:new Date(),
         comment: '',
         value: '',
         StudentID:'',
@@ -29,6 +31,7 @@ export const MyClassTeacherStudentDetail = ({id}:any) => {
       comment: '',
       value: '',
       StudentID:'',
+      updatedAt:new Date(),
         });
 
     useEffect(() => {
@@ -58,7 +61,23 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setIsLoadingSubmit(true)
 
     try {
+      const updatedStudent = { ...student };
 
+      updatedStudent.gradeses?.push({
+        value: newGrade.value,
+        comment: newGrade.comment,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        id: '',
+        studentGradesIds: [],
+        studentGrades: [],
+        teacherGradesIds: [],
+        teacherGrades: []
+      });
+    
+      // Update the state with the new "gradeses" array
+      setStudent(updatedStudent as StudentsProps);
+      
       const response = await fetchGrade(newGrade)
       console.log(response)
       if (response === 'success') {
@@ -68,9 +87,11 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         setNewGrade({comment: '',
                      value: '',
                      StudentID:'',
+                     createdAt: new Date(),
+                     updatedAt:new Date(),
                    })
-        setUpdated(!updated)
-        router.refresh()
+      //  setUpdated(!updated)
+      //  router.refresh()
         await new Promise(resolve => setTimeout(resolve, 2000));
         setIsLoadingSubmit(false)
       }
@@ -140,6 +161,7 @@ const handleEditClick = (ID:any) => {
         comment: grade.comment || '',
         value: grade.value || '',
         StudentID:student.id || '',
+        updatedAt:new Date(),
           });
         }
     })
@@ -179,6 +201,7 @@ const saveEditChange =  async () => {
           ...element,
           value: updatedGrade.value,
           comment: updatedGrade.comment,
+          updatedAt:updatedGrade.updatedAt,
         };
       }
     });
@@ -272,11 +295,11 @@ return (
   </div>
 
   <div className="col-span-1">
-    <h3 className="font-semibold">Created At</h3>
+    <h3 className="font-semibold">Created On</h3>
   </div>
 
   <div className="col-span-1">
-    <h3 className="font-semibold">Updated At</h3>
+    <h3 className="font-semibold">Updated On</h3>
   </div>
 
  
@@ -285,8 +308,8 @@ return (
  {student?.gradeses.map(grade => {
 
    if (!updateSelected) { 
-      const formattedCreatedAt = moment(grade.createdAt).format('YY DD.MM');
-      const formattedUpdatedAt = moment(grade.updatedAt).format('YY DD.MM');
+      const formattedCreatedAt = moment(grade.createdAt).format('DD.MM YY');
+      const formattedUpdatedAt = moment(grade.updatedAt).format('DD.MM YY');
 
     return (
  
@@ -320,8 +343,8 @@ return (
     )
 
     } if (updateSelected && updateSelected === grade.id) {
-      const formattedCreatedAt = moment(grade.createdAt).format('YY DD.MM');
-      const formattedUpdatedAt = moment(grade.updatedAt).format('YY DD.MM');
+      const formattedCreatedAt = moment(grade.createdAt).format('DD.MM YY');
+      const formattedUpdatedAt = moment(grade.updatedAt).format('DD.MM YY');
 
     return (
  

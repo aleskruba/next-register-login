@@ -102,6 +102,8 @@ export type NewGrade = {
   comment?: string;
   value: string;
   StudentID:string
+  createdAt: Date,
+  updatedAt:Date,
 };
 
 
@@ -109,5 +111,6 @@ export type UpdatedGrade = {
   gradeID:string;
   comment?: string;
   value: string;
-  StudentID:string
+  StudentID:string; 
+  updatedAt:Date,
 };

@@ -23,7 +23,7 @@ const Dashboard = () => {
   },[])
 
   return (
-    <div className='w-screen mt-20'>
+    <div className='w-screen'>
     {!isLoading ? <>      
       <Navbar/>
    

@@ -43,7 +43,7 @@ function MyClassTeacher({id}:any) {
     <div className="mt-10 flex justify-center ">
       
     {!isLoading ? <>  
-    <div className=" px-2 py-2 min-w-[380px] md:min-w-[480px] text-gray-900 flex flex-col items-start border border-solid border-1 text-xl bg-gray-100">
+    <div className=" px-2 py-2 min-w-[380px] md:min-w-[480px]  flex flex-col items-start border border-solid border-1 text-xl ">
 
         <div className='flex '>
             {classes?.map((cl)=>{
@@ -51,7 +51,7 @@ function MyClassTeacher({id}:any) {
                 
                 return(
                 <div key={cl.id}>    
-                  <div className='flex flex-col bg-red-200' >
+                  <div className='flex flex-col px-2 py-2 text-gray-100 bg-gray-500' >
                     <div className='flex justify-between min-w-[380px] md:min-w-[480px] '>
                     <div>CLASS CODE:</div> <div> {cl.classCode}</div>
                     </div> 
@@ -66,11 +66,11 @@ function MyClassTeacher({id}:any) {
                         {cl.studentClasses.map(student=>{
                             return (
                                 <Link href={`/myclass/${id}/${student.id}`} key={student.id}>
-                                    <div className='flex  bg-blue-200 justify-between min-w-[380px] md:min-w-[480px]' >
-                                        <div>{student.f_name} {student.l_name} </div>
+                                    <div className='flex  px-2  text-gray-900 bg-gray-100 justify-between min-w-[380px] md:min-w-[480px]' >
+                                        <div className=' hover:font-bold'>{student.f_name} {student.l_name} </div>
 
                                             <div className='flex'>      
-                                               <span>grades:</span>  <span>   
+                                               <span>total grades:</span>  <span className='pl-4'>   
                                                {student.gradesIds.length}
                                                                              </span>
 

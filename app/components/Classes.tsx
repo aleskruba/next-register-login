@@ -312,8 +312,8 @@ const handleSubmit = () =>{
 
   ) : (
     <>
-         <div className='w-screen h-screen flex justify-center items-center '>
-              <img src="/spinner.svg" alt="" className="w-[100px]"/>
+         <div className='w-screen h-screen flex justify-center items-center'>
+              <img src="/spinner.svg" alt="" className="w-[100px] "/>
             </div>
     
     

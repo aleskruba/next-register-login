@@ -3,6 +3,7 @@ import { ClassArray,ClassProps,TeacherDetails,TeachersArray } from '@/types';
 import { deleteClass, fetchClasses, fetchTeachers, updateClass} from '@/utils';
 import { useRouter } from "next/navigation";
 import { string } from 'zod';
+import toast from 'react-hot-toast';
 
 function ManageClassesComponents() {
 
@@ -13,6 +14,7 @@ function ManageClassesComponents() {
     const [selectedClass, setSelectedClass] = useState<null | string>(null);
     const [selected, setSelected] = useState<string>('');
     const [classCodeError, setClassCodeError] = useState<string | null>(null);
+    const [refresh,setRefresh] = useState(false)
 
 
 
@@ -35,7 +37,6 @@ function ManageClassesComponents() {
         const allClasses = await fetchClasses()
         const allTeachers = await fetchTeachers()
 
-        console.log(allTeachers)
         setClasses(allClasses)
         setTeachers(allTeachers)
         setIsLoading(false)
@@ -43,7 +44,7 @@ function ManageClassesComponents() {
         fetchData();
 
 
-    },[updatedClass])
+    },[updatedClass,refresh])
 
     const handleDelete = async (ID:string) => {
 
@@ -155,11 +156,16 @@ function ManageClassesComponents() {
               ...prevClasses.slice(updatedClassIndex + 1),
             ]);
           }
-   setSelectedClass(null)
+          setRefresh(!refresh)
+          router.refresh()
+          setSelectedClass(null)
  
          const response = await updateClass(updatedClass)
-         
-        console.log(response)  
+         if (response.message === 'success') {
+          toast.success('Class updated successfully')
+         }
+
+
 
         }
           catch (err) {

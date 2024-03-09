@@ -210,9 +210,9 @@ const handleSubmit = () =>{
   return (
     <div className='flex flex-col items-center justify-center'> 
     
+   {!isLoading ? (
+    <>
     <div className='mt-10'> Drag and drop students to the class</div>
-   
-
     <div className=' flex justify-around w-full mt-4'>
         
 {isUpdated && 
@@ -223,8 +223,7 @@ const handleSubmit = () =>{
       </div>
 }
     <div className='flex flex-col text-base '>
-    {!isLoading ? (
-    <>
+ 
     {students?.map((student) => {
       const matchingClass = classes.find((classItem) =>
         classItem.studentClassesIds?.includes(student.id)
@@ -248,18 +247,7 @@ const handleSubmit = () =>{
   
       return null; // Return null if a matching class is found or student is in the students array
     })}
-  </>
-  
 
-    ) : (
-      <>
-      
-       
-       <img src="/spinner.svg" alt="" className="w-[100px]"/>
-
-
-      </>
-    )}
   </div>
 
   <div className='max-h-[450px] overflow-y-auto'>
@@ -319,6 +307,18 @@ const handleSubmit = () =>{
     
 
     </div>
+    </>
+  
+
+  ) : (
+    <>
+         <div className='w-screen h-screen flex justify-center items-center '>
+              <img src="/spinner.svg" alt="" className="w-[100px]"/>
+            </div>
+    
+    
+            </>
+ )}
     </div>
   );
 }

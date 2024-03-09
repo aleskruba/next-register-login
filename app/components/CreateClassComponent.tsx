@@ -169,9 +169,7 @@ const CreateClassComponent = () => {
             </div>
             </>
             :<>      
-            <div className=' '>
-              <img src="/spinner.svg" alt="" className="w-[100px]"/>
-            </div>
+      
                  
                  </>
   }

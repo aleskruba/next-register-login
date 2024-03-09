@@ -90,8 +90,8 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
                      createdAt: new Date(),
                      updatedAt:new Date(),
                    })
-      //  setUpdated(!updated)
-      //  router.refresh()
+        setUpdated(!updated)
+        router.refresh()
         await new Promise(resolve => setTimeout(resolve, 2000));
         setIsLoadingSubmit(false)
       }

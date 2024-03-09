@@ -161,12 +161,12 @@ function ManageClassesComponents() {
  
          const response = await updateClass(updatedClass)
          if (response.message === 'success') {
-       
+          setRefresh(false)      
           toast.success('Class updated successfully')
          setTimeout(() => {
           setSelectedClass(null)
-         }, 700);
-         setRefresh(false)          
+         }, 2000);
+             
    
           
         }

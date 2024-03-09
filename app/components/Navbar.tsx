@@ -69,7 +69,7 @@ const Navbar = () => {
       <div ref={menuRef}        className={`lg:block w-screen m-2 ${
               navbar ? "block" : "hidden"
             }`}  > 
-          <ul className="flex flex-col md:flex-row w-full justify-around item-center md:pt-4">
+          <ul className="flex flex-col lg:flex-row w-full justify-around item-center md:pt-4">
         <Link href="/">
           <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Home</li>
         </Link>

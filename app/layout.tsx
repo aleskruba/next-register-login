@@ -5,7 +5,7 @@ import ToasterContext from '@/context/toaster-context'
 import { getServerSession } from 'next-auth'
 import SessionProvider from "@/utils/SessionProvider";
 import UserContextProvider from '../context/auth-context'
-
+import {NextUIProvider} from '@nextui-org/react'
 export const metadata: Metadata = {
   title: 'School app',
   description: 'School app',
@@ -24,6 +24,7 @@ export default async  function RootLayout({
       <body >
       <SessionProvider session={session}>
       <UserContextProvider>   
+
       <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -40,6 +41,7 @@ export default async  function RootLayout({
           </div>
  
          </ThemeProvider>
+
          </UserContextProvider>
         </SessionProvider>
       </body>

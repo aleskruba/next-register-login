@@ -94,9 +94,7 @@ const Post: FC<Props> = ({params}) => {
           console.log('unauthorized')
           setIsLoading(false)  
         }
-
-          toast.success('Class created  successfully');
-          router.push('/students')
+          router.push('/teachers')
           setIsLoading(false)  
         }
         fetchData()
@@ -225,7 +223,11 @@ const Post: FC<Props> = ({params}) => {
 
         </>
         :<>
-                ... wait please
+        <div className="mt-8 w-screen h-screen flex items-center justify-center">
+       
+          <img src="/spinner.svg" alt="" className="w-[100px]"/>
+ 
+      </div>
         </>
         }
        </div>

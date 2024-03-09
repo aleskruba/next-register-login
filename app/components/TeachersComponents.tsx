@@ -36,6 +36,10 @@ function TeachersComponents() {
   return (
     <div className='mt-4 '>
        
+
+   
+   {!isLoading ? <>   
+     
          <input
            type="text"
            className='text-base px-4 py-2 border border-solid border-gray-300'
@@ -43,9 +47,6 @@ function TeachersComponents() {
            value={searchTerm}
            onChange={(e) => setSearchTerm(e.target.value)}
          />
-   
-   {!isLoading ? <>   
-     
          {filteredTeachers .sort((a, b) => a.l_name.localeCompare(b.l_name)).map((teacher) => {
            const teacherClasses = classes
              .filter((cl) => cl.teacherClassesIds?.includes(teacher.id))
@@ -75,9 +76,11 @@ function TeachersComponents() {
          })}
 
 </>:<>
-        <div>
-        wait please ...
-        </div>
+<div className="mt-8 w-screen h-screen flex items-center justify-center">
+       
+       <img src="/spinner.svg" alt="" className="w-[100px]"/>
+
+   </div>
       </>}  
        </div>
      );

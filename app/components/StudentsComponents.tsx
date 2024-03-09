@@ -33,16 +33,17 @@ const StudentsComponents = () => {
   return (
  <div className='mt-4 '>
     
+ 
+
+    {!isLoading ? <>   
+
       <input
         type="text"
         className='text-base px-4 py-2 border border-solid border-gray-300'
         placeholder="Search by last name"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-      />
-
-    {!isLoading ? <>   
-  
+      /> 
       {filteredStudents .sort((a, b) => a.l_name.localeCompare(b.l_name)).map((student) => {
         const studentClasses = classes
           .filter((cl) => cl.studentClassesIds?.includes(student.id))
@@ -73,9 +74,9 @@ const StudentsComponents = () => {
 
 
       </>:<>
-        <div>
-        wait please ...
-        </div>
+      <div className='w-screen h-screen flex justify-center items-center '>
+              <img src="/spinner.svg" alt="" className="w-[100px]"/>
+            </div>
       </>}  
     </div>
   );

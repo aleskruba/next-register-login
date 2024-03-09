@@ -253,7 +253,11 @@ const handleSubmit = () =>{
 
     ) : (
       <>
-        ...students are loading
+      
+       
+       <img src="/spinner.svg" alt="" className="w-[100px]"/>
+
+
       </>
     )}
   </div>

@@ -29,7 +29,7 @@ const Dashboard = () => {
       <Navbar/>
    {/*      <DataTableDemo/> */}
       <div className='flex flex-col py-8 '>
-           <div className='italic font-bold'> CREATE A CLASS </div>
+     
 
             <CreateClassComponent/>
 
@@ -37,7 +37,9 @@ const Dashboard = () => {
 
         </> : 
         <>
-        ... wait please
+           <div className='flex w-screen h-screen justify-center items-center'>
+                 <img src="/spinner.svg" alt="" className="w-[100px]"/>
+                 </div>
         </>}
     </div>
   )

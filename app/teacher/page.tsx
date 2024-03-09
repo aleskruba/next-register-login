@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import StudentsComponents from '../components/StudentsComponents';
+import {Spinner} from "@nextui-org/react";
 
 function Teacher() {
 
@@ -36,10 +36,10 @@ function Teacher() {
 
         {!isLoading ? <>      
               <Navbar/>
-<h1>Hello</h1>
+
                 </> : 
                 <>
-                ... wait please
+                    <Spinner />
                 </>}
             </div>
           )

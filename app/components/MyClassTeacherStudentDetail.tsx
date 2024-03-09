@@ -218,7 +218,12 @@ const saveEditChange =  async () => {
 
 return (
     <div className='mt-8 px-2'>
-        {isLoading ? <> wait please ...</> : <>
+        {isLoading ? <>      
+          <div className='w-screen h-screen flex justify-center items-center '>
+              <img src="/spinner.svg" alt="" className="w-[100px]"/>
+            </div>
+            </> 
+          : <>
         <div className='flex flex-col w-[380px] md:w-[580px]'>
         <div className=''>
         <span className='font-bold'>{student?.l_name} {student?.f_name} </span>  

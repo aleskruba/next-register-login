@@ -5,6 +5,7 @@ import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 import Navbar from '../components/Navbar';
 import TeachersComponents from '../components/TeachersComponents';
+import {Spinner} from "@nextui-org/react";
 
 const Teachers = () => {
     const {session,currentUser} = useUserContext()
@@ -32,7 +33,11 @@ const Teachers = () => {
 
         </> : 
         <>
-        ... wait please
+      <div className="mt-8 w-screen h-screen flex items-center justify-center">
+       
+       <img src="/spinner.svg" alt="" className="w-[100px]"/>
+
+   </div>
         </>}
     </div>
   )

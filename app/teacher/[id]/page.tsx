@@ -2,7 +2,7 @@
 import Navbar from "@/app/components/Navbar";
 import { useRouter } from 'next/navigation'
 import { FC,useEffect,useState} from "react";
-import MyProfileComponent from "@/app/components/MyProfileComponent";
+import {Spinner} from "@nextui-org/react";
 import { useUserContext } from "../../../context/auth-context";
 import MyProfileTeacherComponents from "@/app/components/MyProfileTeacherComponents";
 
@@ -35,7 +35,7 @@ const Post: FC<Props> = ({params}) => {
     <div className="mt-20 flex justify-center ">
       <Navbar/>
 
-      {isLoading ? <>wait please .... </> : <> 
+      {isLoading ? <>     <Spinner /> </> : <> 
         <MyProfileTeacherComponents id={params.id}/> 
 
       </>}

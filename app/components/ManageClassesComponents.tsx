@@ -144,7 +144,7 @@ function ManageClassesComponents() {
 
       const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
-
+        setRefresh(true)
         if (!classCodeError) {
         try{
           const updatedClassIndex = classes.findIndex((c) => c.id === updatedClass.id);
@@ -161,11 +161,14 @@ function ManageClassesComponents() {
  
          const response = await updateClass(updatedClass)
          if (response.message === 'success') {
+       
           toast.success('Class updated successfully')
+         setTimeout(() => {
           setSelectedClass(null)
-          setRefresh(!refresh)
-          router.refresh()
+         }, 700);
+         setRefresh(false)          
    
+          
         }
 
 
@@ -278,28 +281,29 @@ function ManageClassesComponents() {
                      </div>
                         <div className='flex-1'>
                   
-                               
+                      
 
                               {cl.teacherClasses?.map((teacher) => 
                         
                      
                         (
                             <div key={teacher.id} className='flex justify-center'>
-                            <p className='font-bold  text-xs md:text-base  mt-1 mb-3'>{
+                 
+                           <p className='font-bold  text-xs md:text-base  mt-1 mb-3'>
                             
-                            teachers.map(t => { 
+                            { teachers.map(t => { 
                                 if (t.id ===  teacher.id) {
-                                    return ` ${t.f_name} ${t.l_name} `
+                            
+                                  return ` ${t.f_name} ${t.l_name} `
                                 }
-                           
+                            })     }
                             
-                        })
-                            
-                            }</p>
+                            </p>
+                  
                             </div>
                         ))}
 
-                    
+                       
                       
                         <div className='flex justify-end items-center flex-col'>
                      

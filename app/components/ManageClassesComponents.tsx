@@ -2,7 +2,6 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { ClassArray,ClassProps,TeacherDetails,TeachersArray } from '@/types';
 import { deleteClass, fetchClasses, fetchTeachers, updateClass} from '@/utils';
 import { useRouter } from "next/navigation";
-import { string } from 'zod';
 import toast from 'react-hot-toast';
 
 function ManageClassesComponents() {
@@ -12,11 +11,9 @@ function ManageClassesComponents() {
     const [teachers, setTeachers] = useState<TeachersArray>([]);
     const [isLoading,setIsLoading] = useState(true)
     const [selectedClass, setSelectedClass] = useState<null | string>(null);
-    const [selected, setSelected] = useState<string>('');
+    //const [selected, setSelected] = useState<string>('');
     const [classCodeError, setClassCodeError] = useState<string | null>(null);
-    const [refresh,setRefresh] = useState(false)
-
-
+ 
 
     const [updatedClass, setUpdatedClass] = useState<ClassProps>({
       id:'',
@@ -44,15 +41,19 @@ function ManageClassesComponents() {
         fetchData();
 
 
-    },[updatedClass,refresh])
+    },[])
 
     const handleDelete = async (ID:string) => {
+
+      const isConfirmed = window.confirm("Are you sure you want to delete this class?");
+
+      if (isConfirmed) {
+        console.log(ID);
 
         const classToBeDeleted = classes.find(cl => cl.id === ID)
 
         if (classToBeDeleted?.studentClassesIds?.length === 0) {
-            console.log('deleted ',ID)
-
+    
             try { 
                 const response = await deleteClass(ID)
          
@@ -70,7 +71,7 @@ function ManageClassesComponents() {
         }
         else { alert('Class is not empty , cannot be deleted !!!! ')}
 
-    
+      }
             }
   
     const handleEditClick = (ID:string) =>{
@@ -80,7 +81,7 @@ function ManageClassesComponents() {
             if (cl.id === ID) {
           
 
-                cl.teacherClassesIds && setSelected( cl.teacherClassesIds[0])
+                cl.teacherClassesIds /* && setSelected( cl.teacherClassesIds[0]) */
                 setUpdatedClass({
                   id: cl.id,
                   classCode: cl.classCode,
@@ -118,18 +119,17 @@ function ManageClassesComponents() {
 
       const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
      
-        setSelected(e.target.value);
-        console.log(e.target.value);
+     /*    setSelected(e.target.value);
+        console.log(e.target.value); */
         console.log(teachers)
         const selectedTeacher = teachers.find(teacher => teacher.id === e.target.value) 
         console.log(selectedTeacher)
       
         setUpdatedClass((prevClass:any) => {
-          const updatedTeacherClasses = prevClass.teacherClasses || []; // Default to an empty array if undefined
-      
-          // Create a new TeacherDetails object
+          const updatedTeacherClasses = prevClass.teacherClasses || []; 
+
           const selectedTeacher: TeacherDetails = {
-            id: e.target.value, // Assuming e.target.value is the teacher ID
+            id: e.target.value, 
           };
       
           return {
@@ -144,34 +144,33 @@ function ManageClassesComponents() {
 
       const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
-        setRefresh(true)
+
         if (!classCodeError) {
         try{
-          const updatedClassIndex = classes.findIndex((c) => c.id === updatedClass.id);
-          if (updatedClassIndex !== -1) {
-            // If the object is found, create a new array with the updated object
-            setClasses((prevClasses) => [
-              ...prevClasses.slice(0, updatedClassIndex),
-              updatedClass,
-              ...prevClasses.slice(updatedClassIndex + 1),
-            ]);
-          }
+
       
+          console.log('updatedClass',updatedClass)  
   
- 
-         const response = await updateClass(updatedClass)
-         if (response.message === 'success') {
-          setRefresh(false)      
-          toast.success('Class updated successfully')
-         setTimeout(() => {
-          setSelectedClass(null)
-         }, 2000);
-             
-   
-          
+          console.log('selectedClass',selectedClass)
+          if (selectedClass) {
+            const newValue = classes.map(element => {
+              if (element.id === selectedClass) {
+                // Update the properties of the matching object
+                return { ...element, ...updatedClass };
+              }
+              return element;
+            });
+            setClasses(newValue);
+     
         }
 
+          setSelectedClass(null)
 
+          const response = await updateClass(updatedClass)
+         if (response.message === 'success') {
+           toast.success('Class updated successfully')
+          router.refresh()
+          } 
 
         }
           catch (err) {
@@ -189,8 +188,7 @@ function ManageClassesComponents() {
         </div>
         {classes.map( cl =>{
 
-  
-
+    
             return (
                 <div key={cl.id} className='border border-solid border-gray-400 flex justify-between px-2 min-w-[380px]  md:min-w-[500px] '>
                     

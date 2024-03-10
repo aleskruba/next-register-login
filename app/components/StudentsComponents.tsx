@@ -50,19 +50,25 @@ const StudentsComponents = () => {
           .map((cl) => cl.classCode);
 
         return (
-          <div key={student.id} className='mt-2 text-base border border-solid border-gray-300 max-w-[390px] md:max-w-[580px]'>
+          <div key={student.id} className='mt-2 text-base border border-solid border-gray-300 max-w-[360px] md:max-w-[580px]'>
             <div className='cursor-pointer w-[200px] flex justify-between'>
               <Link href={`/students/${student.id}`}>
-                <div className={`min-w-[390px] md:min-w-[580px] w-full flex justify-between px-1 py-1 ${resolvedTheme === 'dark' ? 'hover:bg-gray-300 hover:text-black' : 'hover:bg-gray-500 hover:text-white '} `}>
+                <div className={`min-w-[360px] md:min-w-[580px] w-full flex justify-between px-1 py-1 ${resolvedTheme === 'dark' ? 'hover:bg-gray-300 hover:text-black' : 'hover:bg-gray-500 hover:text-white '} `}>
                     <div className='flex justify-between w-[320px]'>
-                      <div >
-                         {student.l_name} {student.f_name} 
+                    <div className=' overflow-hidden'>
+                        {student.l_name.length + student.f_name.length > 15
+                          ? `${student.l_name} ${student.f_name}`.slice(0, 15) + '...'
+                          : `${student.l_name} ${student.f_name}`}
                       </div>
-                      <div > 
-                        {student.email}  
+
+                      <div className='overflow-hidden'>
+                        {student.email.length > 15
+                          ? `${student.email.slice(0, 15)}...`
+                          : student.email}
                       </div>
+
                     </div>
-                   <div className='font-bold min-w-[25px]'>
+                   <div className='font-bold min-w-[25px] '>
                     {studentClasses}
                     </div>
                 </div>

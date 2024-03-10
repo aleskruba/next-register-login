@@ -334,7 +334,7 @@ export async function updateClass(updatedClass:ClassProps) {
 
 export async function updateStudentsInClass(classData: ClassArray): Promise<void> {
 
-  console.log('classData',classData)
+
    try {
     const response = await fetch('/api/classes', {
       method: 'PUT',

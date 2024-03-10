@@ -18,19 +18,16 @@ function Classes() {
       try {
         const classesResponse = await fetchClasses();
         const studentsResponse = await fetchStudents();
-        console.log(studentsResponse);
-  
-        // Extract all student ids and class codes from classesResponse
+
         const allStudentInfo = classesResponse.reduce((info: any, cls: { studentClassesIds: any[]; classCode: any; }) => {
           return [...info, ...cls.studentClassesIds.map(studentId => ({ studentId, classCode: cls.classCode }))];
         }, []);
   
-        // Filter out students whose id is not present in any studentClassesIds
-        const filteredStudents = studentsResponse.filter((student: { id: any; }) =>
+          const filteredStudents = studentsResponse.filter((student: { id: any; }) =>
           allStudentInfo.some((info: { studentId: any; }) => info.studentId === student.id)
         );
   
-        // Group students by classCode
+    
         const groupedStudents = filteredStudents.reduce((grouped: { [x: string]: any[]; }, student: { id: any; }) => {
           const matchingInfo = allStudentInfo.find((info: { studentId: any; }) => info.studentId === student.id);
           const classCode = matchingInfo ? matchingInfo.classCode : null;
@@ -41,19 +38,18 @@ function Classes() {
           return grouped;
         }, {});
   
-        // Save the grouped students to state
+ 
         setDroppedStudents(groupedStudents);
-        console.log(groupedStudents);
+    
         
         const totalStringsCount = classesResponse.reduce((acc: any, obj: { studentClassesIds: string | any[]; }) => {
           if (obj.studentClassesIds) {
-            // Add the length of the studentClassesIds array to the accumulator
+    
             return acc + obj.studentClassesIds.length;
           }
           return acc;
         }, 0);
         
-        console.log('Total count of strings:', totalStringsCount);
   
         setClasses(classesResponse);
         setStudents(studentsResponse);
@@ -87,7 +83,7 @@ function Classes() {
     setIsChanged(true)
     const studentEmail = e.dataTransfer.getData('text/plain');
     const draggedStudent = students?.find((student) => student.email === studentEmail);
-  console.log(draggedStudent)
+
     if (draggedStudent) {
       setDroppedStudents((prev) => {
         const updatedDroppedStudents = { ...prev };
@@ -110,7 +106,7 @@ function Classes() {
               if (cl.classCode === classCode) {
                 const studentClassesIds = Array.isArray(cl.studentClassesIds) ? [...cl.studentClassesIds] : [];
                 
-                // Check if the student's id is already in the array
+         
                 const isStudentIdAlreadyAdded = studentClassesIds.includes(draggedStudent.id);
                 
        
@@ -130,9 +126,7 @@ function Classes() {
             return updatedClasses;
           });
   
-    /*       setStudents((prevStudents) =>
-            prevStudents?.filter((student) => student.id !== draggedStudent.id)
-          ); */
+
         }
 
         return updatedDroppedStudents;
@@ -142,29 +136,29 @@ function Classes() {
   
   
   const handleDelete = (ID: string) => {
-    // Create a new object with updated values
+
     setIsChanged(true)
     const updatedDroppedStudents: { [classCode: string]: StudentsProps[] } = {};
   
     for (const classCode in droppedStudents) {
       if (droppedStudents.hasOwnProperty(classCode)) {
-        // Filter out the student with the specified ID from the current classCode
+      
         const updatedStudents = droppedStudents[classCode].filter(student => student.id !== ID);
-        // Update the updatedDroppedStudents object with the filtered array
+    
         updatedDroppedStudents[classCode] = updatedStudents;
       }
     }
 
     setClasses((prevClasses) => {
       if (!prevClasses) {
-        return prevClasses; // If prevClasses is undefined, return it as is
+        return prevClasses; 
       }
     
       const updatedClasses = prevClasses.map((cl) => {
-        // Check if the studentClassesIds array includes the specified ID
+  
         const updatedStudentClassesIds = cl.studentClassesIds?.filter(studentId => studentId !== ID);
     
-        // If the class still has students after filtering, update it; otherwise, exclude it
+
         return {
           ...cl,
           studentClassesIds: updatedStudentClassesIds,
@@ -176,7 +170,6 @@ function Classes() {
     
 
 
-    // Update the state with the new object
     setDroppedStudents(updatedDroppedStudents);
   };
   
@@ -192,10 +185,10 @@ function Classes() {
 
 
 const handleSubmit = () =>{ 
-  console.log(classes)
+
   setIsChanged(false)
   setIsUpdated(false)
-  console.log(droppedStudents)
+
   const fetchData = async () => {
     try {
       const response = await updateStudentsInClass(classes);
@@ -238,8 +231,8 @@ const handleSubmit = () =>{
             draggable
             onDragStart={(e) => handleDragStart(e, student)}
           >
-            <div className='flex bg-gray-100 text-black font-semibold gap-2 py-1 border border-solid border-1 w-[150px] mt-1 px-1 rounded'>
-            <div>{student?.l_name}</div>      <div>{student?.f_name}</div>
+            <div className='flex bg-gray-100 text-black font-semibold gap-2 py-1 border border-solid border-1 w-[130px] lg:[150px] mt-1 px-1 rounded'>
+               <div>{student?.l_name}</div>      <div>{student?.f_name}</div>
             </div>
           </div>
         );

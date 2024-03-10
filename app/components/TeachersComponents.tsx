@@ -58,13 +58,19 @@ function TeachersComponents() {
                  <Link href={`/teachers/${teacher.id}`}>
                    <div className={`min-w-[390px] md:min-w-[580px] w-full flex justify-between px-1 py-1 ${resolvedTheme === 'dark' ? 'hover:bg-gray-300 hover:text-black' : 'hover:bg-gray-500 hover:text-white '} `}>
                        <div className='flex justify-between w-[320px]'>
-                         <div >
-                            {teacher.l_name} {teacher.f_name} 
+                         <div className=' overflow-hidden'>
+                         {teacher.l_name.length + teacher.f_name.length > 15
+                          ? `${teacher.l_name} ${teacher.f_name}`.slice(0, 15) + '...'
+                          : `${teacher.l_name} ${teacher.f_name}`}
                          </div>
-                         <div > 
-                           {teacher.email}  
+                         <div className=' overflow-hidden'> 
+                           {teacher.email.length > 15
+                          ? `${teacher.email.slice(0, 15)}...`
+                          : teacher.email} 
                          </div>
                        </div>
+
+                    
                       <div className='font-bold min-w-[25px]'>
                        {classCodesString}
                        </div>

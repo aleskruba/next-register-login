@@ -198,38 +198,6 @@ const Post: FC<Props> = ({params}) => {
 
             </div>
 
-       {/*      <div className="flex justify-between w-full mt-1">
-              <div className="flex items-center">role:</div>
-              <label className="flex items-center">
-                <input
-                          disabled={  studentClasses &&  studentClasses.length > 0}
-                  type="radio"
-                  value="Student"
-                  checked={updatedStudent?.role === 'Student'}
-                  onChange={handleChange}
-                  className="bg-gray-200 border-none rounded-md p-2 cursor-pointer"
-                  name="role"
-                />
-                <span className="ml-2">Student</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                          disabled={  studentClasses &&  studentClasses.length > 0}
-                  type="radio"
-                  value="Teacher"
-                  checked={updatedStudent?.role === 'Teacher'}
-                  onChange={handleChange}
-                  className="bg-gray-200 border-none rounded-md p-2 cursor-pointer"
-                  name="role"
-                />
-                <span className="ml-2">Teacher</span>
-              </label>
-
-            </div>
-            {studentClasses &&  studentClasses.length > 0 &&
-            <span className="text-xs text-red-400 text-end w-full">Change of role works only if Class is empty  </span>}
- */}
-
                 <div className="flex justify-between w-full mt-1">
             <div>class:</div><div> {studentClasses.join(", ")}</div>
           </div>

@@ -37,8 +37,6 @@ function MyProfileComponent({id}:any) {
         const response = await fetchMyProfile(id)
         const allClasses = await fetchClasses();
     
-        console.log(response)
-        
         setStudent(response)
         setClasses(allClasses);
         setIsLoading(false)

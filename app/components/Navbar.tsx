@@ -9,10 +9,11 @@ import { IoMdMenu, IoMdClose } from "react-icons/io"
 import { usePathname } from 'next/navigation'
 import { useTheme } from "next-themes"
 
+
 const Navbar = () => {
   const { resolvedTheme } = useTheme();
   const {session,currentUser,setCurrentUser} = useUserContext()
-  const router = useRouter()
+  const router = useRouter();
   const [navbar, setNavbar] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -115,7 +116,7 @@ const Navbar = () => {
                 <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
               </Link>
 
-              <Link href="/mygrades">
+              <Link href={`/mygrades/${currentUser.id}`}>
                 <li className={pathname === "/mygrades" ? "font-bold text-green-500" : "hover:text-green-500"}>my grades</li>
             </Link>
           </>
@@ -126,6 +127,7 @@ const Navbar = () => {
               <Link href={`/teacher/${currentUser.id}`}>
                       <li className={pathname === "/techer" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
               </Link>
+       
               <Link href={`/myclass/${currentUser.id}`}>
                   <li className={pathname === "/myclass" ? "font-bold text-green-500" : "hover:text-green-500"}>My class</li>
                 </Link>

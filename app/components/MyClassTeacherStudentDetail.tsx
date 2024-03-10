@@ -42,7 +42,7 @@ export const MyClassTeacherStudentDetail = ({id}:any) => {
                 setStudent(response);
               //  setClasses(allClasses);
                 setIsLoading(false)
-              console.log(response)
+          
             } catch (e) {
                 console.error('Error fetching student data:', e);
             }
@@ -79,7 +79,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       setStudent(updatedStudent as StudentsProps);
       
       const response = await fetchGrade(newGrade)
-      console.log(response)
+
       if (response === 'success') {
         toast.success('Grade updated successfully')
        
@@ -132,7 +132,7 @@ const deleteGradeFunction = (id:any) =>{
   try{
     const fetchFunction = async () =>{
       const response =  await deleteGrade(data);
-      console.log(response)
+
       if (response.data === 'success') {
              setUpdated(!updated)
              router.refresh()
@@ -150,7 +150,7 @@ const deleteGradeFunction = (id:any) =>{
 }
 
 const handleEditClick = (ID:any) => {
-  console.log(ID)
+
    setUpdateSelected(ID)
 
    student?.gradeses.forEach(grade => {
@@ -181,7 +181,7 @@ const handleEditChange  = (e: ChangeEvent<HTMLInputElement>) => {
 
 const saveEditChange =  async () => {
   const updatedStudent = { ...student };
-  console.log(updatedGrade)
+
   
   try { 
     const response = await updateGrade(updatedGrade)

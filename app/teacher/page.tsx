@@ -15,10 +15,8 @@ function Teacher() {
     const fetchData = async () => {
       try {
         if (currentUser) {
-          console.log("Current User:", currentUser);
           if (currentUser.role === "Teacher" || "Admin") {
-            console.log('Teacher')
-            setIsLoading(false);
+             setIsLoading(false);
           } else {
                    router.replace("/");
           }
@@ -39,7 +37,9 @@ function Teacher() {
 
                 </> : 
                 <>
-                    <Spinner />
+                 <div className='w-screen h-screen flex justify-center items-center'>
+                     <img src="/spinner.svg" alt="" className="w-[100px] "/>
+               </div>
                 </>}
             </div>
           )

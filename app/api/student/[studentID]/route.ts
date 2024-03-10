@@ -24,8 +24,14 @@ try {
         }
       });
 
+      const currentUserStudent = await prisma.student.findUnique({
+        where: {
+          email: session.user?.email as string // Ensure session.user.email exists and is a string
+        }
+      });
+
  
-      if(currentUser?.role == 'Admin' || currentUserTeacher?.role == 'Teacher')    {
+      if(currentUser?.role == 'Admin' || currentUserTeacher?.role == 'Teacher' || currentUserStudent?.role == 'Student')    {
    
         const student = await prisma.student.findFirst({
             where: { id:params.studentID },

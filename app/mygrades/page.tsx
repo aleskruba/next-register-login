@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
 
-function MyClass() {
+function MyGrades() {
 
   const router = useRouter()
   const {session,currentUser} = useUserContext()
@@ -14,7 +14,7 @@ function MyClass() {
     const fetchData = async () => {
       try {
         if (currentUser) {
-          if (currentUser.role === "Teacher" || "Admin") {
+               if (currentUser.role === "Student" || "Admin") {
             setIsLoading(false);
           } else {
                    router.replace("/");
@@ -34,11 +34,11 @@ function MyClass() {
         {!isLoading ? <>      
               <Navbar/>
               <div >
-            <h1>Hello from my class :-)</h1>
+            <h1>My Grades</h1>
             </div>
                 </> : 
                 <>
-             <div className='w-screen h-screen flex justify-center items-center '>
+          <div className='w-screen h-screen flex justify-center items-center '>
               <img src="/spinner.svg" alt="" className="w-[100px]"/>
             </div>
                 </>}
@@ -46,4 +46,4 @@ function MyClass() {
           )
         }
 
-export default MyClass
+export default MyGrades

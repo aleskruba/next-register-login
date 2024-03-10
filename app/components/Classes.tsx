@@ -232,7 +232,11 @@ const handleSubmit = () =>{
             onDragStart={(e) => handleDragStart(e, student)}
           >
             <div className='flex bg-gray-100 text-black font-semibold gap-2 py-1 border border-solid border-1 w-[130px] lg:[150px] mt-1 px-1 rounded'>
-               <div>{student?.l_name}</div>      <div>{student?.f_name}</div>
+            <div className=' hover:font-bold overflow-hidden'>
+                                            {student.l_name.length + student.f_name.length > 10
+                                            ? `${student.l_name} ${student.f_name}`.slice(0, 10) + '...'
+                                            : `${student.l_name} ${student.f_name}`}
+                                            </div>
             </div>
           </div>
         );
@@ -276,8 +280,12 @@ const handleSubmit = () =>{
             {droppedStudents[cl.classCode].map((student) => (
               <li key={student.id} className='text-left '>
               <div className='flex between  border border-solid border-gray-300'>
-                <div className='flex-1 text-base ml-2'>
-               {student.l_name} {student.f_name}
+                <div className='flex-1 text-base ml-2 overflow-hidden'>
+              
+                        {student.l_name.length + student.f_name.length > 15
+                          ? `${student.l_name} ${student.f_name}`.slice(0, 15) + '...'
+                          : `${student.l_name} ${student.f_name}`}
+                  
                 </div>
                 <div
                     className='mr-2 w-[20px] flex justify-center items-center text-base cursor-pointer hover:font-bold hover:bg-red-500 hover:text-white'

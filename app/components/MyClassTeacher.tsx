@@ -1,31 +1,29 @@
 "use client"
-import React,{useState,useEffect,ChangeEvent,FormEvent } from 'react'
-import { fetchClasses, fetchMyProfileTeacher, fetchStudents, updateTeacherProfile} from "@/utils";
-import { ClassProps, ClassArray,StudentsArray, StudentsProps, TeachersProps } from '@/types';
-import toast from "react-hot-toast";
-import { useRouter } from 'next/navigation'
+import React,{useState,useEffect } from 'react'
+import { fetchClasses, fetchMyProfileTeacher} from "@/utils";
+import {  ClassArray,  TeachersProps } from '@/types';
 import Link from 'next/link';
-
-
+import { useRouter } from 'next/navigation';
 
 
 function MyClassTeacher({id}:any) {
 
 
 
-    const router = useRouter()
     const [teacher,setTeacher] = useState<TeachersProps>()
     const [classes, setClasses] = useState<ClassArray>([]);
     const [isLoading,setIsLoading] = useState(true)
+
+    const router = useRouter()
+
+
 
     useEffect(() =>{
       const fetchData = async () => { 
         const response = await fetchMyProfileTeacher(id)
         const allClasses = await fetchClasses();   
         
-
-        console.log(allClasses)
-        
+              
         setTeacher(response)
         setClasses(allClasses);
         setIsLoading(false)
@@ -37,12 +35,12 @@ function MyClassTeacher({id}:any) {
 
 
       const teacherClasses = classes.filter((cl: { teacherClassesIds: string | string[]; }) => cl.teacherClassesIds?.includes(teacher?.id || "")).map((cl: { classCode: any; }) => cl.classCode);
-        console.log(teacherClasses[0])
- 
+  
   return (
     <div className="mt-10 flex justify-center ">
       
     {!isLoading ? <>  
+   
     <div className=" px-2 py-2 min-w-[380px] md:min-w-[480px]  flex flex-col items-start border border-solid border-1 text-xl ">
 
         <div className='flex '>
@@ -67,7 +65,12 @@ function MyClassTeacher({id}:any) {
                             return (
                                 <Link href={`/myclass/${id}/${student.id}`} key={student.id}>
                                     <div className='flex  px-2  text-gray-900 bg-gray-100 justify-between min-w-[380px] md:min-w-[480px]' >
-                                        <div className=' hover:font-bold'>{student.f_name} {student.l_name} </div>
+                                   
+                                        <div className=' hover:font-bold overflow-hidden'>
+                                            {student.l_name.length + student.f_name.length > 15
+                                            ? `${student.l_name} ${student.f_name}`.slice(0, 15) + '...'
+                                            : `${student.l_name} ${student.f_name}`}
+                                            </div>
 
                                             <div className='flex'>      
                                                <span>total grades:</span>  <span className='pl-4'>   
@@ -91,7 +94,9 @@ function MyClassTeacher({id}:any) {
     </div>
     </>
     :<>
-            ... wait please
+    <div className='w-screen h-screen flex justify-center items-center'>
+              <img src="/spinner.svg" alt="" className="w-[100px] "/>
+            </div>
     </>
     }
    </div>

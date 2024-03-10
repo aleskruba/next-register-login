@@ -29,7 +29,6 @@ function MyProfileTeacherComponents({id}:any) {
         const response = await fetchMyProfileTeacher(id)
         const allClasses = await fetchClasses();
     
-        console.log(response)
         
         setTeacher(response)
         setClasses(allClasses);
@@ -47,7 +46,7 @@ function MyProfileTeacherComponents({id}:any) {
 
 
        const handleEditClick = (ID:any) => {
-        console.log(ID)
+       
         setUpdateSelected(true)
   
         setUpdatedTeacher({
@@ -73,12 +72,11 @@ function MyProfileTeacherComponents({id}:any) {
       
       const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault(); 
-        console.log(updatedTeacher);
-  
+   
         try{
           const fetchFunc = async () => {
           const response = await updateTeacherProfile(updatedTeacher) 
-          console.log(response)
+
           if (response.message = 'success') {
             toast.success('Updated successfully');
             router.push('/')
@@ -172,7 +170,9 @@ function MyProfileTeacherComponents({id}:any) {
 
     </>
     :<>
-            ... wait please
+             <div className='w-screen h-screen flex justify-center items-center'>
+              <img src="/spinner.svg" alt="" className="w-[100px] "/>
+            </div>
     </>
     }
    </div>

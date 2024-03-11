@@ -120,7 +120,7 @@ function MyProfileComponent({id}:any) {
       const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
 
         if (!cloudinaryUrl) {
-          console.error("Cloudinary URL is not defined!");
+          console.error("Cloudinary URL is not defined    !");
           return null; // or handle the error in some way
         }
 

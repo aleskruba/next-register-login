@@ -1,9 +1,12 @@
 "use client"
 import React,{useState,useEffect,ChangeEvent,FormEvent } from 'react'
-import { fetchClasses, fetchMyProfileTeacher, updateTeacherProfile} from "@/utils";
-import { StudentsProps, TeachersProps } from '@/types';
+import { fetchClasses, fetchMyProfileTeacher, updateProfileImage, updateTeacherProfile} from "@/utils";
+import { TeachersProps } from '@/types';
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation'
+import axios from 'axios';
+
+
 
 function MyProfileTeacherComponents({id}:any) {
 
@@ -24,6 +27,10 @@ function MyProfileTeacherComponents({id}:any) {
         grades: []
           });
 
+    const [url,setUrl] = useState('');
+    const [image, setImage] = useState<File | undefined>();
+    const [forceUpdate, setForceUpdate] = useState(false); 
+
     useEffect(() =>{
       const fetchData = async () => { 
         const response = await fetchMyProfileTeacher(id)
@@ -31,6 +38,7 @@ function MyProfileTeacherComponents({id}:any) {
     
         
         setTeacher(response)
+        setUrl(response.image)
         setClasses(allClasses);
         setIsLoading(false)
 
@@ -90,12 +98,101 @@ function MyProfileTeacherComponents({id}:any) {
         }
       
       }
+
+      const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+    
+        if (selectedFile) {
+          setImage(selectedFile);
+          setForceUpdate(prevState => !prevState); // Toggle the state to force re-render
+        }
+      };
+
+      const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
+
+      if (!cloudinaryUrl) {
+        console.error("Cloudinary URL is not defined!");
+        return null; // or handle the error in some way
+      }
+
+      const uploadImage = async () => {
+        try {
+          const formData = new FormData();
+          formData.append('file', image!); // Ensure that 'image' is defined here
+      
+          const cloudinaryUploadResponse = await axios.post(
+            cloudinaryUrl,
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              params: {
+                upload_preset: 'schoolapp',
+              },
+            }
+          );
+      
+          const imageUrl = cloudinaryUploadResponse.data.secure_url;
+          setUrl(imageUrl);
+
+          const response = await updateProfileImage(imageUrl)
+       
+            if (response.data === 'success') { 
+              toast.success('Image updated successfully')
+            }
+            else { 
+              toast.error('Image not updated successfully')
+            }
+
+            setImage(undefined)
+
+       //   console.log('Cloudinary Upload Response:', cloudinaryUploadResponse.data);
+        } catch (error) {
+          console.error('Error uploading image to Cloudinary:', error);
+        }
+      };
+      
  
   return (
-    <div className="mt-20 flex justify-center ">
+    <div className="flex justify-center flex-col">
       
     {!isLoading ? <>  
-    <div className="mt-20 px-5 py-5 min-w-[380px] md:min-w-[480px] text-gray-900 flex flex-col items-start border border-solid border-1 text-xl bg-gray-100">
+
+      <div className="  mt-10 px-5 py-5 min-w-[380px] md:min-w-[480px] text-gray-900 flex flex-col  items-center justify-center  border border-solid border-1 text-xl bg-gray-100">
+        <div className=''>
+        <img    src={image ? URL.createObjectURL(image) : url ?  url: '../placeholder.jpg'} alt="" className='mb-4 w-[150px] h-[150px] rounded-full object-cover'/>
+         </div>
+          <label htmlFor="imageInput" className="cursor-pointer">
+            <span className="relative">
+              <input
+                type="file"
+                id="imageInput"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+              <span className=" bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-md cursor-pointer">
+                Choose a new photo
+              </span>
+            </span>
+          </label>
+         {image && 
+         
+     
+         <div className='flex gap-4 justify-between w-full '>
+          <button onClick={uploadImage}
+                className='mt-4 px-2 py-2 rounded text-white bg-blue-500 hover:bg-blue-800 w-[150px]'
+                >Update Image
+          </button>
+                <button onClick={()=>setImage(undefined)}
+                className='mt-4 px-2 py-2 rounded text-white bg-slate-500 hover:bg-slate-400 w-[150px]'
+                >Cancel
+          </button>
+          </div>
+}
+      </div>
+      <div className="mt-5 px-5 py-5 min-w-[380px] md:min-w-[480px] text-gray-900 flex flex-col items-start border border-solid border-1 text-xl bg-gray-100">
+
 
     {!updateSelected ? <>
 
@@ -119,7 +216,7 @@ function MyProfileTeacherComponents({id}:any) {
       {!isLoading &&
       <div className="px-5 mt-4 flex justify-between w-full">
 
-      <button className="px-8 py-2 bg-blue-500 hover:bg-blue-600 rounded "
+      <button className="px-8 py-2 bg-blue-500 hover:bg-blue-600 rounded  text-white"
            onClick={()=>handleEditClick(teacher?.id)}> 
          update 
       </button>

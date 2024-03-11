@@ -7,7 +7,6 @@ export async function GET(req: Request,context:any) {
 const {params} = context;
 const session = await getServerSession();
 
-console.log(params)
 
 try {
     
@@ -19,7 +18,6 @@ try {
         }
       });
 
-      console.log(currentUser)
  
       if(currentUser?.role == 'Student')    {
    

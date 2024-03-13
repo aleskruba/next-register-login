@@ -19,8 +19,6 @@ export async function POST(req: NextRequest) {
         if (currentUserTeacher?.role === 'Teacher') {
           try {
             const data = await req.json();
-            console.log(data);
-  
             const student = await prisma.student.findUnique({
               where: {
                 id: data.StudentID,
@@ -36,7 +34,7 @@ export async function POST(req: NextRequest) {
               data: {
                 comment: data.comment,
                 value: data.value,
-                // ... other grade fields
+         
               },
             });
   
@@ -65,7 +63,7 @@ export async function POST(req: NextRequest) {
               },
             });
   
-            console.log(data);
+        
   
             return new NextResponse(JSON.stringify({ data: 'success' }), { status: 200 });
           } catch (error) {
@@ -89,6 +87,8 @@ export async function POST(req: NextRequest) {
   export async function DELETE(req: NextRequest) {
     try {
       const session = await getServerSession();
+
+      console.log(session?.user)
   
       if (session) {
         const currentUserTeacher = await prisma.teacher.findUnique({

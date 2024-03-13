@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/libs/prismadb';
 import bcrypt from 'bcrypt';
+import { getServerSession } from 'next-auth';
 
 export async function POST(req: NextRequest) {
     const data = await req.json();
@@ -98,3 +99,93 @@ export async function POST(req: NextRequest) {
       );
     }
   } 
+
+
+  export async function PUT(req: NextRequest) {
+    
+    const session = await getServerSession();
+    
+    
+    
+    try {
+
+      if (session) {
+        
+        const currentUser = await prisma.admin.findUnique({
+          where: {
+            email: session.user?.email as string, // Ensure session.user.email exists and is a string
+          },
+        });
+
+        const currentUserStudent = await prisma.student.findUnique({
+          where: {
+            email: session.user?.email as string, // Ensure session.user.email exists and is a string
+          },
+        });
+
+        const currentUserTeacher = await prisma.teacher.findUnique({
+          where: {
+            email: session.user?.email as string, // Ensure session.user.email exists and is a string
+          },
+        });
+
+        const data = await req.json();
+        console.log(data);
+
+        if (data.password !== data.repeatpassword) {
+            return new NextResponse(JSON.stringify({ data: 'Passwords do not match' }));
+        }
+
+        const passwordRegex = /^.{8,}$/;
+        const isValidPassword = passwordRegex.test(data.password); // Pass password string here
+
+        if (!isValidPassword) {
+            return new NextResponse(JSON.stringify({ data: 'Password is not valid' }));
+        } else {
+
+          const hashedPassword = await bcrypt.hash(data.password, 12);
+
+          if (currentUserStudent?.role === 'Admin') {
+
+            await prisma.student.update({
+              where: {
+                  id: data.userID,
+              },
+              data: {
+                  hashedPassword: hashedPassword,
+              },
+          });
+        }      
+          if (currentUserStudent?.id === data.userID) {
+
+          await prisma.student.update({
+            where: {
+                id: data.userID,
+            },
+            data: {
+                hashedPassword: hashedPassword,
+            },
+        });
+      }          
+
+      if (currentUserTeacher?.id === data.userID) {
+
+        await prisma.teacher.update({
+          where: {
+              id: data.userID,
+          },
+          data: {
+              hashedPassword: hashedPassword,
+          },
+      });
+    }          
+
+            return new NextResponse(JSON.stringify({ data: 'Success' }), { status: 200 });
+        }
+      }
+      return new NextResponse(JSON.stringify({ data: 'Server Error' }));
+    } catch (error) {
+        console.error(error);
+        return new NextResponse(JSON.stringify({ message: 'Failed to process the request' }), { status: 500 });
+    }
+}

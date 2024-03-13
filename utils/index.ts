@@ -453,3 +453,25 @@ export async function updateProfileImage(image:any) {
   }
 }
 
+export async function updatePassword(data: { password: string; repeatpassword: string; }) {
+
+  try {
+    const response = await fetch('/api/register', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update the password');
+    }
+
+    const responseData = await response.json();
+    return responseData;
+
+  } catch (error) {
+    console.error('Error during updating the password:', error);
+  }
+}

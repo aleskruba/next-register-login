@@ -7,7 +7,7 @@ export async function PUT(req: NextRequest) {
       const session = await getServerSession();
 
       if (session) {
-        const currentUser = await prisma.admin.findUnique({
+        const currentUserAdmin = await prisma.admin.findUnique({
           where: {
             email: session.user?.email as string // Ensure session.user.email exists and is a string
           }
@@ -26,7 +26,7 @@ export async function PUT(req: NextRequest) {
         });
   
    
-        if(currentUser?.role == 'Admin' || currentUserTeacher?.role == 'Teacher' || currentUserStudent?.role == 'Student')    {
+        if(currentUserAdmin?.role == 'Admin' || currentUserTeacher?.role == 'Teacher' || currentUserStudent?.role == 'Student')    {
           try {
             const data = await req.json();
        
@@ -36,7 +36,7 @@ export async function PUT(req: NextRequest) {
        
               const updateGrade = await prisma.student.update({
               where: { id: currentUserStudent.id },
-              data: { image:data}
+              data: { image:data.imageUrl}
              
             });
         }
@@ -45,11 +45,44 @@ export async function PUT(req: NextRequest) {
        
           const updateGrade = await prisma.teacher.update({
           where: { id: currentUserTeacher.id },
-          data: { image:data}
+          data: { image:data.imageUrl}
          
         });
     }
+
+        if (currentUserAdmin) {   
+
+          if (data.role == "Student") {
+          const currentUser = await prisma.student.findUnique({
+            where: {
+              id: data.userID as string // Ensure session.user.email exists and is a string
+            }
+          });
+    
+          const updateGrade = await prisma.student.update({
+          where: { id: currentUser?.id },
+          data: { image:data.imageUrl}
+        
+        });
+    }
+    
+        if (data.role == "Teacher") {
+          const currentUser = await prisma.teacher.findUnique({
+            where: {
+              id: data.userID as string // Ensure session.user.email exists and is a string
+            }
+          });
+
+            const updateGrade = await prisma.teacher.update({
+            where: { id: currentUser?.id },
+            data: { image:data.imageUrl}
+          
+          });
+      } 
+    
   
+  
+  }
             return new NextResponse(JSON.stringify({ data: 'success' }), { status: 200 });
           } catch (error) {
             console.error(error);

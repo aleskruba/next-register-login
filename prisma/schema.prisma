@@ -41,6 +41,12 @@ model Student {
   gradesIds String[] @db.ObjectId
   gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
 
+  seenMessagesIds String[] @db.ObjectId
+  seenMessages Message[] @relation("Message", fields: [seenMessagesIds], references: [id])
+
+  senderStudentIds  String[]     @db.ObjectId
+  senderStudent    Message[]    @relation("senderStudent",fields: [senderStudentIds], references: [id])
+
  @@map("students") 
 }
 
@@ -62,6 +68,13 @@ model Teacher {
   gradesIds String[] @db.ObjectId
   gradeses Grade[] @relation("Value", fields: [gradesIds], references: [id])
 
+  seenMessagesIds String[] @db.ObjectId
+  seenMessages Message[] @relation("Message", fields: [seenMessagesIds], references: [id])
+
+  senderTeacherIds  String[]     @db.ObjectId
+  senderTeacher    Message[]    @relation("senderTeacher",fields: [senderTeacherIds], references: [id])
+
+
  @@map("teachers") 
 }
 
@@ -78,14 +91,17 @@ model Class {
   teacherClassesIds String[] @db.ObjectId
   teacherClasses Teacher[] @relation("classCode", fields: [teacherClassesIds], references: [id])
 
+  classCodesIds String[] @db.ObjectId
+  classCodes   Message[] @relation("classCode", fields: [classCodesIds], references: [id])
+
  @@map("classes") 
 }
 
 
 model Grade {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
-  comment   String?
-  value     String
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  comment          String?
+  value            String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -100,3 +116,25 @@ model Grade {
  @@map("grades") 
 }
 
+model Message {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  message          String?
+  createdAt        DateTime    @default(now())
+
+  seenByStudentsIds String[] @db.ObjectId
+  seenByStudents   Student[]   @relation("Message",fields: [seenByStudentsIds], references: [id])
+  
+  seenByTeachersIds String[] @db.ObjectId
+  seenByTeachers   Teacher[]   @relation("Message",fields: [seenByTeachersIds], references: [id])
+
+
+  classCodesIds    String[]      @db.ObjectId
+  classCodes       Class[]       @relation("classCode",fields: [classCodesIds], references: [id])
+
+  senderStudentIds  String[]     @db.ObjectId
+  senderStudent    Student[]    @relation("senderStudent",fields: [senderStudentIds], references: [id])
+
+  senderTeacherIds  String[]     @db.ObjectId
+  senderTeacher    Teacher[]    @relation("senderTeacher",fields: [senderTeacherIds], references: [id])
+  
+}

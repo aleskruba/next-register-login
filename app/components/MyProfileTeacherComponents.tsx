@@ -329,7 +329,7 @@ function MyProfileTeacherComponents({id}:any) {
        <form onSubmit={handleSubmitPassword} className="w-full bg-gray-100 px-5 mt-4 py-4">
          <div className="flex justify-between   ">
   
-          <div className="text-xs md:text-l lg:text-xl pl-2 pr-2 ">New Password : </div> 
+          <div className="text-xs md:text-l lg:text-xl pl-2 pr-2 text-black">New Password : </div> 
                 <input type="password" 
                       // placeholder="password" 
                        autoComplete="new-password" 
@@ -339,7 +339,7 @@ function MyProfileTeacherComponents({id}:any) {
                        onChange={handleChangePassword}/>
         </div>
         <div className="flex justify-between  mt-1">
-         <div className="text-xs md:text-l lg:text-xl pl-2 pr-2 ">Repeat Password: </div>
+         <div className="text-xs md:text-l lg:text-xl pl-2 pr-2 text-black ">Repeat Password: </div>
                 <input type="password" 
                       // placeholder="repeat password" 
                        autoComplete="new-password" 

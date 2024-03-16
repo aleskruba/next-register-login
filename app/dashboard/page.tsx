@@ -1,10 +1,9 @@
 "use client"
-import { DataTableDemo } from '@/components/TableComponent'
+
 import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import { useUserContext } from "../../context/auth-context";
 import { useRouter } from "next/navigation";
-import Students from '../components/StudentsNOTinUSE';
 import Class from '../components/Class';
 
 const Dashboard = () => {

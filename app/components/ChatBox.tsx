@@ -14,7 +14,7 @@ function ChatBox() {
 
         <div className='flex justify-end items-center gap-2'>
           <div className="flex justify-end">
-          <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full" />
+          <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full" alt='profile image'/>
 
 
           </div>
@@ -30,7 +30,7 @@ function ChatBox() {
 
       <div className='flex items-center gap-2'>
           <div className="flex justify-start ">
-          <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full" />
+          <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full"  alt='profile image'/>
 
 
           </div>
@@ -38,7 +38,7 @@ function ChatBox() {
           <div className="flex flex-col items-start">
             <div className={`bg-gray-200 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'} `}>
               <p className='text-xs font-bold'>Peter <span className='font-thin'>wrote on</span> 24.3. at 10:00 AM </p>
-              <p className="text-sm">Hi, I'm good! What about you?</p>
+              <p className="text-sm">Hi, I am good! What about you?</p>
        
             </div>
           </div>

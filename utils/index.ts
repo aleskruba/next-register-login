@@ -274,7 +274,13 @@ export async function createClass(classData: ClassProps): Promise<ClassResponseT
   }
 }
 
+export async function fetchClassesTeacher() {
 
+  const response = await fetch(`/api/chooseclasses`)
+  const data = await response.json()
+
+return data.data
+}
 
 export async function fetchClasses() {
 
@@ -475,7 +481,6 @@ export async function updatePassword(data: { password: string; repeatpassword: s
     console.error('Error during updating the password:', error);
   }
 }
-
 
 
 

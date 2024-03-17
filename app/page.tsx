@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import moment from 'moment'
 import ChatBox from './components/ChatBox';
 import { useUserContext } from "../context/auth-context";
+import ChooseChatBox from './components/ChooseChatBox';
 
 export default function Home() {
 
@@ -46,8 +47,12 @@ export default function Home() {
           </div>
         </div>
           <div className='mt-2'>
-          {currentUser?.role === 'Teacher' || currentUser?.role === 'Student' ? 
+          {currentUser?.role === 'Student' ? 
         <ChatBox/>
+          :null
+    }
+            {currentUser?.role === 'Teacher' ? 
+        <ChooseChatBox/>
         :null
   }
         </div>

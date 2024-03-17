@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { ClassArray, StudentsProps, TeachersProps, UserProps,GradeProps, NewGrade} from "@/types";
+import { ClassArray, StudentsProps, TeachersProps, UserProps,GradeProps, NewGrade, MessageProps} from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -475,3 +475,34 @@ export async function updatePassword(data: { password: string; repeatpassword: s
     console.error('Error during updating the password:', error);
   }
 }
+
+
+
+
+
+
+export async function sendMessage(message: MessageProps) {
+  try {
+    const response = await fetch('/api/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send message');
+    }
+
+    const responseData: ClassResponseType = await response.json();
+    return responseData;
+
+  } catch (error) {
+    console.error('Error creating message:', error);
+
+    throw error;
+
+  }
+}
+

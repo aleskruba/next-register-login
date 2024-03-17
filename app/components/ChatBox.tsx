@@ -1,10 +1,55 @@
-import React from 'react';
+import React,{ ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
+import { sendMessage } from '@/utils';
 
 function ChatBox() {
-  const {session,currentUser,setCurrentUser} = useUserContext()
+    
+    const {session,currentUser,setCurrentUser} = useUserContext()
+    const [emptyInputError,setEmptyInputError] = useState(false)
     const { resolvedTheme } = useTheme();
+
+    useEffect(() => {
+    console.log(currentUser)
+     },[])
+
+   
+    const [newMessage,setNewMessage] = useState({
+      message:'',
+      senderID:currentUser?.id,
+  
+    })
+
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => { 
+      setNewMessage({...newMessage,[e.target.name]:e.target.value})
+    }
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+
+      console.log(newMessage);
+      if (newMessage.message) {
+      try {
+        const response = await sendMessage(newMessage)
+        console.log(response);
+
+        if (response.message === 'empty') {
+        
+          setEmptyInputError(true)
+        }
+        if (response.message ==='success') {
+
+          setEmptyInputError(false)
+        }
+       }
+      catch (e) {
+        console.log(e)
+      }
+    }
+      else { console.log('cannot be empty')
+              setEmptyInputError(true) }
+    }
 
   return (
     <div>
@@ -21,7 +66,7 @@ function ChatBox() {
 
           <div className="flex flex-col items-end">
             <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`}>
-            <p className='text-xs font-bold'>Peter <span className='font-thin'>wrote on</span> 24.3. at 10:00 AM </p>
+            <p className='text-xs font-bold'>Teacher <span className='font-thin'>wrote on</span> 24.3. at 10:00 AM </p>
               <p className="text-sm">Hello, how are you?</p>
        
             </div>
@@ -46,10 +91,23 @@ function ChatBox() {
         </div>
         </div>
 
+        <form action="" onSubmit={handleSubmit}>
         <div className="flex mt-4">
-          <input type="text" placeholder="Type a message..." className="flex-grow rounded-full py-2 px-4 focus:outline-none focus:ring focus:border-blue-300" />
-          <button className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-4 py-2 ml-2 focus:outline-none focus:ring focus:border-blue-300">Send</button>
+
+           <input type="text" 
+                  placeholder="Type a message..." 
+                  className="flex-grow rounded-full py-2 px-2 lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
+                  name = "message"
+                  onChange={handleChange}  
+                  />
+          <input className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-2 lg:px-4 py-2 lg:ml-2 focus:outline-none focus:ring focus:border-blue-300"
+                type= 'submit'
+                value='Send'
+          />
+
         </div>
+        <div className="text-red-500 text-base">{emptyInputError && 'Cannot be empty'}</div> 
+        </form>
       </div>
     </div>
   )

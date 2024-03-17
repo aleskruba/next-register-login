@@ -114,3 +114,9 @@ export type UpdatedGrade = {
   StudentID:string; 
   updatedAt:Date,
 };
+
+export type MessageProps = {
+  senderID:string;
+  message:string;
+
+} 

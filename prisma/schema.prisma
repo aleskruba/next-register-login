@@ -44,8 +44,7 @@ model Student {
   seenMessagesIds String[] @db.ObjectId
   seenMessages Message[] @relation("Message", fields: [seenMessagesIds], references: [id])
 
-  senderStudentIds  String[]     @db.ObjectId
-  senderStudent    Message[]    @relation("senderStudent",fields: [senderStudentIds], references: [id])
+  posts Message[]
 
  @@map("students") 
 }
@@ -71,8 +70,7 @@ model Teacher {
   seenMessagesIds String[] @db.ObjectId
   seenMessages Message[] @relation("Message", fields: [seenMessagesIds], references: [id])
 
-  senderTeacherIds  String[]     @db.ObjectId
-  senderTeacher    Message[]    @relation("senderTeacher",fields: [senderTeacherIds], references: [id])
+  posts Message[]
 
 
  @@map("teachers") 
@@ -91,8 +89,7 @@ model Class {
   teacherClassesIds String[] @db.ObjectId
   teacherClasses Teacher[] @relation("classCode", fields: [teacherClassesIds], references: [id])
 
-  classCodesIds String[] @db.ObjectId
-  classCodes   Message[] @relation("classCode", fields: [classCodesIds], references: [id])
+  posts Message[]
 
  @@map("classes") 
 }
@@ -128,13 +125,13 @@ model Message {
   seenByTeachers   Teacher[]   @relation("Message",fields: [seenByTeachersIds], references: [id])
 
 
-  classCodesIds    String[]      @db.ObjectId
-  classCodes       Class[]       @relation("classCode",fields: [classCodesIds], references: [id])
+  classCodes            Class?     @relation(fields: [classCodesIds], references: [id])
+  classCodesIds         String?    @db.ObjectId
 
-  senderStudentIds  String[]     @db.ObjectId
-  senderStudent    Student[]    @relation("senderStudent",fields: [senderStudentIds], references: [id])
+  authorStudent         Student?   @relation(fields: [authorStudentId], references: [id])
+  authorStudentId       String ?   @db.ObjectId
 
-  senderTeacherIds  String[]     @db.ObjectId
-  senderTeacher    Teacher[]    @relation("senderTeacher",fields: [senderTeacherIds], references: [id])
+  authorTeacher         Teacher?   @relation(fields: [authorTeacherId], references: [id])
+  authorTeacherId       String?    @db.ObjectId
   
 }

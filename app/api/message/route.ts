@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         });
 
         
-        if (currentUserStudent && currentUserStudent?.id == data.senderID){
+        if (currentUserStudent && currentUserStudent?.id == data.authorStudentId){
 
                   const classId = await prisma.class.findFirst({
                     where: {
@@ -40,22 +40,40 @@ export async function POST(req: NextRequest) {
                 });
         
                 console.log('Student wrote',data , 'CLASS',classId?.classCode)
+
+                const newMessage = await prisma.message.create({
+                  data: {
+                    message: data.message,
+                    authorStudentId: data.authorStudentId , // Connects the message to the corresponding student
+                    classCodesIds: classId?.id,  // Connects the message to the corresponding class
+                    role:'student'
+                  }
+                });
+                
        
             return NextResponse.json({ message: 'success'});
           }
 
-        if (currentUserTeacher && currentUserTeacher?.id == data.senderID){
+        if (currentUserTeacher && currentUserTeacher?.id == data.authorTeacherId){
 
           const classId = await prisma.class.findFirst({
             where: {
-                studentClassesIds: {
-                    has: currentUserStudent?.id
+                teacherClassesIds: {
+                    has: currentUserTeacher?.id
                 }
             }
         });
-          
 
-          console.log('Teacher wrote',data , 'CLASS',classId?.classCode)
+            console.log('Student wrote',data , 'CLASS',classId?.classCode)
+
+            const newMessage = await prisma.message.create({
+              data: {
+                message: data.message,
+                authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student
+                classCodesIds:  data.classCode,  // Connects the message to the corresponding class
+                role:'teacher'
+              }
+            });
               
          return NextResponse.json({ message: 'success'});
       }

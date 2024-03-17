@@ -506,3 +506,14 @@ export async function sendMessage(message: MessageProps) {
   }
 }
 
+
+
+
+
+export async function fetchMessages() {
+
+  const response = await fetch(`/api/messages`)
+  const data = await response.json()
+
+return data.data
+}

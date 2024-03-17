@@ -115,8 +115,20 @@ export type UpdatedGrade = {
   updatedAt:Date,
 };
 
-export type MessageProps = {
-  senderID:string;
-  message:string;
 
-} 
+
+export type PostProps = {
+  id: string;
+  message: string;
+  createdAt: Date;
+  role: string;
+  classCodesIds: string;
+  authorStudentId?: string;
+  authorStudent?: StudentsProps;
+  authorTeacherId?: string;  
+  authorTeacher?: TeachersProps;
+
+
+}
+
+export type PostArray = PostProps[];

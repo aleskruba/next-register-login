@@ -17,7 +17,7 @@ export default function Home() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       // Calculate random left and top values within the parent container
-      const parentWidth = 150; // Width of the parent container
+      const parentWidth = 200; // Width of the parent container
     //  const parentHeight = 1; // Height of the parent container
 
       const randomLeft = Math.floor(Math.random() * (parentWidth - 20)); // Subtracting 20 to ensure it stays within the container
@@ -40,13 +40,12 @@ export default function Home() {
         <div className='  relative md:ml-0 ml-6  w-[650px] h-[70px] text-base  overflow-hidden '>
           <div
               className='absolute'
-              style={{ left: `${position.left}px` }}
+              style={{ left: `${position.left}px`, marginLeft:'50px'}}
             >
             <div className='w-[240px] italix font-bold'> Today is {currentDate} </div> 
           </div>
         </div>
-        <div>role{currentUser?.role}</div>
-        <div className='mt-2'>
+          <div className='mt-2'>
           {currentUser?.role === 'Teacher' || currentUser?.role === 'Student' ? 
         <ChatBox/>
         :null

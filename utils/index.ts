@@ -1,6 +1,6 @@
 
   import * as z from "zod"
-import { ClassArray, StudentsProps, TeachersProps, UserProps,GradeProps, NewGrade, MessageProps} from "@/types";
+import { ClassArray, StudentsProps, TeachersProps, UserProps,GradeProps, NewGrade, PostProps} from "@/types";
 import { ClassProps } from "@/types";  
 
 
@@ -481,7 +481,7 @@ export async function updatePassword(data: { password: string; repeatpassword: s
 
 
 
-export async function sendMessage(message: MessageProps) {
+export async function sendMessage(message: PostProps) {
   try {
     const response = await fetch('/api/message', {
       method: 'POST',

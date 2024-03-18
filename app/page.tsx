@@ -9,7 +9,7 @@ import ChooseChatBox from './components/ChooseChatBox';
 
 export default function Home() {
 
-  const [position, setPosition] = useState({ left: 0 });
+  const [position, setPosition] = useState({ left: 100 });
   const {session,currentUser,setCurrentUser} = useUserContext()
 
 

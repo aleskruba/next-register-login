@@ -256,7 +256,7 @@ function MyProfileTeacherComponents({id}:any) {
               <button onClick={()=>setImage(undefined)}
               className='mt-4 px-2 py-2 rounded text-white bg-slate-500 hover:bg-slate-400 w-[150px]'
               >Cancel
-        </button>
+             </button>
         </div>
 }
     </div>
@@ -282,16 +282,16 @@ function MyProfileTeacherComponents({id}:any) {
         <p className='text-xs text-red-600'> {classCodeError && classCodeError}</p>
 
         {!isLoading &&
-        <div className="px-5 mt-4 flex justify-between w-full">
+        <div className="px-5 mt-4 flex justify-center w-full">
 
         <button className="px-8 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white  w-[150px] "
              onClick={()=>handleEditClick(teacher?.id)}> 
            update 
         </button>
-         <button onClick={()=>setImage(undefined)}
+     {/*     <button onClick={()=>setImage(undefined)}
               className=' px-2 py-2 rounded text-white bg-slate-500 hover:bg-slate-400 w-[150px]'
               >Cancel
-        </button>
+        </button> */}
     
         </div>}
 

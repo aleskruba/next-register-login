@@ -1,15 +1,17 @@
 "use client"
 import React,{useState,useEffect } from 'react'
-import { fetchMyClassesTeacher} from "@/utils";
+import { fetchClasses, fetchMyProfileTeacher} from "@/utils";
 import {  ClassArray,  TeachersProps } from '@/types';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 
-function MyClassTeacher({id0,id1}:any) {
+function MyClassTeacher({id}:any) {
 
 
-  const [classes, setClasses] = useState<ClassArray>([]);
+
+    const [teacher,setTeacher] = useState<TeachersProps>()
+    const [classes, setClasses] = useState<ClassArray>([]);
     const [isLoading,setIsLoading] = useState(true)
 
     const router = useRouter()
@@ -18,10 +20,12 @@ function MyClassTeacher({id0,id1}:any) {
 
     useEffect(() =>{
       const fetchData = async () => { 
-        const allClasses = await fetchMyClassesTeacher();   
+        const response = await fetchMyProfileTeacher(id)
+        const allClasses = await fetchClasses();   
         
               
-          setClasses(allClasses);
+        setTeacher(response)
+        setClasses(allClasses);
         setIsLoading(false)
 
         
@@ -30,7 +34,8 @@ function MyClassTeacher({id0,id1}:any) {
         },[]);
 
 
-
+      const teacherClasses = classes.filter((cl: { teacherClassesIds: string | string[]; }) => cl.teacherClassesIds?.includes(teacher?.id || "")).map((cl: { classCode: any; }) => cl.classCode);
+  
   return (
     <div className="mt-10 flex justify-center ">
       
@@ -40,7 +45,8 @@ function MyClassTeacher({id0,id1}:any) {
 
         <div className='flex '>
             {classes?.map((cl)=>{
-                       if (cl.id === id1) { 
+                if (cl.classCode === teacherClasses[0] )
+                
                 return(
                 <div key={cl.id}>    
                   <div className='flex flex-col px-2 py-2 text-gray-100 bg-gray-500' >
@@ -56,9 +62,8 @@ function MyClassTeacher({id0,id1}:any) {
                 </div>
                     <div className='mt-5'>
                         {cl.studentClasses.map(student=>{
-                            console.log(student)
                             return (
-                                <Link href={`/myclass/${id0}/${id1}/${student.id}`} key={student.id}>
+                                <Link href={`/myclass/${id}/${student.id}`} key={student.id}>
                                     <div className='flex  px-2  text-gray-900 bg-gray-100 justify-between min-w-[380px] md:min-w-[480px]' >
                                    
                                         <div className=' hover:font-bold overflow-hidden'>
@@ -80,9 +85,7 @@ function MyClassTeacher({id0,id1}:any) {
                     </div>
 
                 </div>
-                    )
-            }    
-
+                )
             })}
 
         </div>

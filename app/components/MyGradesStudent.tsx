@@ -27,21 +27,21 @@ export const MyGradesStudent = ({id}:any) => {
 
 
     return (
-        <div className='mt-8 px-2'>
+        <div className='mt-8  '>
           {!isLoading ? (
             <>
-              <div className='w-screen h-screen flex items-center  flex-col '>
+              <div className=' h-screen flex items-center  flex-col '>
                 <div className="grid grid-cols-4 gap-4 text-xs mt-4">
-                  <div className="col-span-1 w-[25px] ">
+                  <div className="col-span-1  ">
                     <h3 className="font-semibold">Value</h3>
                   </div>
-                  <div className="col-span-1 w-[150px]">
+                  <div className="col-span-1 ">
                     <h3 className="font-semibold">Comment</h3>
                   </div>
-                  <div className="col-span-1 w-[150px]">
+                  <div className="col-span-1 ">
                     <h3 className="font-semibold">Created On</h3>
                   </div>
-                  <div className="col-span-1 w-[150px]">
+                  <div className="col-span-1 ">
                     <h3 className="font-semibold">Updated On</h3>
                   </div>
                 </div>
@@ -50,16 +50,16 @@ export const MyGradesStudent = ({id}:any) => {
                   const formattedUpdatedAt = moment(grade.updatedAt).format('DD.MM YY');
                   return (
                     <div key={grade.id} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 `}>
-                      <div className='w-[25px]'>
+                      <div className=''>
                         <p>{grade.value}</p>
                       </div>
-                      <div className='w-[150px]'>
+                      <div className=''>
                         <p>{grade.comment}</p>
                       </div>
-                      <div className='w-[150px]'>
+                      <div className=''>
                         <p>{formattedCreatedAt}</p>
                       </div>
-                      <div className='w-[150px]'>
+                      <div className=''>
                         <p>{formattedUpdatedAt}</p>
                       </div>
                     </div>
@@ -68,7 +68,7 @@ export const MyGradesStudent = ({id}:any) => {
               </div>
             </>
           ) : (
-            <div className='w-screen h-screen flex justify-center items-center '>
+            <div className=' h-screen flex justify-center items-center '>
               <img src="/spinner.svg" alt="" className="w-[100px]"/>
             </div>
           )}

@@ -5,6 +5,7 @@ import { FC,useEffect,useState} from "react";
 import { useUserContext } from "../../../context/auth-context";
 import MyClassTeacher from "@/app/components/MyClassTeacher";
 import { MyClassTeacherStudentDetail } from "@/app/components/MyClassTeacherStudentDetail";
+import ChooseClass from "@/app/components/ChooseClass";
 
 
 interface Props {
@@ -40,9 +41,11 @@ const Post: FC<Props> = ({params}) => {
 
 
 
-      {params.id.length == 1 &&   <MyClassTeacher id={params.id[0]}/>} 
-      {params.id.length == 2 &&   <MyClassTeacherStudentDetail id={params.id[1]}  /> }
 
+{/*       {params.id.length == 1 &&   <MyClassTeacher id={params.id[0]}/>}  */}
+      {params.id.length == 1 &&   <ChooseClass id={params.id[0]}/>} 
+      {params.id.length == 2 &&   <MyClassTeacher id0={params.id[0]} id1={params.id[1]}  /> }
+   {params.id.length == 3 &&   <MyClassTeacherStudentDetail id={params.id[2]}  /> } 
       </>}
 
        </div>

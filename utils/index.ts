@@ -290,6 +290,16 @@ export async function fetchClasses() {
 return data.data
 }
 
+
+
+export async function fetchMyClassesTeacher() {
+
+  const response = await fetch(`/api/myclasses`)
+  const data = await response.json()
+
+return data.data
+}
+
 export async function deleteClass(classID: string) {
   try {
     const response = await fetch('/api/class', {

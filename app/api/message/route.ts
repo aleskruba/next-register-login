@@ -22,12 +22,6 @@ export async function POST(req: NextRequest) {
           }
         });
 
-        const currentUserTeacher = await prisma.teacher.findUnique({
-          where: {
-            email: session.user?.email as string // Ensure session.user.email exists and is a string
-          }
-        });
-
         
         if (currentUserStudent && currentUserStudent?.id == data.authorStudentId){
 
@@ -54,31 +48,6 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'success'});
           }
 
-        if (currentUserTeacher && currentUserTeacher?.id == data.authorTeacherId){
-
-          const classId = await prisma.class.findFirst({
-            where: {
-                teacherClassesIds: {
-                    has: currentUserTeacher?.id
-                }
-            }
-        });
-
-            console.log('Student wrote',data , 'CLASS',classId?.classCode)
-
-            const newMessage = await prisma.message.create({
-              data: {
-                message: data.message,
-                authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student
-                classCodesIds:  data.classCode,  // Connects the message to the corresponding class
-                role:'teacher'
-              }
-            });
-              
-         return NextResponse.json({ message: 'success'});
-      }
-
-
     } else  { 
         return new Response(JSON.stringify({ message:'not authorized' }))
         ;}
@@ -88,5 +57,5 @@ export async function POST(req: NextRequest) {
   }
  
 }
-
+return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
 }

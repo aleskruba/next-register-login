@@ -1,12 +1,12 @@
 import React,{ ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
-import { fetchMessages, sendMessage } from '@/utils';
+import { fetchMessages, fetchMessagesTeacher, sendMessage, sendMessageTeacher } from '@/utils';
 import { PostArray } from '@/types';
 import moment from 'moment';
 
-function ChatBox() {
-    
+function ChatBoxesTeacher({param}:any) {
+
     const {currentUser} = useUserContext()
     const [emptyInputError,setEmptyInputError] = useState(false)
     const { resolvedTheme } = useTheme();
@@ -17,20 +17,21 @@ function ChatBox() {
       id: '' ,
       message: '',
       createdAt: new Date(),
-      role: '',
+      role: 'teacher',
       classCodesIds: '',
-      authorStudentId: currentUser?.id || undefined,
+      authorStudentId: '',
       authorStudent: undefined,
-      authorTeacherId: '',  
+      authorTeacherId: currentUser?.id || undefined,
       authorTeacher: undefined,
     });
     
+   
 
     useEffect(() => {
 
       try {
       const fetchData = async () => {
-          const response = await fetchMessages()
+          const response = await fetchMessagesTeacher(param)
            console.log(response)
            setMessages(response)
            setIsLoading(false)
@@ -43,85 +44,69 @@ function ChatBox() {
 
    
 
-     function generateRandomString(length:any) {
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      let result = '';
-      for (let i = 0; i < length; i++) {
-          result += characters.charAt(Math.floor(Math.random() * characters.length));
-      }
-      return result;
-  }
-  const randomString = generateRandomString(8);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => { 
-      setNewMessage({...newMessage,[e.target.name]:e.target.value,   id: randomString, createdAt: new Date()})
-    }
-
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      console.log(newMessage);
-      if (newMessage.message) {
-      try {
-        const response = await sendMessage(newMessage)
-        setMessages([...messages,  newMessage]);
-
-        setNewMessage({...newMessage, message:''})
-
-        if (response.message === 'empty') {
-        
-          setEmptyInputError(true)
-        }
-        if (response.message ==='success') {
    
-          setEmptyInputError(false)
-        }
-       }
-      catch (e) {
-        console.log(e)
-      }
-    }
-      else { console.log('cannot be empty')
-              setEmptyInputError(true) }
-    }
 
+     function generateRandomString(length:any) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+    const randomString = generateRandomString(8);
+  
+      const handleChange = (e: ChangeEvent<HTMLInputElement>) => { 
+        setNewMessage({...newMessage,[e.target.name]:e.target.value,   id: randomString, createdAt: new Date()})
+      }
+  
+      const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+  
+        console.log(newMessage);
+        if (newMessage.message) {
+        try {
+          const response = await sendMessageTeacher(newMessage,param)
+          setMessages([...messages,  newMessage]);
+  
+          setNewMessage({...newMessage, message:''})
+  
+          if (response.message === 'empty') {
+          
+            setEmptyInputError(true)
+          }
+          if (response.message ==='success') {
+     
+            setEmptyInputError(false)
+          }
+         }
+        catch (e) {
+          console.log(e)
+        }
+      }
+        else { console.log('cannot be empty')
+                setEmptyInputError(true) }
+      }
   return (
-    <div>
-        {!isLoading ? 
+    <div className='mt-10'>
+            {!isLoading ? 
       <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[380px] md:w-[580px] lg:w-[780px] `}>
 
  
         <div className="space-y-4">
 
         {messages.map(message => {
-            if (message.role === 'teacher') {
+            if (message?.role === 'teacher') {
                 return (
                     <div className='flex justify-end items-center gap-2' key={message.id}>
                         <div className="flex justify-end">
-                            <img src={message?.authorTeacher?.image ?? ""} className="w-10 h-10 rounded-full" alt='profile image'/>
+                            <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full" alt='profile image'/>
                         </div>
                         <div className="flex flex-col items-end">
-                            <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
-                                <p className='text-xs font-bold'>{message?.authorTeacher?.f_name}{message?.authorTeacher?.l_name}  <span className='font-thin'>wrote on</span> {moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
-                                <p className="text-sm">{message.message}</p>
-                            </div>
-                        </div>
-                    </div>
-                );
-            } else {
-                return (
-                    <div className='flex items-center gap-2' key={message.id}>
-                        <div className="flex justify-start ">
-                      
-                            <img src={message?.authorStudent?.image ? message.authorStudent.image : currentUser?.image || './placeholder.jpg'}
-                                          className="w-10 h-10 rounded-full"  alt='profile image'/>
-                  
-                           </div>
-                        <div className="flex flex-col items-start">
-                            <div className={`bg-gray-200 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'} `} key={message.id}>
+                        <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
                                 <p className='text-xs font-bold'>
-                                {message?.authorStudent ? <>
-                                    {message?.authorStudent?.f_name} {message?.authorStudent?.l_name  }
+                                {message?.authorTeacher ? <>
+                                    {message?.authorTeacher?.f_name} {message?.authorTeacher?.l_name  }
                                      </>
                                : 
                                <>
@@ -131,6 +116,23 @@ function ChatBox() {
                               
                                                               
                                  <span className='font-thin'>wrote on</span>{moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
+                                <p className="text-sm">{message.message}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            } else {
+                return (
+                    <div className='flex items-center gap-2' key={message.id}>
+                        <div className="flex justify-start ">
+                            <img src={message?.authorStudent?.image ?? ""} className="w-10 h-10 rounded-full"  alt='profile image'/>
+                        </div>
+                        <div className="flex flex-col items-start">
+                            <div className={`bg-gray-200 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'} `} key={message.id}>
+                                <p className='text-xs font-bold'>
+                                    {message?.authorStudent?.f_name} {message?.authorStudent?.l_name  }
+                       
+                                     <span className='font-thin'>wrote on</span>{moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
                                 <p className="text-sm">{message.message}</p>
                             </div>
                         </div>
@@ -171,4 +173,4 @@ function ChatBox() {
   )
 }
 
-export default ChatBox;
+export default ChatBoxesTeacher;

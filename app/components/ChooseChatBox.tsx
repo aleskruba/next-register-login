@@ -33,7 +33,7 @@ function ChooseChatBox() {
     <div className='flex gap-4 mt-4'>
         
      {classes?.map(cl => {
-        console.log(cl?.classCode)
+
         return (
             <Link  key={cl.id} href={`chatrooms/${cl.id}`} >
             <div  className='relative group'>
@@ -50,7 +50,7 @@ function ChooseChatBox() {
 
 
     </> : <>
-    <div className='w-screen flex justify-center '>
+    <div className='w-screen h-screen flex justify-center '>
               <img src="/spinner.svg" alt="" className="w-[100px] "/>
             </div>
     </> }

@@ -7,6 +7,8 @@ export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession();
 
+
+
     if (session) {
       const currentUser = await prisma.student.findUnique({
         where: {
@@ -14,22 +16,26 @@ export async function GET(req: NextRequest) {
         }
       });
 
-      if (currentUser?.role == 'Student') {
-
-        const classId = await prisma.class.findFirst({
-            where: {
-                studentClassesIds: {
-                    has: currentUser?.id
-                }
+      const classId = await prisma.class.findFirst({
+        where: {
+            studentClassesIds: {
+                has: currentUser?.id
             }
-
+        }
       })
+
+      const cuurentUserID = currentUser?.id
+
+      if(cuurentUserID && classId?.studentClassesIds.includes(cuurentUserID))  {
+
+ 
                 const messages = await prisma.message.findMany({
                      where: {
                         classCodesIds: classId?.id // Using optional chaining to access classCode safely
                     }, 
                     include: {
                         authorStudent: true,  
+                        authorTeacher: true,  
                     },
                 });
                 

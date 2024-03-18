@@ -522,3 +522,37 @@ export async function fetchMessages() {
 
 return data.data
 }
+
+
+export async function sendMessageTeacher(message: PostProps,params: any) {
+  try {
+    const response = await fetch(`/api/chatboxes/${params}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to send message');
+    }
+
+    const responseData: ClassResponseType = await response.json();
+    return responseData;
+
+  } catch (error) {
+    console.error('Error creating message:', error);
+
+    throw error;
+
+  }
+}
+
+export async function fetchMessagesTeacher(params: any) {
+
+  const response = await fetch(`/api/chatboxes/${params}`)
+  const data = await response.json()
+
+return data.data
+}

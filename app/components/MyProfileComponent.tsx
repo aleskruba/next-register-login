@@ -115,12 +115,20 @@ function MyProfileComponent({id}:any) {
 
       const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
-    
+      
         if (selectedFile) {
+          // Check if the selected file type is valid
+          const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+          if (!allowedTypes.includes(selectedFile.type)) {
+            alert('Invalid file type. Only JPEG, JPG, or PNG images are allowed.');
+            return;
+          }
+      
           setImage(selectedFile);
           setForceUpdate(prevState => !prevState); // Toggle the state to force re-render
         }
       };
+      
 
 
       const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL;
@@ -130,45 +138,56 @@ function MyProfileComponent({id}:any) {
           return null; // or handle the error in some way
         }
 
-      const uploadImage = async () => {
-        try {
-          const formData = new FormData();
-          formData.append('file', image!); // Ensure that 'image' is defined here
-      
-          
-          const cloudinaryUploadResponse = await axios.post(
-            cloudinaryUrl,
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              params: {
-                upload_preset: 'schoolapp',
-              },
+        const uploadImage = async () => {
+          try {
+            // Ensure that 'image' is defined here
+            if (!image) {
+              // Handle case where image is not defined
+              console.error('No image selected for upload');
+              return;
             }
-          );
-      
-          const imageUrl = cloudinaryUploadResponse.data.secure_url;
-          setUrl(imageUrl);
-
-          const data =  {imageUrl:imageUrl}
-          const response = await updateProfileImage(data)
-       
-            if (response.data === 'success') { 
-              toast.success('Image updated successfully')
+        
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowedTypes.includes(image.type)) {
+              alert('Invalid file type. Only JPEG, JPG, or PNG images are allowed.');
+              return;
             }
-            else { 
-              toast.error('Image not updated successfully')
+        
+            const formData = new FormData();
+            formData.append('file', image);
+        
+            const cloudinaryUploadResponse = await axios.post(
+              cloudinaryUrl,
+              formData,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+                params: {
+                  upload_preset: 'schoolapp',
+                },
+              }
+            );
+        
+            const imageUrl = cloudinaryUploadResponse.data.secure_url;
+            setUrl(imageUrl);
+        
+            const data = { imageUrl: imageUrl };
+            const response = await updateProfileImage(data);
+        
+            if (response.data === 'success') {
+              toast.success('Image updated successfully');
+            } else {
+              toast.error('Image not updated successfully');
             }
-
-            setImage(undefined)
-
-       //   console.log('Cloudinary Upload Response:', cloudinaryUploadResponse.data);
-        } catch (error) {
-          console.error('Error uploading image to Cloudinary:', error);
-        }
-      };
+        
+            setImage(undefined);
+          } catch (error) {
+            console.error('Error uploading image to Cloudinary:', error);
+          }
+        };
+        
       
 
       

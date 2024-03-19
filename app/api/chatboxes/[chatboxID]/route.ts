@@ -17,6 +17,9 @@ try {
       }
     })
 
+    if (!classId) {
+      return new Response(JSON.stringify({ message: 'Class not found' }));
+  }
      
 
     if (session && classId) {
@@ -25,6 +28,10 @@ try {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
       });
+
+      if (!currentUser) {
+        return new Response(JSON.stringify({ message: 'User not found' }));
+    }
 
       const cuurentUserID = currentUser?.id
 
@@ -67,8 +74,7 @@ export async function POST(req: NextRequest,context:any) {
   const {params} = context;
   const session = await getServerSession();
   const data = await req.json();
-  console.log('data',data);
-  console.log('params',params);
+
 
   if (!data.message){
     return new Response(JSON.stringify({ message:'empty' }))
@@ -84,18 +90,23 @@ try {
         }
       });
  
+      if (!currentUserTeacher) {
+        return new Response(JSON.stringify({ message: 'User not found' }));
+    }
+
       const classId = await prisma.class.findFirst({
       where: {
         id:params.chatboxID
       }
        })
+
+       if (!classId) {
+        return new Response(JSON.stringify({ message: 'Class not found' }));
+    }
       
       if (currentUserTeacher && currentUserTeacher?.id == data.authorTeacherId){
 
-        
-              console.log('Teacher wrote',data , 'CLASS',classId?.classCode)
-
-              const newMessage = await prisma.message.create({
+             const newMessage = await prisma.message.create({
                 data: {
                   message: data.message,
                   authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student

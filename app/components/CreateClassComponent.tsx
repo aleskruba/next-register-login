@@ -12,9 +12,7 @@ const CreateClassComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedValue, setselectedValue] = useState<string>(''); // Initialize with an empty string
   const [languageValue, setLanguageValue] = useState<string | null | undefined>(''); 
-
   const [classCodeError, setClassCodeError] = useState<string | null>(null);
-
   const [newClass, setNewClass] = useState<ClassProps>({
     id:'',
     classCode: '',

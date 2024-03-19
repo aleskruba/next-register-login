@@ -314,7 +314,7 @@ const handleSubmitPassword = async (e: FormEvent<HTMLFormElement>) => {
     <form onSubmit={handleSubmit} className="w-full">
     <div className="flex justify-between w-full ">
   
-          <div>email : </div> <input type="email" value={updatedStudent?.email} className="bg-gray-200" name="email" onChange={handleChange}/>
+          <div>email : </div> <input type="email" disabled value={updatedStudent?.email} className="bg-gray-500 " name="email" onChange={handleChange}/>
         </div>
         <div className="flex justify-between w-full mt-1">
          <div>name: </div><input type="text" value={updatedStudent?.f_name} className="bg-gray-200" name="f_name"  onChange={handleChange}/>

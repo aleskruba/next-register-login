@@ -95,7 +95,7 @@ function ChatBoxesTeacher({param}:any) {
  
         <div className="space-y-4">
 
-        {messages.map(message => {
+        {messages?.map(message => {
             if (message?.role === 'teacher') {
                 return (
                     <div className='flex justify-end items-center gap-2' key={message.id}>

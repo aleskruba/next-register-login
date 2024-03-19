@@ -12,6 +12,12 @@ export async function GET(req: NextRequest) {
             email: session.user?.email as string // Ensure session.user.email exists and is a string
           }
         });
+
+        if (!currentUserTeacher) {
+          return new Response(JSON.stringify({ message: 'User not found' }));
+      }
+
+      if (currentUserTeacher.email === session.user?.email) {
  
     try {
 
@@ -37,7 +43,8 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
   }
-}
-
+}    return new Response(JSON.stringify({ message: 'Unauthorized' }));
+    }
+    return new Response(JSON.stringify({ message: 'Unauthorized' }));
 }
 

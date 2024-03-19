@@ -10,6 +10,7 @@ export type UserProps = {
     role: string;
     createdAt?: Date ;
     updatedAt?: Date;
+   
   } | null 
 
 

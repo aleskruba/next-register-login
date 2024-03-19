@@ -7,18 +7,22 @@ export async function GET(req: Request,context:any) {
 const {params} = context;
 const session = await getServerSession();
 
+if (session) {
+  const currentUser = await prisma.admin.findUnique({
+    where: {
+      email: session.user?.email as string // Ensure session.user.email exists and is a string
+    }
+  });
 
+  if (!currentUser) {
+    return new Response(JSON.stringify({ message: 'User not found' }));
+}
+
+if (currentUser.email === session.user?.email) {
 try {
     
 
-    if (session) {
-      const currentUser = await prisma.admin.findUnique({
-        where: {
-          email: session.user?.email as string // Ensure session.user.email exists and is a string
-        }
-      });
-
-      const currentUserTeacher = await prisma.teacher.findUnique({
+    /*   const currentUserTeacher = await prisma.teacher.findUnique({
         where: {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
@@ -28,11 +32,10 @@ try {
         where: {
           email: session.user?.email as string // Ensure session.user.email exists and is a string
         }
-      });
+      }); */
 
  
-      if(currentUser?.role == 'Admin' || currentUserTeacher?.role == 'Teacher' || currentUserStudent?.role == 'Student')    {
-   
+
         const student = await prisma.student.findFirst({
             where: { id:params.studentID },
             include: {
@@ -41,20 +44,17 @@ try {
           },
         });
 
-        return new Response(JSON.stringify({ data:student }), { status: 200 });
+        console.log('student',student)
+        return new Response(JSON.stringify({ data:student }));
 
-        }
-
-
-    } else 
-        { return new Response(JSON.stringify({ message:'not authorized' }), { status: 401 });}
-
-return new Response(JSON.stringify({ message:'not authorized' }), { status: 401 });
-}
+ }
 catch(err){
     console.log(err)
-    return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
-}
+    return new Response(JSON.stringify({ message: 'Failed to process the message' }));
+  } 
+    } else { return new Response(JSON.stringify({ message:'not authorized' }));}
+  
+  }  else { return new Response(JSON.stringify({ message:'not authorized' }));}
 }
 
 

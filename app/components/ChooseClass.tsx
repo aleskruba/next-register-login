@@ -25,9 +25,9 @@ function ChooseClass({id}:any) {
     },[])
 
   return (
-    <div className='flex flex-col justify-between items-center'>
+    <div className='flex flex-col justify-between items-center mt-10'>
 {!isLoading ? <> 
-    <div className=''>Choose the class</div>
+    <div className=''>{classes.length > 0 ? <>Choose the class </> : <> You have no class</> }</div>
 
     <div className='flex gap-4 mt-4 flex-col md:flex-row lg:flex-row '>
         

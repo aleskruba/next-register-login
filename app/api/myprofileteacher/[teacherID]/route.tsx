@@ -17,7 +17,9 @@ try {
         }
       });
 
-
+      if (!currentUser) {
+        return new Response(JSON.stringify({ message: 'User not found' }));
+    }
       if(currentUser?.role == 'Teacher' && currentUser.id == params.teacherID)    {
    
         const teacher = await prisma.teacher.findFirst({

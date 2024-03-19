@@ -14,6 +14,12 @@ export async function GET(req: NextRequest) {
         },
       });
 
+      if (!currentUserTeacher) {
+        return new Response(JSON.stringify({ message: 'User not found' }));
+    }
+
+    if (currentUserTeacher.email === session.user?.email) {
+
   try {
 
         const classes = await prisma.class.findMany({
@@ -34,7 +40,9 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500 });
-  }
-}
+      }
 
+    } return new Response(JSON.stringify({ message: 'Unathorized' }));
+    
+  } return new Response(JSON.stringify({ message: 'Unathorized' }));
 }

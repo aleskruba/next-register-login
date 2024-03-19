@@ -85,15 +85,16 @@ function ChatBox() {
               setEmptyInputError(true) }
     }
 
-  return (
+  return ( <>
+    {messages && messages.length > 0 && <>
     <div>
         {!isLoading ? 
       <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[380px] md:w-[580px] lg:w-[780px] `}>
 
- 
+     
         <div className="space-y-4">
 
-        {messages.map(message => {
+        {messages?.map(message => {
             if (message.role === 'teacher') {
                 return (
                     <div className='flex justify-end items-center gap-2' key={message.id}>
@@ -102,7 +103,7 @@ function ChatBox() {
                         </div>
                         <div className="flex flex-col items-end">
                             <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
-                                <p className='text-xs font-bold'>{message?.authorTeacher?.f_name}{message?.authorTeacher?.l_name}  <span className='font-thin'>wrote on</span> {moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
+                                <p className='text-xs font-bold'>{message?.authorTeacher?.f_name} {message?.authorTeacher?.l_name}  <span className='font-thin'>wrote on</span> {moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
                                 <p className="text-sm">{message.message}</p>
                             </div>
                         </div>
@@ -160,15 +161,28 @@ function ChatBox() {
         </div>
         <div className="text-red-500 text-base">{emptyInputError && 'Cannot be empty'}</div> 
         </form>
+
+  
       </div>
 
 : <>
   <div className='w-screen h-screen flex justify-center '>
               <img src="/spinner.svg" alt="" className="w-[100px] "/>
             </div>
+        
 </>}
     </div>
+
+    </>
+  }
+  </>
   )
+
+
+        
+
 }
+
+
 
 export default ChatBox;

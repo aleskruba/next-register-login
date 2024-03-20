@@ -120,7 +120,7 @@ const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 const deleteGradeFunction = (id:any) =>{
 
 
-  const isConfirmed = window.confirm("Are you sure you want to delete this student?");
+  const isConfirmed = window.confirm("Are you sure you want to delete this grade?");
 
   if (isConfirmed) {
  

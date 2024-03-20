@@ -10,7 +10,7 @@ import ChooseChatBox from './components/ChooseChatBox';
 export default function Home() {
 
   const [position, setPosition] = useState({ left: 100 });
-  const {session,currentUser,setCurrentUser} = useUserContext()
+  const {currentUser} = useUserContext()
 
 
   const currentDate = moment().format('D.M. YYYY');

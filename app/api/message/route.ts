@@ -59,3 +59,69 @@ export async function POST(req: NextRequest) {
 }
 return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
 }
+
+
+
+
+export async function DELETE(req: NextRequest) {
+
+  const session = await getServerSession();
+  const data = await req.json();
+
+  try {
+
+    if (session) {
+
+      const messageToBeDeleted = await prisma.message.findFirst({
+        where: { id: data.messageID },
+      });
+      
+      if (!messageToBeDeleted){
+        return new NextResponse(JSON.stringify({ message: 'This messagge does not exist' }));
+      }
+
+    //  console.log('messageToBeDeleted',messageToBeDeleted);
+
+      const currentUserTeacher = await prisma.teacher.findUnique({
+        where: {
+          email: session.user?.email as string, // Ensure session.user.email exists and is a string
+        },
+      });
+
+      const currentUserStudent = await prisma.student.findUnique({
+        where: {
+          email: session.user?.email as string, // Ensure session.user.email exists and is a string
+        },
+      });
+
+       if (currentUserStudent && currentUserStudent?.id == messageToBeDeleted.authorStudentId ) {
+   
+        const response = await prisma.message.delete({
+          where: { id: data.messageID },
+      })
+
+      console.log(response)
+    
+      return new NextResponse(JSON.stringify({ data: 'success' }));
+    }
+
+      if (currentUserTeacher && currentUserTeacher?.id == messageToBeDeleted.authorTeacherId) {
+        const response = await prisma.message.delete({
+          where: { id: data.messageID },
+      })
+      console.log(response)
+      return new NextResponse(JSON.stringify({ data: 'success' }));
+      }
+   
+ 
+
+       
+
+    } else {
+      return new NextResponse(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+    }
+  } catch (error) {
+    console.error(error);
+    return new NextResponse(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
+  }
+}

@@ -1,18 +1,21 @@
 import React,{ ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
-import { fetchMessages, fetchMessagesTeacher, sendMessage, sendMessageTeacher } from '@/utils';
+import {deleteMessage,  fetchMessagesTeacher, sendMessageTeacher } from '@/utils';
 import { PostArray } from '@/types';
 import moment from 'moment';
+import { AiFillDelete} from 'react-icons/ai';
+import { useRouter } from 'next/navigation'
 
 function ChatBoxesTeacher({param}:any) {
-
+  const router = useRouter()
     const {currentUser} = useUserContext()
     const [emptyInputError,setEmptyInputError] = useState(false)
     const { resolvedTheme } = useTheme();
     const [messages,setMessages] = useState<PostArray>([])
     const [isLoading,setIsLoading] = useState(true)
-
+    const [isDeletingMessage,setIsDeletingMessage] = useState(false)
+    const [updated,setUpdated] = useState(false)
     const [newMessage, setNewMessage] = useState({
       id: '' ,
       message: '',
@@ -25,7 +28,7 @@ function ChatBoxesTeacher({param}:any) {
       authorTeacher: undefined,
     });
     
-   
+   console.log('param',param)
 
     useEffect(() => {
 
@@ -40,7 +43,7 @@ function ChatBoxesTeacher({param}:any) {
       } catch(err)
       {console.log(err)}
 
-     },[])
+     },[updated])
 
    
 
@@ -78,6 +81,7 @@ function ChatBoxesTeacher({param}:any) {
           if (response.message ==='success') {
      
             setEmptyInputError(false)
+            setUpdated(!updated)
           }
          }
         catch (e) {
@@ -87,6 +91,36 @@ function ChatBoxesTeacher({param}:any) {
         else { console.log('cannot be empty')
                 setEmptyInputError(true) }
       }
+
+      const deleteMessageFunction = (id:string) =>{
+        const isConfirmed = window.confirm("Are you sure you want to delete this message?");
+
+        if (isConfirmed) {
+       
+      
+        const data = {  messageID:id,}
+  
+        setIsDeletingMessage(true);
+        try{
+          const fetchFunction = async () =>{
+            const response =  await deleteMessage(data);
+      
+            if (response.data === 'success') {
+                   setUpdated(!updated)
+                   router.refresh()
+                   await new Promise(resolve => setTimeout(resolve, 1000));
+                   setIsDeletingMessage(false) 
+            }
+          }
+          fetchFunction()
+        } catch(err) {
+          console.log(err)
+          setIsDeletingMessage(false)
+      
+        }
+      }
+      }
+
   return (
     <div className='mt-10'>
             {!isLoading ? 
@@ -103,7 +137,7 @@ function ChatBoxesTeacher({param}:any) {
                             <img src={currentUser?.image ?? ""} className="w-10 h-10 rounded-full" alt='profile image'/>
                         </div>
                         <div className="flex flex-col items-end">
-                        <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
+                        <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xl ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
                                 <p className='text-xs font-bold'>
                                 {message?.authorTeacher ? <>
                                     {message?.authorTeacher?.f_name} {message?.authorTeacher?.l_name  }
@@ -119,16 +153,28 @@ function ChatBoxesTeacher({param}:any) {
                                 <p className="text-sm">{message.message}</p>
                             </div>
                         </div>
+
+                        {!isDeletingMessage && (
+                            <div className='w-[25px] flex justify-center cursor-pointer' onClick={() => deleteMessageFunction(message.id)}>
+                                <AiFillDelete className="text-xl text-red-500 hover:text-red-400" />
+                            </div>
+                        )}
+                        {isDeletingMessage && (
+                            <div className='w-[25px] flex justify-center cursor-default opacity-20'>
+                                <AiFillDelete className="text-xl text-red-500 " />
+                            </div>
+                        )}
+
                     </div>
                 );
             } else {
                 return (
                     <div className='flex items-center gap-2' key={message.id}>
-                        <div className="flex justify-start ">
+                        <div className="flex justify-start min-w-12  ">
                             <img src={message?.authorStudent?.image ?? ""} className="w-10 h-10 rounded-full"  alt='profile image'/>
                         </div>
                         <div className="flex flex-col items-start">
-                            <div className={`bg-gray-200 rounded-lg py-2 px-4 max-w-xs ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'} `} key={message.id}>
+                            <div className={`bg-gray-300 rounded-lg py-2 px-4 max-w-xl ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'} `} key={message.id}>
                                 <p className='text-xs font-bold'>
                                     {message?.authorStudent?.f_name} {message?.authorStudent?.l_name  }
                        

@@ -40,7 +40,7 @@ export async function GET(req: NextRequest) {
                 });
                 
     
-         console.log(messages)
+      
         return new Response(JSON.stringify({ data:messages }), { status: 200 });
       } else {
         return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });

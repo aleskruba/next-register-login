@@ -566,3 +566,29 @@ export async function fetchMessagesTeacher(params: any) {
 
 return data.data
 }
+
+
+export async function deleteMessage(grade:any) {
+
+  try {
+    const response = await fetch('/api/message', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(grade),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete the message');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during deleting the grade:', error);
+
+  }
+}

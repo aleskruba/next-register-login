@@ -5,7 +5,16 @@ import ToasterContext from '@/context/toaster-context'
 import { getServerSession } from 'next-auth'
 import SessionProvider from "@/utils/SessionProvider";
 import UserContextProvider from '../context/auth-context'
-import {NextUIProvider} from '@nextui-org/react'
+import  { DefaultSession } from "next-auth";
+
+
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
 export const metadata: Metadata = {
   title: 'School app',
   description: 'School app',
@@ -17,6 +26,7 @@ export default async  function RootLayout({
   children: React.ReactNode
 }) {
  const session = await getServerSession();
+
 
 
   return (

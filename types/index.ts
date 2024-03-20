@@ -10,7 +10,8 @@ export type UserProps = {
     role: string;
     createdAt?: Date ;
     updatedAt?: Date;
-   
+    classesIds?:string[] | undefined;
+    classes: ClassProps[] | undefined;
   } | null 
 
 

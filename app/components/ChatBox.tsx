@@ -34,7 +34,7 @@ function ChatBox() {
 
  
     useEffect(() => {
-      console.log(currentUser?.classesIds?.[0]);
+    //  console.log(currentUser?.classesIds?.[0]);
       try {
       const fetchData = async () => {
           const response = await fetchMessages()
@@ -64,7 +64,7 @@ function ChatBox() {
         if (currentUser?.id !== message.message.authorStudentId )
           if (message.message.role == 'student') {
               {
-              console.log('New message received:', message.message.authorStudentId);
+             // console.log('New message received:', message.message.authorStudentId);
               const pushedMessage = {
                 id: message.message.id,
                 message: message.message.message,

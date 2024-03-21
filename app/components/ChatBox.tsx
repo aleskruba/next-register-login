@@ -270,7 +270,7 @@ function ChatBox() {
 
            <input type="text" 
                   placeholder="Type a message..." 
-                  className="flex-grow rounded-full py-2 pr-2 pl-2 w-[250px] md:w-full lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
+                  className="flex-grow rounded-full py-2 px-2 w-[250px] md:w-full lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
                   name = "message"
                   value={newMessage.message}
                   onChange={handleChange}  

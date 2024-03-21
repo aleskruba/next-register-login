@@ -236,11 +236,11 @@ function ChatBoxesTeacher({param}:any) {
         </div>
 
         <form action="" onSubmit={handleSubmit}>
-        <div className="flex mt-4 h-10">
+        <div className="flex mt-4 h-10 gap-2 ">
 
            <input type="text" 
                   placeholder="Type a message..." 
-                  className="flex-grow rounded-full py-2 px-2 lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
+                  className="flex-grow rounded-full w-[250px] md:w-full py-2 px-2 lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
                   name = "message"
                   value={newMessage.message}
                   onChange={handleChange}  

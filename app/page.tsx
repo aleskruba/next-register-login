@@ -38,10 +38,10 @@ export default function Home() {
 
        <div className='mt-24  flex flex-col jutify-center items-center'>
  
-        <div className='  relative md:ml-0 ml-6  w-[650px] h-[70px] text-base  overflow-hidden '>
+        <div className='  relative md:ml-0 ml-6 h-[70px] text-base  overflow-hidden '>
           <div
               className='absolute'
-              style={{ left: `${position.left}px`, marginLeft:'50px'}}
+              style={{ left: 100+`${position.left}px`, marginLeft:'50px'}}
             >
             <div className='w-[240px] italix font-bold'> Today is {currentDate} </div> 
           </div>

@@ -2,8 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/libs/prismadb';
 import { getServerSession } from 'next-auth';
 
+
+
 export async function POST(req: NextRequest) {
-    
+  const Pusher = require("pusher");
+
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID ,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+    secret: process.env.PUSHER_SECRET ,
+    cluster: 'eu',
+    useTls:true,
+  
+  })
+  
     const session = await getServerSession();
     const data = await req.json();
     console.log(data);
@@ -43,7 +55,22 @@ export async function POST(req: NextRequest) {
                     role:'student'
                   }
                 });
-                
+                pusher.trigger('chat', 'new-message', {
+                  message:{
+                    id:data.id,
+                    message: data.message,
+                    authorStudentId: data.authorStudentId , // Connects the message to the corresponding student
+                    classCodesIds: classId?.id,  // Connects the message to the corresponding class
+                    role:'student',
+                    createdAt: new Date(),
+                    authorStudent:{
+                      id:currentUserStudent.id,
+                    f_name:currentUserStudent.f_name,
+                    l_name:currentUserStudent.l_name,
+                    image:currentUserStudent.image,
+                    }
+                  }
+                });
        
             return NextResponse.json({ message: 'success'});
           }

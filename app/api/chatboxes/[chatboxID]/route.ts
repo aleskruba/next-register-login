@@ -69,7 +69,16 @@ catch(err){
 
 
 export async function POST(req: NextRequest,context:any) {
+  const Pusher = require("pusher");
 
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID ,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+    secret: process.env.PUSHER_SECRET ,
+    cluster: 'eu',
+    useTls:true,
+  
+  })
 
   const {params} = context;
   const session = await getServerSession();
@@ -112,6 +121,23 @@ try {
                   authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student
                   classCodesIds: params.chatboxID,  // Connects the message to the corresponding class
                   role:'teacher', //
+                }
+              });
+
+              pusher.trigger('chat', 'new-message', {
+                message:{
+                  id: data.id,
+                  message: data.message,
+                  authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student
+                  classCodesIds: classId?.id,  // Connects the message to the corresponding class
+                  role:'teacher',
+                  createdAt: new Date(),
+                  authorTeacher:{
+                    id:currentUserTeacher.id,
+                    f_name:currentUserTeacher.f_name,
+                    l_name:currentUserTeacher.l_name,
+                    image:currentUserTeacher.image,
+                    }
                 }
               });
               

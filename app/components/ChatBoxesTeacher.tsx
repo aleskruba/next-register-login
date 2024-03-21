@@ -6,6 +6,8 @@ import { PostArray } from '@/types';
 import moment from 'moment';
 import { AiFillDelete} from 'react-icons/ai';
 import { useRouter } from 'next/navigation'
+import Pusher from 'pusher-js';
+
 
 function ChatBoxesTeacher({param}:any) {
   const router = useRouter()
@@ -28,15 +30,19 @@ function ChatBoxesTeacher({param}:any) {
       authorTeacher: undefined,
     });
     
-   console.log('param',param)
+
+
+
+  // console.log('param',param)
 
     useEffect(() => {
 
       try {
       const fetchData = async () => {
           const response = await fetchMessagesTeacher(param)
-           console.log(response)
+    
            setMessages(response)
+
            setIsLoading(false)
         }
       fetchData()
@@ -45,9 +51,32 @@ function ChatBoxesTeacher({param}:any) {
 
      },[updated])
 
-   
 
-   
+   useEffect(() => {
+    if (messages.length) {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+        cluster: 'eu', // Your cluster
+      });
+    
+      const channel = pusher.subscribe('chat');
+      channel.bind('new-message', (message:any) => {
+
+        if ( currentUser?.id !== message.message.authorTeacherId)
+        {
+          setMessages([...messages,  message.message]);
+        }
+     
+      });
+    
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      };
+    }
+    }, [messages]); 
+
+ 
+
 
      function generateRandomString(length:any) {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -68,6 +97,17 @@ function ChatBoxesTeacher({param}:any) {
   
         console.log(newMessage);
         if (newMessage.message) {
+
+          var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+            cluster: 'eu'
+          });
+      
+          var channel = pusher.subscribe('my-channel');
+          channel.bind('my-event', function(message:any) {
+
+            setMessages([...messages,  message.message ]);
+          });
+
         try {
           const response = await sendMessageTeacher(newMessage,param)
           setMessages([...messages,  newMessage]);
@@ -82,7 +122,12 @@ function ChatBoxesTeacher({param}:any) {
      
             setEmptyInputError(false)
             setUpdated(!updated)
+           
+      
+    
           }
+
+    
          }
         catch (e) {
           console.log(e)

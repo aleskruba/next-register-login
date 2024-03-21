@@ -5,7 +5,9 @@ import { deleteMessage, fetchMessages, sendMessage } from '@/utils';
 import { PostArray } from '@/types';
 import moment from 'moment';
 import { AiFillDelete} from 'react-icons/ai';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
+import Pusher from 'pusher-js';
+
 
 function ChatBox() {
     
@@ -30,14 +32,13 @@ function ChatBox() {
     });
     
 
-
-
+ 
     useEffect(() => {
       console.log(currentUser?.classesIds?.[0]);
       try {
       const fetchData = async () => {
           const response = await fetchMessages()
-           console.log(response)
+           //console.log(response)
            setMessages(response)
            setIsLoading(false)
         }
@@ -48,6 +49,63 @@ function ChatBox() {
      },[updated])
 
    
+      useEffect(() => {
+
+        if (messages.length) {
+      const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+        cluster: 'eu', // Your cluster
+      });
+    
+      const channel = pusher.subscribe('chat');
+      channel.bind('new-message', (message:any) => {
+
+        console.log(message.message);
+
+        if (currentUser?.id !== message.message.authorStudentId )
+          if (message.message.role == 'student') {
+              {
+              console.log('New message received:', message.message.authorStudentId);
+              const pushedMessage = {
+                id: message.message.id,
+                message: message.message.message,
+                createdAt: new Date(),
+                role: message.message.role,
+                classCodesIds: '',
+                authorStudentId: message.message.authorStudentId,
+                authorStudent : message.message.authorStudent,
+                authorTeacherId:  undefined,
+                authorTeacher: undefined,
+              }
+              setMessages([...messages,  pushedMessage ]);
+              }
+            }else {
+              const pushedMessage = {
+                id: message.message.id,
+                message: message.message.message,
+                createdAt: new Date(),
+                role: message.message.role,
+                classCodesIds: '',
+                authorStudentId: undefined,
+                authorStudent : undefined,
+                authorTeacherId: message.message.authorTeacherId,
+                authorTeacher: message.message.authorTeacher
+              }
+              setMessages([...messages,  pushedMessage ]);
+
+
+              
+            }
+
+      });
+    
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      };}
+    }, [messages]); 
+    
+
+    
 
      function generateRandomString(length:any) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -66,10 +124,22 @@ function ChatBox() {
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
     
+
+   
+      var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+        cluster: 'eu'
+      });
+  
+      var channel = pusher.subscribe('my-channel');
+      channel.bind('my-event', function(message:any) {
+        setMessages([...messages,  message.message]);
+      });
+
+      console.log(newMessage);
       if (newMessage.message) {
       try {
         const response = await sendMessage(newMessage)
-        setMessages([...messages,  newMessage]);
+       
 
         setNewMessage({...newMessage, message:''})
 
@@ -81,7 +151,10 @@ function ChatBox() {
    
           setEmptyInputError(false)
           setUpdated(!updated)
+ 
+       
         }
+ 
        }
       catch (e) {
         console.log(e)
@@ -127,7 +200,7 @@ function ChatBox() {
     {messages && messages.length > 0 && <>
     <div>
         {!isLoading ? 
-      <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[380px] md:w-[580px] lg:w-[780px] `}>
+      <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[360px] md:w-[580px] lg:w-[780px] `}>
 
      
         <div className="space-y-4">
@@ -174,12 +247,12 @@ function ChatBox() {
                             </div>
                         </div>
                   
-                        {!isDeletingMessage && (
+                        {!isDeletingMessage && currentUser?.id === message?.authorStudent?.id  &&  (
                             <div className='w-[25px] flex justify-center cursor-pointer' onClick={() => deleteMessageFunction(message.id)}>
                                 <AiFillDelete className="text-xl text-red-500 hover:text-red-400" />
                             </div>
                         )}
-                        {isDeletingMessage && (
+                        {isDeletingMessage && currentUser?.id === message?.authorStudent?.id  &&  (
                             <div className='w-[25px] flex justify-center cursor-default opacity-20'>
                                 <AiFillDelete className="text-xl text-red-500 " />
                             </div>
@@ -193,17 +266,17 @@ function ChatBox() {
         </div>
 
         <form action="" onSubmit={handleSubmit}>
-        <div className="flex mt-4 h-10">
+        <div className="flex mt-4 h-10 gap-2  ">
 
            <input type="text" 
                   placeholder="Type a message..." 
-                  className="flex-grow rounded-full py-2 px-2 lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
+                  className="flex-grow rounded-full py-2 pr-2 pl-2 w-[250px] md:w-full lg:px-4 focus:outline-none focus:ring focus:border-blue-300" 
                   name = "message"
                   value={newMessage.message}
                   onChange={handleChange}  
                   />
   <button 
-    className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-2 lg:px-4 py-2 lg:ml-2 focus:outline-none focus:ring focus:border-blue-300 flex items-center" 
+    className="bg-blue-500 hover:bg-blue-600 text-white rounded-full px-2  lg:px-4 py-2 lg:ml-2 focus:outline-none focus:ring focus:border-blue-300 flex items-center" 
     type='submit' 
    >Send</button>
 

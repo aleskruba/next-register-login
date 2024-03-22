@@ -1,4 +1,4 @@
-import React,{ ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import React,{ ChangeEvent, FormEvent, useEffect,useRef, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
 import {deleteMessage,  fetchMessagesTeacher, sendMessageTeacher } from '@/utils';
@@ -23,7 +23,7 @@ function ChatBoxesTeacher({param}:any) {
       message: '',
       createdAt: new Date(),
       role: 'teacher',
-      classCodesIds: '',
+      classCodesIds: param as string,
       authorStudentId: '',
       authorStudent: undefined,
       authorTeacherId: currentUser?.id || undefined,
@@ -32,7 +32,7 @@ function ChatBoxesTeacher({param}:any) {
     
 
 
-
+    const messageEndRef = useRef<HTMLInputElement>(null);
   // console.log('param',param)
 
     useEffect(() => {
@@ -58,8 +58,9 @@ function ChatBoxesTeacher({param}:any) {
         cluster: 'eu', // Your cluster
       });
     
-      const channel = pusher.subscribe('chat');
+      const channel = pusher.subscribe(param);
       channel.bind('new-message', (message:any) => {
+       // console.log(message.message)
 
         if ( currentUser?.id !== message.message.authorTeacherId)
         {
@@ -67,7 +68,14 @@ function ChatBoxesTeacher({param}:any) {
         }
      
       });
-    
+
+      channel.bind('delete-message', (response: any) => {
+        const messageIdToDelete = response.response.id;
+     //  console.log(messageIdToDelete)
+        setMessages(messages.filter(message => message.id !== messageIdToDelete));
+      });
+  
+
       return () => {
         channel.unbind_all();
         channel.unsubscribe();
@@ -98,7 +106,7 @@ function ChatBoxesTeacher({param}:any) {
         console.log(newMessage);
         if (newMessage.message) {
 
-          var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+     /*      var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
             cluster: 'eu'
           });
       
@@ -106,7 +114,7 @@ function ChatBoxesTeacher({param}:any) {
           channel.bind('my-event', function(message:any) {
 
             setMessages([...messages,  message.message ]);
-          });
+          }); */
 
         try {
           const response = await sendMessageTeacher(newMessage,param)
@@ -166,13 +174,22 @@ function ChatBoxesTeacher({param}:any) {
       }
       }
 
+      const scrollToBottom = () =>{
+        messageEndRef.current?.scrollIntoView({behavior:"smooth"});
+      }
+      
+      useEffect(()=>{
+        scrollToBottom();
+      },[messages])
+
   return (
-    <div className='mt-10'>
+    <div className='mt-10 max-h-[450px] overflow-auto'>
             {!isLoading ? 
       <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[380px] md:w-[580px] lg:w-[780px] `}>
 
  
-        <div className="space-y-4">
+        <div className="space-y-4 ">
+      
 
         {messages?.map(message => {
             if (message?.role === 'teacher') {
@@ -225,13 +242,14 @@ function ChatBoxesTeacher({param}:any) {
                        
                                      <span className='font-thin'>wrote on</span>{moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
                                 <p className="text-sm">{message.message}</p>
+                               
                             </div>
                         </div>
                     </div>
                 );
             }
         })}
-
+    <div ref={messageEndRef}></div>
 
         </div>
 

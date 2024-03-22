@@ -10,6 +10,7 @@ import { AiFillDelete, AiOutlineEdit,AiFillCheckCircle,AiFillCloseCircle   } fro
 
 export const MyClassTeacherStudentDetail = ({id}:any) => {
 
+
     const router = useRouter()
     const [student,setStudent] = useState<StudentsProps>()
     //const [classes, setClasses] = useState<ClassArray>([]);
@@ -22,7 +23,7 @@ export const MyClassTeacherStudentDetail = ({id}:any) => {
         updatedAt:new Date(),
         comment: '',
         value: '',
-        StudentID:'',
+        StudentID:id,
          });
     const [updated,setUpdated] = useState(false)
 
@@ -86,7 +87,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 
         setNewGrade({comment: '',
                      value: '',
-                     StudentID:'',
+                     StudentID:id,
                      createdAt: new Date(),
                      updatedAt:new Date(),
                    })
@@ -113,7 +114,7 @@ const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewGrade({
       ...newGrade,
       [e.target.name]: e.target.value,
-      StudentID: student?.id || ''  // Update with the student ID if available
+      StudentID: id || ''  // Update with the student ID if available
     });
   };
   

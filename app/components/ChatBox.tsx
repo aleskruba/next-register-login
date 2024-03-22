@@ -1,12 +1,13 @@
-import React,{ ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import React,{ ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
 import { deleteMessage, fetchMessages, sendMessage } from '@/utils';
 import { PostArray } from '@/types';
 import moment from 'moment';
 import { AiFillDelete} from 'react-icons/ai';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Pusher from 'pusher-js';
+
 
 
 function ChatBox() {
@@ -24,14 +25,14 @@ function ChatBox() {
       message: '',
       createdAt: new Date(),
       role: '',
-      classCodesIds: '',
+      classCodesIds: currentUser?.classesIds?.[0] as string,
       authorStudentId: currentUser?.id || undefined,
       authorStudent: undefined,
       authorTeacherId: '',  
       authorTeacher: undefined,
     });
     
-
+    const messageEndRef = useRef<HTMLInputElement>(null);
  
     useEffect(() => {
     //  console.log(currentUser?.classesIds?.[0]);
@@ -41,6 +42,8 @@ function ChatBox() {
            //console.log(response)
            setMessages(response)
            setIsLoading(false)
+
+           console.log('class',currentUser?.classesIds?.[0])
         }
       fetchData()
       } catch(err)
@@ -56,7 +59,7 @@ function ChatBox() {
         cluster: 'eu', // Your cluster
       });
     
-      const channel = pusher.subscribe('chat');
+      const channel = pusher.subscribe(currentUser?.classesIds?.[0] as string);
       channel.bind('new-message', (message:any) => {
 
         console.log(message.message);
@@ -70,7 +73,7 @@ function ChatBox() {
                 message: message.message.message,
                 createdAt: new Date(),
                 role: message.message.role,
-                classCodesIds: '',
+                classCodesIds: currentUser?.classesIds?.[0] as string,
                 authorStudentId: message.message.authorStudentId,
                 authorStudent : message.message.authorStudent,
                 authorTeacherId:  undefined,
@@ -84,7 +87,7 @@ function ChatBox() {
                 message: message.message.message,
                 createdAt: new Date(),
                 role: message.message.role,
-                classCodesIds: '',
+                classCodesIds: currentUser?.classesIds?.[0] as string,
                 authorStudentId: undefined,
                 authorStudent : undefined,
                 authorTeacherId: message.message.authorTeacherId,
@@ -92,12 +95,23 @@ function ChatBox() {
               }
               setMessages([...messages,  pushedMessage ]);
 
-
-              
+            
             }
 
+          
       });
+
+              
+      channel.bind('delete-message', (response: any) => {
+
+        console.log(response)
+
+        const messageIdToDelete = response.response.id;
+     //  console.log(messageIdToDelete)
+        setMessages(messages.filter(message => message.id !== messageIdToDelete));
     
+      });
+
       return () => {
         channel.unbind_all();
         channel.unsubscribe();
@@ -126,14 +140,14 @@ function ChatBox() {
     
 
    
-      var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+    /*   var pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
         cluster: 'eu'
       });
   
       var channel = pusher.subscribe('my-channel');
       channel.bind('my-event', function(message:any) {
         setMessages([...messages,  message.message]);
-      });
+      }); */
 
       console.log(newMessage);
       if (newMessage.message) {
@@ -184,6 +198,7 @@ function ChatBox() {
                  router.refresh()
                  await new Promise(resolve => setTimeout(resolve, 1000));
                  setIsDeletingMessage(false) 
+                 
           }
         }
         fetchFunction()
@@ -196,9 +211,18 @@ function ChatBox() {
 
     }
 
+
+    const scrollToBottom = () =>{
+      messageEndRef.current?.scrollIntoView({behavior:"smooth"});
+    }
+    
+    useEffect(()=>{
+      scrollToBottom();
+    },[messages])
+
   return ( <>
     {messages && messages.length > 0 && <>
-    <div>
+      <div className='max-h-[450px] overflow-auto'>
         {!isLoading ? 
       <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[360px] md:w-[580px] lg:w-[780px] `}>
 
@@ -216,6 +240,7 @@ function ChatBox() {
                             <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xl ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
                                 <p className='text-xs font-bold'>{message?.authorTeacher?.f_name} {message?.authorTeacher?.l_name}  <span className='font-thin'>wrote on</span> {moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
                                 <p className="text-sm">{message.message}</p>
+                                <p className="text-sm">{message.id}</p>
                             </div>
                         </div>
                     </div>
@@ -262,6 +287,7 @@ function ChatBox() {
             }
         })}
 
+    <div ref={messageEndRef}></div>
 
         </div>
 

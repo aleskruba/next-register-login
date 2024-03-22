@@ -29,7 +29,7 @@ function MyGrades() {
   }, [session, currentUser]);
 
   return (
-    <div className='w-full mt-20 '>
+    <div className='mt-20'>
 
         {!isLoading ? <>      
               <Navbar/>

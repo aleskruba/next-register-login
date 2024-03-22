@@ -27,12 +27,12 @@ export const MyGradesStudent = ({id}:any) => {
 
 
     return (
-        <div className='mt-8  '>
+        <div className='mt-8  h-screen'>
           {!isLoading ? (
             <>
-              <div className=' h-screen flex items-center  flex-col '>
-                <div className="grid grid-cols-4 gap-4 text-xs mt-4">
-                  <div className="col-span-1  ">
+              <div className='  flex items-center  flex-col '>
+                <div className="grid grid-cols-4 gap-4 text-xs mt-4 w-full">
+                  <div className="col-span-1  flex justify-center  ">
                     <h3 className="font-semibold">Value</h3>
                   </div>
                   <div className="col-span-1 ">
@@ -49,9 +49,9 @@ export const MyGradesStudent = ({id}:any) => {
                   const formattedCreatedAt = moment(grade.createdAt).format('DD.MM YY');
                   const formattedUpdatedAt = moment(grade.updatedAt).format('DD.MM YY');
                   return (
-                    <div key={grade.id} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 `}>
-                      <div className=''>
-                        <p>{grade.value}</p>
+                    <div key={grade.id} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 w-full px-2`}>
+                      <div className='text-center'>
+                        <p className='font-bold text-xl'>{grade.value}</p>
                       </div>
                       <div className=''>
                         <p>{grade.comment}</p>

@@ -20,6 +20,8 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     console.log(data);
 
+
+
     if (!data.message){
       return new Response(JSON.stringify({ message:'empty' }))
 
@@ -55,9 +57,11 @@ export async function POST(req: NextRequest) {
                     role:'student'
                   }
                 });
-                pusher.trigger('chat', 'new-message', {
+
+               // console.log('newMessage',newMessage)
+                pusher.trigger(data.classCodesIds, 'new-message', {
                   message:{
-                    id:data.id,
+                    id:newMessage.id,
                     message: data.message,
                     authorStudentId: data.authorStudentId , // Connects the message to the corresponding student
                     classCodesIds: classId?.id,  // Connects the message to the corresponding class
@@ -65,9 +69,9 @@ export async function POST(req: NextRequest) {
                     createdAt: new Date(),
                     authorStudent:{
                       id:currentUserStudent.id,
-                    f_name:currentUserStudent.f_name,
-                    l_name:currentUserStudent.l_name,
-                    image:currentUserStudent.image,
+                      f_name:currentUserStudent.f_name,
+                      l_name:currentUserStudent.l_name,
+                      image:currentUserStudent.image,
                     }
                   }
                 });
@@ -91,6 +95,17 @@ return new Response(JSON.stringify({ message: 'Failed to process the message' })
 
 
 export async function DELETE(req: NextRequest) {
+
+  const Pusher = require("pusher");
+
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID ,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+    secret: process.env.PUSHER_SECRET ,
+    cluster: 'eu',
+    useTls:true,
+  
+  })
 
   const session = await getServerSession();
   const data = await req.json();
@@ -127,8 +142,9 @@ export async function DELETE(req: NextRequest) {
           where: { id: data.messageID },
       })
 
-      console.log(response)
-    
+     //  console.log('delete',response)
+      pusher.trigger(messageToBeDeleted.classCodesIds, 'delete-message', { response }); 
+    // console.log(messageToBeDeleted)
       return new NextResponse(JSON.stringify({ data: 'success' }));
     }
 
@@ -136,7 +152,8 @@ export async function DELETE(req: NextRequest) {
         const response = await prisma.message.delete({
           where: { id: data.messageID },
       })
-      console.log(response)
+      pusher.trigger(messageToBeDeleted.classCodesIds, 'delete-message', { response }); 
+      console.log('message to be deleted from teacher',response)
       return new NextResponse(JSON.stringify({ data: 'success' }));
       }
    

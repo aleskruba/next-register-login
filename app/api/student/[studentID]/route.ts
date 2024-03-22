@@ -5,37 +5,10 @@ import { getServerSession } from 'next-auth';
 
 export async function GET(req: Request,context:any) {
 const {params} = context;
-const session = await getServerSession();
 
-if (session) {
-  const currentUser = await prisma.admin.findUnique({
-    where: {
-      email: session.user?.email as string // Ensure session.user.email exists and is a string
-    }
-  });
 
-  if (!currentUser) {
-    return new Response(JSON.stringify({ message: 'User not found' }));
-}
-
-if (currentUser.email === session.user?.email) {
-try {
-    
-
-    /*   const currentUserTeacher = await prisma.teacher.findUnique({
-        where: {
-          email: session.user?.email as string // Ensure session.user.email exists and is a string
-        }
-      });
-
-      const currentUserStudent = await prisma.student.findUnique({
-        where: {
-          email: session.user?.email as string // Ensure session.user.email exists and is a string
-        }
-      }); */
-
- 
-
+    try {
+       
         const student = await prisma.student.findFirst({
             where: { id:params.studentID },
             include: {
@@ -52,19 +25,26 @@ catch(err){
     console.log(err)
     return new Response(JSON.stringify({ message: 'Failed to process the message' }));
   } 
-    } else { return new Response(JSON.stringify({ message:'not authorized' }));}
-  
-  }  else { return new Response(JSON.stringify({ message:'not authorized' }));}
+ 
 }
 
 
 export async function DELETE(req: NextRequest) {
-  
-  try {
-    const studentID = await req.json();
-
+    
+  const studentID = await req.json();
     const classes = await prisma.class.findMany()
-   
+    const session = await getServerSession();
+
+
+  if (session) {
+    const currentUser = await prisma.admin.findUnique({
+      where: {
+        email: session.user?.email as string // Ensure session.user.email exists and is a string
+      }
+    });
+    if(currentUser?.role == 'Admin')    {
+  try {
+  
 
      const studentToBeDeleted = await prisma.student.findUnique({
       where: { id: studentID }, 
@@ -90,6 +70,8 @@ export async function DELETE(req: NextRequest) {
     console.error(error);
     return new Response(JSON.stringify({ message: 'Failed to process the message' }), { status: 500 });
   }
+}
+  } else  { return new Response(JSON.stringify({ message:'not authorized' }));}
 }
 
 export async function PUT(req: NextRequest) {

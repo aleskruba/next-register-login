@@ -6,6 +6,8 @@ import { getServerSession } from 'next-auth';
 
 
 export async function POST(req: NextRequest) {
+  const data = await req.json();
+  console.log('data',data);
     try {
       const session = await getServerSession();
   
@@ -18,7 +20,7 @@ export async function POST(req: NextRequest) {
   
         if (currentUserTeacher?.role === 'Teacher') {
           try {
-            const data = await req.json();
+       
             const student = await prisma.student.findUnique({
               where: {
                 id: data.StudentID,

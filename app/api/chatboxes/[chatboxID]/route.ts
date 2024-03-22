@@ -84,7 +84,7 @@ export async function POST(req: NextRequest,context:any) {
   const session = await getServerSession();
   const data = await req.json();
 
-
+console.log(data);
   if (!data.message){
     return new Response(JSON.stringify({ message:'empty' }))
 
@@ -124,9 +124,9 @@ try {
                 }
               });
 
-              pusher.trigger('chat', 'new-message', {
+              pusher.trigger(params.chatboxID, 'new-message', {
                 message:{
-                  id: data.id,
+                  id: newMessage.id,
                   message: data.message,
                   authorTeacherId: data.authorTeacherId , // Connects the message to the corresponding student
                   classCodesIds: classId?.id,  // Connects the message to the corresponding class

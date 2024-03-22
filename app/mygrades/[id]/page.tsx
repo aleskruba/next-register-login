@@ -31,13 +31,15 @@ const Post: FC<Props> = ({params}) => {
 
 
     return (    
-    <div className="mt-20 flex justify-center ">
+    <div className="mt-20 flex justify-center w-screen ">
       <Navbar/>
 
       {isLoading ? <>      
           <div className='w-screen h-screen flex justify-center items-center '>
               <img src="/spinner.svg" alt="" className="w-[100px]"/>
-            </div></> : <> 
+            </div></> : 
+           
+          <> 
         <MyGradesStudent id={params.id}/>
       </>}
 

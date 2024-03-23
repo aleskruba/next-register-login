@@ -68,7 +68,7 @@ const Navbar = () => {
               </button>
 
               <div className="pl-24 flex items-center font-thin text-2xl ">
-                Student App
+                School App
               </div>
             </div>
       <div ref={menuRef}        className={`lg:block w-screen m-2 ${

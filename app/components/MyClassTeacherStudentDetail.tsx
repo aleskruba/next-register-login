@@ -320,7 +320,7 @@ return (
     return (
  
  
-        <div key={grade.id} className={`grid grid-cols-5 gap-4 text-base my-1 border-b border-b-1 ${isDeletingGrade ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div key={grade.id} className={`grid grid-cols-5 gap-4 text-base my-1 border-b border-b-1 ${isDeletingGrade || isLoadingSubmit ? 'opacity-50 pointer-events-none' : ''}`}>
 
          <div className='max-w-[20px]'>
            <p>{grade.value}</p>

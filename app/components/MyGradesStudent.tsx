@@ -8,6 +8,7 @@ export const MyGradesStudent = ({id}:any) => {
 
     const [student,setStudent] = useState<StudentsProps>()
     const [isLoading,setIsLoading] = useState(true)
+    const [newGradeStyle,setNewGradeStyle] = useState('' || null)
 
     useEffect(() => {
 
@@ -36,6 +37,12 @@ export const MyGradesStudent = ({id}:any) => {
         const channel = pusher.subscribe(student.id);
 
         channel.bind('new-grade', (response:any) => {
+          console.log(response.gradeses)
+          setNewGradeStyle(response.gradeses.id)
+          setTimeout(() => {
+            setNewGradeStyle(null)
+          }, 1500);
+
             setStudent({...student, gradeses: [...student.gradeses, response.gradeses]})
 
        });
@@ -103,7 +110,8 @@ export const MyGradesStudent = ({id}:any) => {
                   const formattedCreatedAt = moment(grade?.createdAt).format('DD.MM YY');
                   const formattedUpdatedAt = moment(grade?.updatedAt).format('DD.MM YY');
                   return (
-                    <div key={idx} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 w-full px-2`}>
+                    <div key={idx}       className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 w-full px-2 ${newGradeStyle && grade.id == newGradeStyle ? 'newGradeStyle' : ''}`}
+                    >
                       <div className='text-center'>
                         <p className='font-bold text-xl'>{grade?.value}</p>
                       </div>

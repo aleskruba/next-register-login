@@ -2,6 +2,7 @@ import { StudentsProps } from '@/types'
 import { fetchStudent } from '@/utils'
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import Pusher from 'pusher-js';
 
 export const MyGradesStudent = ({id}:any) => {
 
@@ -9,6 +10,7 @@ export const MyGradesStudent = ({id}:any) => {
     const [isLoading,setIsLoading] = useState(true)
 
     useEffect(() => {
+
         const fetchData = async () => {
             try {
                 const response = await fetchStudent(id);
@@ -23,7 +25,58 @@ export const MyGradesStudent = ({id}:any) => {
         fetchData();
     }, []);
 
+    useEffect(() => {
 
+      if (student) {
+
+      const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+          cluster: 'eu', // Your cluster
+        });
+      
+        const channel = pusher.subscribe(student.id);
+
+        channel.bind('new-grade', (response:any) => {
+            setStudent({...student, gradeses: [...student.gradeses, response.gradeses]})
+
+       });
+  
+      channel.bind('delete-grade', (response: any) => {
+        const gradetoDelete = response.deleteGrade.id
+        console.log(gradetoDelete)
+        setStudent({...student, gradeses: [...student.gradeses.filter(grade => grade.id !== gradetoDelete) ]} )
+      
+      }); 
+
+        channel.bind('udpated-grade', (response: any) => {
+          const gradetoUpdate = response.gradeses
+
+          setStudent(prevStudent => {
+            if (!prevStudent) return prevStudent; // If student state is not initialized, return it as is
+          
+            return {
+              ...prevStudent,
+              gradeses: prevStudent.gradeses.map(grade => {
+                if (grade.id === gradetoUpdate.id) {
+                  return { ...gradetoUpdate }; // Update the grade object
+                }
+                return grade; // Return the grade object unchanged
+              })
+            };
+          });
+        })  
+
+        
+ 
+
+    
+  
+        return () => {
+          channel.unbind_all();
+          channel.unsubscribe();
+        };
+      }
+      }, [student]); 
+  
 
 
     return (
@@ -45,16 +98,17 @@ export const MyGradesStudent = ({id}:any) => {
                     <h3 className="font-semibold">Updated On</h3>
                   </div>
                 </div>
-                {student?.gradeses.map(grade => {
-                  const formattedCreatedAt = moment(grade.createdAt).format('DD.MM YY');
-                  const formattedUpdatedAt = moment(grade.updatedAt).format('DD.MM YY');
+                {student?.gradeses.map((grade,idx) => {
+               //   console.log(grade)
+                  const formattedCreatedAt = moment(grade?.createdAt).format('DD.MM YY');
+                  const formattedUpdatedAt = moment(grade?.updatedAt).format('DD.MM YY');
                   return (
-                    <div key={grade.id} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 w-full px-2`}>
+                    <div key={idx} className={`grid grid-cols-4 gap-4 text-base my-1 border-b border-b-1 w-full px-2`}>
                       <div className='text-center'>
-                        <p className='font-bold text-xl'>{grade.value}</p>
+                        <p className='font-bold text-xl'>{grade?.value}</p>
                       </div>
                       <div className=''>
-                        <p>{grade.comment}</p>
+                        <p>{grade?.comment}</p>
                       </div>
                       <div className=''>
                         <p>{formattedCreatedAt}</p>

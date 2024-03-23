@@ -17,8 +17,7 @@ const {params} = context;
           },
         });
 
-        console.log('student',student)
-        return new Response(JSON.stringify({ data:student }));
+            return new Response(JSON.stringify({ data:student }));
 
  }
 catch(err){

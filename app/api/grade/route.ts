@@ -4,10 +4,21 @@ import { getServerSession } from 'next-auth';
 
 
 
-
 export async function POST(req: NextRequest) {
   const data = await req.json();
-  console.log('data',data);
+
+  const Pusher = require("pusher");
+
+  const pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID ,
+    key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+    secret: process.env.PUSHER_SECRET ,
+    cluster: 'eu',
+    useTls:true,
+  
+  })
+
+
     try {
       const session = await getServerSession();
   
@@ -35,9 +46,20 @@ export async function POST(req: NextRequest) {
             const newGrade = await prisma.grade.create({
               data: {
                 comment: data.comment,
-                value: data.value,
+                value:data.value,
          
               },
+            });
+
+            pusher.trigger(data.StudentID, 'new-grade', {
+              gradeses:{
+                  id:newGrade.id,
+                  value:data.value,
+                  comment:data.comment,
+                  createdAt:new Date(),
+                  updatedAt:new Date()
+                  
+              }
             });
   
             // Establish the relationship between student and grade
@@ -87,11 +109,25 @@ export async function POST(req: NextRequest) {
 
 
   export async function DELETE(req: NextRequest) {
+
+    const data = await req.json();
+    console.log('data.gradeID',data.gradeID,'data.studentID',data.studentID);
+
+    const Pusher = require("pusher");
+
+    const pusher = new Pusher({
+      appId: process.env.PUSHER_APP_ID ,
+      key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+      secret: process.env.PUSHER_SECRET ,
+      cluster: 'eu',
+      useTls:true,
+    
+    })
+
     try {
       const session = await getServerSession();
 
-      console.log(session?.user)
-  
+    
       if (session) {
         const currentUserTeacher = await prisma.teacher.findUnique({
           where: {
@@ -101,9 +137,8 @@ export async function POST(req: NextRequest) {
   
         if (currentUserTeacher?.role === 'Teacher') {
           try {
-            const data = await req.json();
-            console.log(data.gradeID,data.studentID);
-
+  
+         
                const deleteGrade = await prisma.grade.delete({
               where: { id: data.gradeID},
             });  
@@ -124,9 +159,12 @@ export async function POST(req: NextRequest) {
                   },
                 },
               });
+          
+              pusher.trigger(data.studentID, 'delete-grade', {deleteGrade }); 
             }
              
-  
+     
+
             return new NextResponse(JSON.stringify({ data: 'success' }), { status: 200 });
           } catch (error) {
             console.error(error);
@@ -146,6 +184,22 @@ export async function POST(req: NextRequest) {
 
 
   export async function PUT(req: NextRequest) {
+
+    const data = await req.json();
+
+         
+
+    const Pusher = require("pusher");
+
+    const pusher = new Pusher({
+      appId: process.env.PUSHER_APP_ID ,
+      key: process.env.NEXT_PUBLIC_PUSHER_KEY ,
+      secret: process.env.PUSHER_SECRET ,
+      cluster: 'eu',
+      useTls:true,
+    
+    })
+
     try {
       const session = await getServerSession();
   
@@ -158,8 +212,7 @@ export async function POST(req: NextRequest) {
   
         if (currentUserTeacher?.role === 'Teacher') {
           try {
-            const data = await req.json();
-         
+     
             const updateGrade = await prisma.grade.update({
               where: { id: data.gradeID },
               data: {
@@ -169,6 +222,15 @@ export async function POST(req: NextRequest) {
               },
             });
       
+            pusher.trigger(data.StudentID, 'udpated-grade', {
+              gradeses:{
+                  id:data.gradeID,
+                  value:data.value,
+                  comment:data.comment,
+                  updatedAt:new Date()
+                  
+              }
+            }); 
   
             return new NextResponse(JSON.stringify({ data: 'success' }), { status: 200 });
           } catch (error) {

@@ -240,7 +240,7 @@ function ChatBox() {
                             <div className={`bg-green-100 rounded-lg py-2 px-4 max-w-xl ${resolvedTheme === 'dark' ? 'text-gray-600' : 'text-black'}`} key={message.id}>
                                 <p className='text-xs font-bold'>{message?.authorTeacher?.f_name} {message?.authorTeacher?.l_name}  <span className='font-thin'>wrote on</span> {moment(message.createdAt).format('DD.MM. [at] hh:mm A')} </p>
                                 <p className="text-sm">{message.message}</p>
-                                <p className="text-sm">{message.id}</p>
+                             
                             </div>
                         </div>
                     </div>

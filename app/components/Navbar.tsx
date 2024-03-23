@@ -58,7 +58,7 @@ const Navbar = () => {
           <div className="md:hidden absolute left-3 top-1 text-base  text-green-400"  >     {session && session.user?.email}  
   </div> 
   <div  className="lg:hidden absolute right-3 top-1 text-base  "> <ModeToggle/></div>
-         <div className="lg:hidden"  >
+         <div className="lg:hidden flex "  >
               <button
                 className="p-2 mt-2 text-gray-800 dark:text-gray-100 rounded-md outline-none focus:border-gray-400 focus:border "
                 onClick={() =>{ setNavbar(!navbar); /* setOpen(true) */}}
@@ -66,13 +66,17 @@ const Navbar = () => {
               >
                 {navbar ? <div ><IoMdClose size={30}/></div>  : <IoMdMenu size={30} />}
               </button>
+
+              <div className="pl-24 flex items-center font-thin text-2xl ">
+                Student App
+              </div>
             </div>
       <div ref={menuRef}        className={`lg:block w-screen m-2 ${
               navbar ? "block" : "hidden"
             }`}  > 
           <ul className="flex flex-col lg:flex-row w-full justify-around item-center md:pt-4">
         <Link href="/">
-          <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Home</li>
+          <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Chat</li>
         </Link>
 
         {!session ? (
@@ -113,11 +117,11 @@ const Navbar = () => {
             {currentUser?.role === "Student" && (
           <>
             <Link href={`/student/${currentUser.id}`}>
-                <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
+                <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>My profile</li>
               </Link>
 
               <Link href={`/mygrades/${currentUser.id}`}>
-                <li className={pathname === "/mygrades" ? "font-bold text-green-500" : "hover:text-green-500"}>my grades</li>
+                <li className={pathname === "/mygrades" ? "font-bold text-green-500" : "hover:text-green-500"}>My grades</li>
             </Link>
           </>
             )}
@@ -125,7 +129,7 @@ const Navbar = () => {
             {currentUser?.role === "Teacher" && (
              <>
               <Link href={`/teacher/${currentUser.id}`}>
-                      <li className={pathname === "/techer" ? "font-bold text-green-500" : "hover:text-green-500"}>my profile</li>
+                      <li className={pathname === "/techer" ? "font-bold text-green-500" : "hover:text-green-500"}>My profile</li>
               </Link>
        
               <Link href={`/myclass/${currentUser.id}`}>

@@ -2,7 +2,7 @@
 import React,{useState,useEffect,ChangeEvent,FormEvent } from 'react'
 import { fetchClasses, fetchMyProfile, updatePassword, updateProfileImage, updateStudent} from "@/utils";
 import { StudentsProps } from '@/types';
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation'
 import axios from 'axios';
 
@@ -97,7 +97,17 @@ function MyProfileComponent({id}:any) {
           const response = await updateStudent(updatedStudent) 
 
           if (response.message = 'success') {
-            toast.success('Updated successfully');
+            toast('Updated successfully', {
+              style: {
+                background: '#4CAF50', // Green background color
+                color: '#FFFFFF', // White text color
+                border: '1px solid #388E3C', // Dark green border
+                borderRadius: '8px', // Rounded corners
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+                fontSize: '12px', // Font size
+                padding: '16px', // Padding
+              },
+            });
             router.push('/students')
           }
           }
@@ -177,7 +187,17 @@ function MyProfileComponent({id}:any) {
             const response = await updateProfileImage(data);
         
             if (response.data === 'success') {
-              toast.success('Image updated successfully');
+              toast('Image updated successfully', {
+                style: {
+                  background: '#4CAF50', // Green background color
+                  color: '#FFFFFF', // White text color
+                  border: '1px solid #388E3C', // Dark green border
+                  borderRadius: '8px', // Rounded corners
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+                  fontSize: '12px', // Font size
+                  padding: '16px', // Padding
+                },
+              });
             } else {
               toast.error('Image not updated successfully');
             }
@@ -224,7 +244,17 @@ const handleSubmitPassword = async (e: FormEvent<HTMLFormElement>) => {
         setNewPassword({
           password:'',
        repeatpassword:''})
-        toast.success('Password updated successfully')
+       toast('Password Updated successfully', {
+        style: {
+          background: '#4CAF50', // Green background color
+          color: '#FFFFFF', // White text color
+          border: '1px solid #388E3C', // Dark green border
+          borderRadius: '8px', // Rounded corners
+          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+          fontSize: '12px', // Font size
+          padding: '16px', // Padding
+        },
+      });
         setChangePasswordDiv(false)
       }
       setPasswordError(''); 
@@ -363,7 +393,7 @@ const handleSubmitPassword = async (e: FormEvent<HTMLFormElement>) => {
                       // placeholder="password" 
                        autoComplete="new-password" 
                        value={newPassword.password}
-                       className="bg-gray-200 px-2 max-w-[230px] lg:max-w-[280px]" 
+                       className="bg-gray-200 px-2 max-w-[230px] lg:max-w-[280px] text-black" 
                        name="password" 
                        onChange={handleChangePassword}/>
         </div>
@@ -373,7 +403,7 @@ const handleSubmitPassword = async (e: FormEvent<HTMLFormElement>) => {
                       // placeholder="repeat password" 
                        autoComplete="new-password" 
                        value={newPassword.repeatpassword}
-                       className="bg-gray-200 px-2 max-w-[230px] lg:max-w-[280px]" 
+                       className="bg-gray-200 px-2 max-w-[230px] lg:max-w-[280px] text-black" 
                        name="repeatpassword"  
                        onChange={handleChangePassword}/>
         </div>
@@ -399,6 +429,8 @@ const handleSubmitPassword = async (e: FormEvent<HTMLFormElement>) => {
           </div>
       </>
       }
+
+
      </div>
      </>
 )

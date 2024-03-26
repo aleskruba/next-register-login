@@ -130,7 +130,17 @@ const Post: FC<Props> = ({params}) => {
         const response = await updateTeacher(updatedTeacher) 
         console.log(response)
         if (response.message = 'success') {
-          toast.success('Updated successfully');
+          toast('Updated successfully', {
+            style: {
+              background: '#4CAF50', // Green background color
+              color: '#FFFFFF', // White text color
+              border: '1px solid #388E3C', // Dark green border
+              borderRadius: '8px', // Rounded corners
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+              fontSize: '12px', // Font size
+              padding: '16px', // Padding
+            },
+          });
           router.push('/teachers')
         }
         }
@@ -189,7 +199,17 @@ const Post: FC<Props> = ({params}) => {
       const response = await updateProfileImage(data)
    
         if (response.data === 'success') { 
-          toast.success('Image updated successfully')
+          toast('Image updated successfully', {
+            style: {
+              background: '#4CAF50', // Green background color
+              color: '#FFFFFF', // White text color
+              border: '1px solid #388E3C', // Dark green border
+              borderRadius: '8px', // Rounded corners
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+              fontSize: '12px', // Font size
+              padding: '16px', // Padding
+            },
+          });
         }
         else { 
           toast.error('Image not updated successfully')
@@ -236,7 +256,17 @@ const Post: FC<Props> = ({params}) => {
           setNewPassword({
             password:'',
          repeatpassword:''})
-          toast.success('Password updated successfully')
+         toast('Password Updated successfully', {
+          style: {
+            background: '#4CAF50', // Green background color
+            color: '#FFFFFF', // White text color
+            border: '1px solid #388E3C', // Dark green border
+            borderRadius: '8px', // Rounded corners
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+            fontSize: '12px', // Font size
+            padding: '16px', // Padding
+          },
+        });
           setChangePasswordDiv(false)
         }
         setPasswordError(''); 

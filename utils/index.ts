@@ -592,3 +592,29 @@ export async function deleteMessage(grade:any) {
 
   }
 }
+
+
+export async function fetchActiveUsers(cl:any) {
+
+  try {
+    const response = await fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(cl),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed fetching active user');
+    }
+
+    const responseData = await response.json();
+    return responseData
+
+
+  } catch (error) {
+    console.error('Error during Failed fetching active user:', error);
+
+  }
+}

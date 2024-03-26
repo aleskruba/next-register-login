@@ -104,3 +104,8 @@
 .newGradeStyle {
   animation: bounceAndColor 0.5s ease infinite;
 }
+
+
+.Toastify__toast-body {
+  font-size: 12px; /* Adjust the font size here */
+}

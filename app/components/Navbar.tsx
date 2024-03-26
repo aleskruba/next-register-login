@@ -75,9 +75,13 @@ const Navbar = () => {
               navbar ? "block" : "hidden"
             }`}  > 
           <ul className="flex flex-col lg:flex-row w-full justify-around item-center md:pt-4">
+
         <Link href="/">
+        {currentUser?.role !== "Admin" && (
           <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Chat</li>
+        )}
         </Link>
+
 
         {!session ? (
           <ul className="flex md:gap-5 flex-col md:flex-row">

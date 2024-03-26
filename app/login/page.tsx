@@ -61,7 +61,17 @@ import { fetchCurrentUser } from "@/utils"
         const response = await fetchCurrentUser(email);
                      
         setCurrentUser(response);
-        toast.success('Logged in successfully');
+        toast('Logged in successfully', {
+          style: {
+            background: '#4CAF50', // Green background color
+            color: '#FFFFFF', // White text color
+            border: '1px solid #388E3C', // Dark green border
+            borderRadius: '8px', // Rounded corners
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+            fontSize: '12px', // Font size
+            padding: '16px', // Padding
+          },
+        });
         setPending(false)
         router.replace("/");
 
@@ -85,6 +95,23 @@ import { fetchCurrentUser } from "@/utils"
   return (
 
     <div className="w-[70%] md:w-[60%] flex flex-col gap-4 justify-center h-screen">
+
+      <div className="absolute w-[200px] h-[200px] bg-blue-300 text-gray-800 left-1 top-1 text-xs">
+          <p>some students</p>
+         <p>carmen@mexico.com  Heslo12345</p> 
+         <p>cech@email.com  Heslo12345</p> 
+         <p>pepa@seznam.cz  Heslo12345</p> 
+       <br />
+        <p>some teachers</p>
+  
+        <p>ales@ales.cz  Heslo12345</p> 
+        <p>josef@email.com  Heslo12345</p> 
+        <br />
+        <p>admin</p>
+        <p>reactbrno@centrum.cz  Heslo12345</p>
+        
+
+      </div>
       <h1 className="text-2xl md:text-3xl text-center  mb-4">Log in</h1>
     <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>

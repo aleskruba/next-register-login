@@ -3,6 +3,8 @@ import { fetchCurrentUser } from '@/utils';
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import { UserProps } from '@/types';
+import axios from 'axios';
+import { useBeforeUnload } from "react-use";
 
 type UserContextProviderProps = {
     children: React.ReactNode;

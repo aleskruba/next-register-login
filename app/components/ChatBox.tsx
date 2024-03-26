@@ -1,12 +1,13 @@
 import React,{ ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import { useTheme } from "next-themes"
 import { useUserContext } from "../../context/auth-context";
-import { deleteMessage, fetchMessages, sendMessage } from '@/utils';
+import { deleteMessage, fetchActiveUsers, fetchMessages, sendMessage } from '@/utils';
 import { PostArray } from '@/types';
 import moment from 'moment';
 import { AiFillDelete} from 'react-icons/ai';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Pusher from 'pusher-js';
+import axios from 'axios';
 
 
 
@@ -32,6 +33,8 @@ function ChatBox() {
       authorTeacher: undefined,
     });
     
+    const [activeUser,setActiveUser] = useState(false)
+
     const messageEndRef = useRef<HTMLInputElement>(null);
  
     useEffect(() => {
@@ -43,7 +46,7 @@ function ChatBox() {
            setMessages(response)
            setIsLoading(false)
 
-           console.log('class',currentUser?.classesIds?.[0])
+         //  console.log('class',currentUser?.classesIds?.[0])
         }
       fetchData()
       } catch(err)
@@ -51,18 +54,27 @@ function ChatBox() {
 
      },[updated])
 
+
+ 
    
       useEffect(() => {
 
-        if (messages.length) {
+       
       const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
         cluster: 'eu', // Your cluster
       });
     
       const channel = pusher.subscribe(currentUser?.classesIds?.[0] as string);
-      channel.bind('new-message', (message:any) => {
 
-        console.log(message.message);
+     /*  channel.bind('active-users', (response: any) => {
+
+        console.log('active users:',response)
+      //setActiveUser(!activeUser)
+      }); */
+
+
+      if (messages.length) {
+      channel.bind('new-message', (message:any) => {
 
         if (currentUser?.id !== message.message.authorStudentId )
           if (message.message.role == 'student') {
@@ -112,14 +124,16 @@ function ChatBox() {
     
       });
 
+
+
       return () => {
         channel.unbind_all();
         channel.unsubscribe();
       };}
-    }, [messages]); 
-    
+    }, [messages,activeUser]); 
 
-    
+
+     
 
      function generateRandomString(length:any) {
       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

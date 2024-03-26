@@ -82,7 +82,17 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       const response = await fetchGrade(newGrade)
 
       if (response === 'success') {
-        toast.success('Grade updated successfully')
+        toast('Grade updated successfully', {
+          style: {
+            background: '#4CAF50', // Green background color
+            color: '#FFFFFF', // White text color
+            border: '1px solid #388E3C', // Dark green border
+            borderRadius: '8px', // Rounded corners
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Shadow for depth
+            fontSize: '12px', // Font size
+            padding: '16px', // Padding
+          },
+        });
        
 
         setNewGrade({comment: '',

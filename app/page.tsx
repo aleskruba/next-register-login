@@ -6,6 +6,7 @@ import moment from 'moment'
 import ChatBox from './components/ChatBox';
 import { useUserContext } from "../context/auth-context";
 import ChooseChatBox from './components/ChooseChatBox';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Home() {
 
@@ -30,6 +31,7 @@ export default function Home() {
     // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array to run the effect only once
+
 
 
   return (
@@ -57,6 +59,22 @@ export default function Home() {
   }
         </div>
         </div>
+{/*         <Toaster
+          toastOptions={{
+            success: {
+              style: {
+                background: 'blue',
+                fontSize:'12px'
+              },
+            },
+            error: {
+              style: {
+                background: 'red',
+                fontSize:'12px'
+              },
+            },
+          }}
+        /> */}
       </main>
 
   )

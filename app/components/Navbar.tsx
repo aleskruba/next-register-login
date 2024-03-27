@@ -75,16 +75,15 @@ const Navbar = () => {
               navbar ? "block" : "hidden"
             }`}  > 
           <ul className="flex flex-col lg:flex-row w-full justify-around item-center md:pt-4">
+          {!session && 
+        <li className="hidden md:block text-2xl font-thin ">WELCOME TO SCHOOL APP</li>
+          }
+          
 
-        <Link href="/">
-        {currentUser?.role !== "Admin" && (
-          <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Chat</li>
-        )}
-        </Link>
-
-
+    
         {!session ? (
           <ul className="flex md:gap-5 flex-col md:flex-row">
+       
             <Link href="/login">
               <li className={pathname === "/login" ? "font-bold text-green-500" : "hover:text-green-500"}>Login</li>
             </Link>
@@ -120,6 +119,10 @@ const Navbar = () => {
 
             {currentUser?.role === "Student" && (
           <>
+                 <Link href="/">
+          <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Chat</li>
+          </Link>
+   
             <Link href={`/student/${currentUser.id}`}>
                 <li className={pathname === "/student" ? "font-bold text-green-500" : "hover:text-green-500"}>My profile</li>
               </Link>
@@ -132,6 +135,10 @@ const Navbar = () => {
 
             {currentUser?.role === "Teacher" && (
              <>
+                    <Link href="/">
+          <li className={pathname === "/" ? "font-bold text-green-500" : "hover:text-green-500"}>Chat</li>
+          </Link>
+   
               <Link href={`/teacher/${currentUser.id}`}>
                       <li className={pathname === "/techer" ? "font-bold text-green-500" : "hover:text-green-500"}>My profile</li>
               </Link>
@@ -169,9 +176,8 @@ const Navbar = () => {
              <ModeToggle/>
 
             </div>
-      </div>
-
-    </header>
+          </div>
+      </header>
   );
 };
 

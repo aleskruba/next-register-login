@@ -235,7 +235,7 @@ function ChatBox() {
     },[messages])
 
   return ( <>
-    {messages && messages.length > 0 && <>
+    {messages && messages.length > 0 ? <>
       <div className='max-h-[450px] overflow-auto'>
         {!isLoading ? 
       <div className={`${resolvedTheme === 'dark' ? 'bg-gray-500' : 'bg-gray-200'} shadow-lg rounded-lg p-4 w-[360px] md:w-[580px] lg:w-[780px] `}>
@@ -332,12 +332,20 @@ function ChatBox() {
               <img src="/spinner.svg" alt="" className="w-[100px] "/>
             </div>
         
-</>}
+</>
+
+}
     </div>
+    
 
     </>
+
+    : <div className='w-screen h-screen flex justify-center '>
+    <img src="/spinner.svg" alt="" className="w-[100px] "/>
+  </div>
   }
-  </>
+   
+  </> 
   )
 
 

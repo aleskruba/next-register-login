@@ -32,11 +32,11 @@ function MyClassTeacher({id0,id1}:any) {
 
 
   return (
-    <div className="mt-10 mx-2 px-2 flex justify-center ">
+    <div className="mt-10 ml-4 mr-4 px-2 flex justify-center ">
       
     {!isLoading ? <>  
    
-    <div className=" px-2 py-2 min-w-[380px] md:min-w-[480px]  flex flex-col items-start border border-solid border-1 text-xl ">
+    <div className=" px-2 py-2 min-w-[360px] md:min-w-[480px]  flex flex-col items-start border border-solid border-1 text-xl ">
 
         <div className='flex px-2'>
             {classes?.map((cl)=>{

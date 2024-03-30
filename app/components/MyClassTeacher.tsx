@@ -32,13 +32,13 @@ function MyClassTeacher({id0,id1}:any) {
 
 
   return (
-    <div className="mt-10  ml-2 mr-2 flex justify-center items-center">
+    <div className="mt-10   flex justify-center items-center">
       
     {!isLoading ? <>  
    
-    <div className="  py-2 w-full md:min-w-[480px]  flex flex-col  border border-solid border-1 text-xl ">
+    <div className="  mx-4 w-full md:min-w-[480px]  flex flex-col  border border-solid border-1 text-xl  ">
 
-        <div className='flex ml-4 mr-4  '>
+      
             {classes?.map((cl)=>{
                        if (cl.id === id1) { 
                 return(
@@ -85,7 +85,7 @@ function MyClassTeacher({id0,id1}:any) {
 
             })}
 
-        </div>
+
 
 
     </div>

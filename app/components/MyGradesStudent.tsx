@@ -90,7 +90,7 @@ export const MyGradesStudent = ({id}:any) => {
         <div className='mt-8  h-screen'>
           {!isLoading ? (
             <>
-              <div className='  flex items-center  flex-col px-2 bg-gray-200'>
+              <div className='  flex items-center  flex-col px-2'>
                 <div className="grid grid-cols-4 gap-4 text-xs mt-4 w-full">
                   <div className="col-span-1  flex justify-center  ">
                     <h3 className="font-semibold">Value</h3>

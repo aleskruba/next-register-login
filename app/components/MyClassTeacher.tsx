@@ -32,7 +32,7 @@ function MyClassTeacher({id0,id1}:any) {
 
 
   return (
-    <div className="mt-10  ml-2 mr-2 flex justify-center ">
+    <div className="mt-10  ml-2 mr-2 flex justify-center items-center">
       
     {!isLoading ? <>  
    

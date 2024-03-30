@@ -228,7 +228,7 @@ const saveEditChange =  async () => {
 
 
 return (
-    <div className='mt-8 px-2'>
+    <div className='mt-8 px-4'>
         {isLoading ? <>      
           <div className='w-screen h-screen flex justify-center items-center '>
               <img src="/spinner.svg" alt="" className="w-[100px]"/>

@@ -43,7 +43,7 @@ function MyClassTeacher({id0,id1}:any) {
                        if (cl.id === id1) { 
                 return(
                 <div key={cl.id}>    
-                  <div className='flex flex-col px-2 py-2 text-gray-100 bg-gray-500' >
+                  <div className='flex flex-col px-2 py-2 max-w-[360px] md:w-full  text-gray-100 bg-gray-500' >
                     <div className='flex justify-between min-w-[380px] md:min-w-[480px] '>
                     <div>CLASS CODE:</div> <div> {cl.classCode}</div>
                     </div> 
